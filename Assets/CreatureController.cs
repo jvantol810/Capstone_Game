@@ -2,18 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.Events;
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Animator))]
 public class CreatureController : MonoBehaviour
 {
     //References to components or other gameobjects
     [Header("References")]
     private Rigidbody2D m_rigidbody;
+    //[Header("AI")]
+    private Animator m_animator;
+    public Transform player;
+    ////Transition to attacking whenever these events fire off
+    //[Header("State Transitions")]
+    //public List<UnityEvent> attackEvents;
+    ////Transition to wandering whenever these events fire off
+    //public List<UnityEvent> wanderEvents;
     //Attributes/enemy stats
     [Header("Attributes")]
     public int health;
     public float speed;
     public float damage;
+    [Header("Detection")]
+    public float detectionRange;
     [Header("Melee Attacks")]
     public Transform meleeAttackPoint;
     public float meleeAttackRange;
@@ -31,26 +42,31 @@ public class CreatureController : MonoBehaviour
     //Special movements
     public bool charging = false;
     public float chargeSpeed;
+    private Vector2 chargeDestination;
     //Attacks
     public bool swingAttacking = false;
-    public enum creatureState
-    {
-        wander,
-        approach,
-        attack,
-    }
+
     [Header("State")]
     //public TextMeshProUGUI stateText;
     public bool possessed = false;
-    private creatureState state;
+
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        //Set references
         m_rigidbody = GetComponent<Rigidbody2D>();
         weaponAnimator = weapon.GetComponent<Animator>();
+        m_animator = GetComponent<Animator>();
+
+        //Go through each event assigned in the inspector window and add listeners 
+        //foreach (UnityEvent attackEvent in attackEvents)
+        //{
+        //    attackEvent.AddListener(SetAnimatorStateToAttack);
+        //    Debug.Log("Adding listener to event: " + attackEvent.GetPersistentMethodName(0));
+        //}
     }
 
     // Update is called once per frame
@@ -58,7 +74,7 @@ public class CreatureController : MonoBehaviour
     {
         if (Input.GetKey("space"))
         {
-            Charge();
+            //Charge();
         }
         if (Input.GetMouseButtonDown(0))
         {
@@ -68,6 +84,10 @@ public class CreatureController : MonoBehaviour
         {
             swingAttacking = true;
         }
+
+        //Check if player is in enemy's detection range
+        CheckIfPlayerIsDetected();
+
         if (possessed)
         {
             //Get input from user
@@ -86,7 +106,7 @@ public class CreatureController : MonoBehaviour
     {
         if (charging)
         {
-            float distance = MoveTowards(new Vector3(6, 0, 0), chargeSpeed);
+            float distance = MoveTowards(chargeDestination, chargeSpeed);
             if(distance <= 0.5)
             {
                 charging = false;
@@ -111,6 +131,7 @@ public class CreatureController : MonoBehaviour
     /// </summary>
     public void Move(Vector2 direction, float speed)
     {
+        Debug.Log("Move function called.");
         //Get the current position based on the rigidbody
         Vector2 currentPos = m_rigidbody.position;
         //Multiply direction and speed to get the adjustedMovement value, which will modify the current position
@@ -137,16 +158,21 @@ public class CreatureController : MonoBehaviour
         //Calculate distance between creature and destination
         float distance = Vector2.Distance(m_rigidbody.position, destination);
         //If the distance is extremely small, return distance and don't move.
-        if(distance <= 0.5) { return distance;  }
+        if(distance <= 0.1) { return distance;  }
         //Otherwise, the creature is a good distance from the destination. Call the move function.
         Move(direction, speed);
         //Return the distance
         return distance;
     }
 
-    public void Charge()
+    public void Charge(Vector2 destination)
     {
-        charging = true;
+        Debug.Log("Charging!");
+        if(!charging)
+        {
+            chargeDestination = destination;
+            charging = true;
+        }
     }
 
     public void MeleeAttack()
@@ -184,11 +210,57 @@ public class CreatureController : MonoBehaviour
         projectile.Shoot(direction);
     }
 
-    
+    public void SetAnimatorStateToAttack()
+    {
+        Debug.Log("Transitioning to the attack state!");
+        if (m_animator.GetBool("isAttacking") == false)
+        {
+            m_animator.SetBool("isAttacking", true);
+        }
+        
+    }
+
+
+    public void SetAnimatorStateToWander()
+    {
+        Debug.Log("Transitioning to the wander state!");
+        m_animator.SetBool("isAttacking", false);
+    }
+
+    public void CheckIfPlayerIsDetected()
+    {
+        //Create an array of colliders of all gameObjects in this enemies detection range
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, detectionRange);
+
+        //Iterate through hits and check if any of them were the player
+        for (int i = 0; i < hits.Length; i++)
+        {
+            //If one of the hits was the player, assign the player variable and set the animator state to attack
+            if (hits[i].gameObject.CompareTag("Player"))
+            {
+                player = hits[i].transform;
+                Debug.Log("Player detected!"); 
+                SetAnimatorStateToAttack();
+                return;
+            }
+        }
+
+        //If the player was not detected, set the animator state to wander
+        SetAnimatorStateToWander();
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        //Stop charging if you collide with an object
+        if (charging) { charging = false;  }
+    }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(meleeAttackPoint.position, meleeAttackRange);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
     }
 }
