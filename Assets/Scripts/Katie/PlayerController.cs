@@ -30,6 +30,10 @@ public class PlayerController : MonoBehaviour
 
     Vector2 lookDirection = new Vector2(1, 0);
 
+    public GameObject projectilePrefab;
+    public float launchForce;
+
+    public GameObject player;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +46,16 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //disable player game object when possessing enemy
+        if (SampleEnemy.isPossessed == true)
+        {
+            player.SetActive(false);
+        }
+        if (SampleEnemy.isPossessed == false)
+        {
+            player.SetActive(true);
+        }
+        
         //get input from user
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
@@ -54,13 +68,19 @@ public class PlayerController : MonoBehaviour
             lookDirection.Set(move.x, move.y);
             lookDirection.Normalize();
         }
-
+        
         //set invincible timer after hit
         if (isInvincible)
         {
             invincibleTimer -= Time.deltaTime;
             if (invincibleTimer < 0)
                 isInvincible = false;
+        }
+
+        //throw projectile
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Launch();
         }
     }
 
@@ -90,5 +110,18 @@ public class PlayerController : MonoBehaviour
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         //UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
+    }
+
+    void Launch()
+    {
+        GameObject possessionObject = Instantiate(projectilePrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
+
+        Possession possession = possessionObject.GetComponent<Possession>();
+        
+        //throw projectile in direction player is facing
+        possession.Launch(lookDirection, launchForce);
+
+        //animator.SetTrigger("Launch");
+        //PlaySound(throwingClip);
     }
 }
