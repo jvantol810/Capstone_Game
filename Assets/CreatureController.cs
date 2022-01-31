@@ -47,7 +47,9 @@ public class CreatureController : MonoBehaviour
     public bool swingAttacking = false;
 
     [Header("State")]
-    //public TextMeshProUGUI stateText;
+    public TextMeshProUGUI stateText;
+
+    [Header("Possession")]
     public bool possessed = false;
 
 
@@ -98,8 +100,10 @@ public class CreatureController : MonoBehaviour
 
             Move(moveDirection, speed);
         }
-        //stateText.text = state.ToString();
-        //stateText.transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, 0);
+       
+        stateText.text = GetCurrentState();
+       
+        stateText.transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, 0);
     }
 
     private void FixedUpdate()
@@ -118,6 +122,24 @@ public class CreatureController : MonoBehaviour
             weaponAnimator.SetBool("Swing", true);
             swingAttacking = false;
         }
+    }
+
+    public string GetCurrentState()
+    {
+        AnimatorStateInfo currentStateInfo = m_animator.GetCurrentAnimatorStateInfo(0);
+        if (currentStateInfo.IsName("Wander"))
+        {
+            return "Wander";
+        }
+        else if (currentStateInfo.IsName("AttackPlayer"))
+        {
+            return "Attack";
+        }
+        else if (currentStateInfo.IsName("ChasePlayer"))
+        {
+            return "Chase";
+        }
+        else return "Not found";
     }
 
     /// <summary>This method changes the gameobject's location by
@@ -216,18 +238,28 @@ public class CreatureController : MonoBehaviour
         if (m_animator.GetBool("isAttacking") == false)
         {
             m_animator.SetBool("isAttacking", true);
+            m_animator.SetBool("isChasing", false);
         }
         
     }
+    public void SetAnimatorStateToChase()
+    {
+        Debug.Log("Transitioning to the chase state!");
+        if (m_animator.GetBool("isChasing") == false)
+        {
+            m_animator.SetBool("isChasing", true);
+            m_animator.SetBool("isAttacking", false);
+        }
 
-
+    }
     public void SetAnimatorStateToWander()
     {
         Debug.Log("Transitioning to the wander state!");
         m_animator.SetBool("isAttacking", false);
+        m_animator.SetBool("isChasing", false);
     }
 
-    public void CheckIfPlayerIsDetected()
+    public bool CheckIfPlayerIsDetected()
     {
         //Create an array of colliders of all gameObjects in this enemies detection range
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, detectionRange);
@@ -240,13 +272,13 @@ public class CreatureController : MonoBehaviour
             {
                 player = hits[i].transform;
                 Debug.Log("Player detected!"); 
-                SetAnimatorStateToAttack();
-                return;
+                //Since the player was detected, return true
+                return true;
             }
         }
 
-        //If the player was not detected, set the animator state to wander
-        SetAnimatorStateToWander();
+        //If the player was not detected, return false
+        return false;
     }
 
     public void OnCollisionEnter2D(Collision2D collision)

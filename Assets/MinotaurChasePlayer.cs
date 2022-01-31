@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MinotaurAttackPlayer : StateMachineBehaviour
+public class MinotaurChasePlayer : StateMachineBehaviour
 {
-    public float minimumChargeDistance;
     private CreatureController minotaurController;
     Vector3 playerPos;
+    public float distanceBeforeSwitchingToAttackState;
+ 
     //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -14,11 +15,11 @@ public class MinotaurAttackPlayer : StateMachineBehaviour
         playerPos = minotaurController.player.position;
     }
 
-    //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
+    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //If player is ever not detected, switch back to wander
-        if ( minotaurController.CheckIfPlayerIsDetected() == false )
+        if (minotaurController.CheckIfPlayerIsDetected() == false)
         {
             minotaurController.SetAnimatorStateToWander();
         }
@@ -26,17 +27,14 @@ public class MinotaurAttackPlayer : StateMachineBehaviour
         //Update player pos
         playerPos = minotaurController.player.position;
 
-        //If the distance between enemy and player is larger than the min charge distance, charge
-        if (Vector3.Distance(minotaurController.transform.position, playerPos) >= minimumChargeDistance)
-        {
-            minotaurController.Charge(playerPos);
-        }
-        //Otherwise the minotaur must be close to the player. Execute a melee attack.
-        else
-        {
-            minotaurController.MeleeAttack();
-        }
+        //Move towards player
+        minotaurController.MoveTowards(playerPos, minotaurController.speed);
 
+        //Check if close enough to switch to attack state
+        if(Vector3.Distance(minotaurController.transform.position, playerPos) <= distanceBeforeSwitchingToAttackState)
+        {
+            minotaurController.SetAnimatorStateToAttack();
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
