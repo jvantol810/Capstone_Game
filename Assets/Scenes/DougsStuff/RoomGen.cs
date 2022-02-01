@@ -95,9 +95,10 @@ public class RoomGen : MonoBehaviour
                     walkY -= 1;
                     break;
             }
-            
+
             //turn new tile into floor tile
-            map.SetTile(new Vector3Int(walkX, walkY,0), tiles[1]);
+            if (walkX < mapWidth && walkX > -mapWidth && walkY < mapHeight && walkY > -mapHeight)
+                map.SetTile(new Vector3Int(walkX, walkY,0), tiles[1]);
         }
     }
 }
