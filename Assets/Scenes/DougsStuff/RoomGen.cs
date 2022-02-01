@@ -17,6 +17,8 @@ public class RoomGen : MonoBehaviour
     public Vector2Int[] roomCenters;
 
     [Header("Walk Settings")] public int floorMax;
+    public int walkX;
+    public int walkY;
 
     
     
@@ -65,8 +67,7 @@ public class RoomGen : MonoBehaviour
     //Randomly 'Walks' to create walkable area for player
     private void DrunkenWalkGen()
     {
-        int walkX;
-        int walkY;
+        
         
         walkX = (int)map.cellBounds.center.x;
         walkY = (int)map.cellBounds.center.y;
@@ -79,26 +80,35 @@ public class RoomGen : MonoBehaviour
         //Pick random direction to walk
         for (int i = 0; i < floorMax; i++)
         {
-            int rand = Random.Range(0, 5);
-            switch (rand)
-            {
-                case 1:
-                    walkX += 1;
-                    break;
-                case 2:
-                    walkX -= 1;
-                    break;
-                case 3:
-                    walkY += 1;
-                    break;
-                case 4:
-                    walkY -= 1;
-                    break;
-            }
+            PickRandomDirection();
 
             //turn new tile into floor tile
             if (walkX < mapWidth && walkX > -mapWidth && walkY < mapHeight && walkY > -mapHeight)
                 map.SetTile(new Vector3Int(walkX, walkY,0), tiles[1]);
+            else
+            {
+                PickRandomDirection();
+            }
+        }
+    }
+
+    private void PickRandomDirection()
+    {
+        int rand = Random.Range(0, 5);
+        switch (rand)
+        {
+            case 1:
+                walkX += 1;
+                break;
+            case 2:
+                walkX -= 1;
+                break;
+            case 3:
+                walkY += 1;
+                break;
+            case 4:
+                walkY -= 1;
+                break;
         }
     }
 }
