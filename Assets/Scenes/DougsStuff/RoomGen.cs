@@ -13,15 +13,18 @@ public class RoomGen : MonoBehaviour
 
     public int mapHeight;
     public int mapWidth;
-    public int roomsMax;
-    public int roomSeeds;
+   // public int roomsMax;
+   // public int roomSeeds;
     
     public Vector2Int[] roomCenters;
 
     [Header("Walk Settings")] public int floorMax;
     public bool testing = false;
-    public int walkX;
-    public int walkY;
+    public bool seeded = false;
+    public int seed;
+    
+    private int walkX;
+    private int walkY;
     private List<Vector3Int> tilesWalked = new List<Vector3Int>();
 
     
@@ -29,6 +32,7 @@ public class RoomGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         GenerateWorld();
     }
 
@@ -57,6 +61,16 @@ public class RoomGen : MonoBehaviour
 
     private void GenerateWorld()
     {
+        if (seeded)
+        {
+            Random.InitState(seed);
+        }
+        else
+        {
+            int randSeed = Random.Range(0, 99999);
+            seed = randSeed;
+            Random.InitState(randSeed);
+        }
         InitMap();
         DrunkenWalkGen();
     }
@@ -64,7 +78,7 @@ public class RoomGen : MonoBehaviour
     //Generation for square like rooms **WIP**
     private void CreateRooms()
     {
-        for (int i = 0; i < mapHeight; i++)
+       /* for (int i = 0; i < mapHeight; i++)
         {
             for (int j = 0; j < mapWidth; j++)
             {
@@ -78,7 +92,7 @@ public class RoomGen : MonoBehaviour
                     }
                 }
             }
-        }//end of outer loop
+        }//end of outer loop*/
        
        
 

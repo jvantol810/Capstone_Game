@@ -408,8 +408,8 @@ MonoBehaviour:
   roomCenters: []
   floorMax: 1500
   testing: 0
-  walkX: 0
-  walkY: 0
+  seeded: 0
+  seed: 0
 --- !u!4 &1379462477
 Transform:
   m_ObjectHideFlags: 0
