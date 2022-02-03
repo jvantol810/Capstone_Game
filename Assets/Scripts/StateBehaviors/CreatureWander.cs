@@ -21,7 +21,7 @@ public class CreatureWander : StateMachineBehaviour
         creatureController.MoveTowards(currentDestination, creatureController.speed);
         
         //If the creature has detected the player, switch the state to chase
-        if( creatureController.CheckIfPlayerIsDetected() )
+        if( creatureController.isPlayerDetected() )
         {
             SetStateToChase(animator);
         }

@@ -26,7 +26,7 @@ public class CreatureController : MonoBehaviour
     [Header("Detection")]
     public float detectionRange;
     [Header("Melee Attacks")]
-    public Transform meleeAttackPoint;
+    //public Transform meleeAttackPoint;
     public float meleeAttackRange;
     public LayerMask whatCanBeHitByMelee;
     [Header("Swing Attacks")]
@@ -76,31 +76,9 @@ public class CreatureController : MonoBehaviour
     {
         if (Input.GetKey("space"))
         {
-            //Charge();
+            //Set state to possessed
+            SetAnimatorStateToPossessed();
         }
-        if (Input.GetMouseButtonDown(0))
-        {
-            RangedAttack(projectilePrefab, Vector2.right);
-        }
-        if (Input.GetKeyDown("f"))
-        {
-            swingAttacking = true;
-        }
-
-        //Check if player is in enemy's detection range
-        CheckIfPlayerIsDetected();
-
-        if (possessed)
-        {
-            //Get input from user
-            float horizontal = Input.GetAxis("Horizontal");
-            float vertical = Input.GetAxis("Vertical");
-
-            Vector2 moveDirection = new Vector2(horizontal, vertical);
-
-            Move(moveDirection, speed);
-        }
-       
         stateText.text = GetCurrentState();
        
         stateText.transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, 0);
@@ -139,6 +117,10 @@ public class CreatureController : MonoBehaviour
         {
             return "Chase";
         }
+        else if (currentStateInfo.IsName("Possessed"))
+        {
+            return "Possessed";
+        }
         else return "Not found";
     }
 
@@ -153,7 +135,7 @@ public class CreatureController : MonoBehaviour
     /// </summary>
     public void Move(Vector2 direction, float speed)
     {
-        Debug.Log("Move function called.");
+        //Debug.Log("Move function called.");
         //Get the current position based on the rigidbody
         Vector2 currentPos = m_rigidbody.position;
         //Multiply direction and speed to get the adjustedMovement value, which will modify the current position
@@ -189,7 +171,7 @@ public class CreatureController : MonoBehaviour
 
     public void Charge(Vector2 destination)
     {
-        Debug.Log("Charging!");
+        //Debug.Log("Charging!");
         if(!charging)
         {
             chargeDestination = destination;
@@ -200,13 +182,15 @@ public class CreatureController : MonoBehaviour
     public void MeleeAttack()
     {
         //Create a circle at the attack position with the range given for melee attacks, and store the hit colliders in an array called hits
-        Collider2D[] hits = Physics2D.OverlapCircleAll(meleeAttackPoint.position, meleeAttackRange, whatCanBeHitByMelee);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, meleeAttackRange, whatCanBeHitByMelee);
+
+
         //Iterate through hits and check if any of them were the player
         for (int i = 0; i < hits.Length; i++)
         {
             switch (hits[i].gameObject.tag)
             {
-                case "Player": Debug.Log("Player hit!"); break;
+                case "Player":/* Debug.Log("Player hit!");*/ break;
                 default: Debug.Log("Something hit!"); break;
             }
         }
@@ -234,7 +218,7 @@ public class CreatureController : MonoBehaviour
 
     public void SetAnimatorStateToAttack()
     {
-        Debug.Log("Transitioning to the attack state!");
+        //Debug.Log("Transitioning to the attack state!");
         if (m_animator.GetBool("isAttacking") == false)
         {
             m_animator.SetBool("isAttacking", true);
@@ -244,7 +228,8 @@ public class CreatureController : MonoBehaviour
     }
     public void SetAnimatorStateToChase()
     {
-        Debug.Log("Transitioning to the chase state!");
+        //Debug.Log("Transitioning to the chase state!");
+        m_animator.SetBool("isPossessed", false);
         if (m_animator.GetBool("isChasing") == false)
         {
             m_animator.SetBool("isChasing", true);
@@ -254,12 +239,43 @@ public class CreatureController : MonoBehaviour
     }
     public void SetAnimatorStateToWander()
     {
-        Debug.Log("Transitioning to the wander state!");
+        //Debug.Log("Transitioning to the wander state!");
+        m_animator.SetBool("isPossessed", false);
         m_animator.SetBool("isAttacking", false);
         m_animator.SetBool("isChasing", false);
     }
 
-    public bool CheckIfPlayerIsDetected()
+    public void SetAnimatorStateToPossessed()
+    {
+        //Debug.Log("Transitioning to the possessed state!");
+        m_animator.SetBool("isPossessed", true);
+        m_animator.SetBool("isAttacking", false);
+        m_animator.SetBool("isChasing", false);
+    }
+
+    public bool isPlayerInMeleeAttackRange()
+    {
+        //Create an array of colliders of all gameObjects in this enemies detection range
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, meleeAttackRange);
+
+        //Iterate through hits and check if any of them were the player
+        for (int i = 0; i < hits.Length; i++)
+        {
+            //If one of the hits was the player, assign the player variable and return true
+            if (hits[i].gameObject.CompareTag("Player"))
+            {
+                player = hits[i].transform;
+                //Debug.Log("Player in melee attack range!");
+                //Since the player is in the melee attack range, return true
+                return true;
+            }
+        }
+
+        //If the player is not in the melee attack range, return false
+        return false;
+    }
+
+    public bool isPlayerDetected()
     {
         //Create an array of colliders of all gameObjects in this enemies detection range
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, detectionRange);
@@ -267,11 +283,11 @@ public class CreatureController : MonoBehaviour
         //Iterate through hits and check if any of them were the player
         for (int i = 0; i < hits.Length; i++)
         {
-            //If one of the hits was the player, assign the player variable and set the animator state to attack
+            //If one of the hits was the player, assign the player variable and return true
             if (hits[i].gameObject.CompareTag("Player"))
             {
                 player = hits[i].transform;
-                Debug.Log("Player detected!"); 
+                //Debug.Log("Player detected!"); 
                 //Since the player was detected, return true
                 return true;
             }
@@ -290,7 +306,7 @@ public class CreatureController : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(meleeAttackPoint.position, meleeAttackRange);
+        Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
 
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
