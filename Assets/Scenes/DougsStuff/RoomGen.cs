@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
+using Random = UnityEngine.Random;
 
 
 public class RoomGen : MonoBehaviour
@@ -18,16 +19,29 @@ public class RoomGen : MonoBehaviour
     public Vector2Int[] roomCenters;
 
     [Header("Walk Settings")] public int floorMax;
+    public bool testing = false;
     public int walkX;
     public int walkY;
+    private List<Vector3Int> tilesWalked = new List<Vector3Int>();
 
     
     
     // Start is called before the first frame update
     void Start()
     {
-        InitMap();
-        DrunkenWalkGen();
+        GenerateWorld();
+    }
+
+    private void Update()
+    {
+        if (testing)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                GenerateWorld();
+            }  
+        }
+        
     }
 
     private void InitMap()
@@ -39,6 +53,12 @@ public class RoomGen : MonoBehaviour
                 map.SetTile(new Vector3Int(j,i,0), tiles[0]);
             }
         }//end of outer loop
+    }
+
+    private void GenerateWorld()
+    {
+        InitMap();
+        DrunkenWalkGen();
     }
 
     //Generation for square like rooms **WIP**
@@ -68,51 +88,30 @@ public class RoomGen : MonoBehaviour
     //Randomly 'Walks' to create walkable area for player
     private void DrunkenWalkGen()
     {
-
-
-        //walkX = (int)map.cellBounds.center.x;
-        //walkY = (int)map.cellBounds.center.y;
+        tilesWalked.Clear();
         walkX = Mathf.RoundToInt(mapWidth / 2);
         walkY = Mathf.RoundToInt(mapHeight / 2);
-        int rand = 0;
-        
+
         //Seed of walk
         map.SetTile(new Vector3Int(walkX, walkY,0), tiles[1]);
-        
-        //Make walk bounded within map height and width
-        
-        //Pick random direction to walk
+
+        //Rand walk
         for (int i = 0; i < floorMax; i++)
         {
-            rand = PickRandomDirection();
-
-            //turn new tile into floor tile
-            if (walkX < mapWidth - 1  && walkX > 1 && walkY < mapHeight - 1 && walkY > 1)
-                map.SetTile(new Vector3Int(walkX, walkY,0), tiles[1]);
-            else
+            //Pick random direction
+            if (PickRandomDirection())
             {
-                switch (rand)
-                {
-                    case 1:
-                        walkX -= 1;
-                        break;
-                    case 2:
-                        walkX += 1;
-                        break;
-                    case 3:
-                        walkY -= 1;
-                        break;
-                    case 4:
-                        walkY += 1;
-                        break;
-                }
-                PickRandomDirection();
+                //turn new tile into floor tile
+                map.SetTile(new Vector3Int(walkX, walkY, 0), tiles[1]);
+                tilesWalked.Add(new Vector3Int(walkX, walkY, 0));
             }
+            
         }
     }
 
-    private int PickRandomDirection()
+    private bool PickRandomDirection()
     {
+        int lastIndex = tilesWalked.Count - 1;
         int rand = Random.Range(0, 5);
         switch (rand)
         {
@@ -129,6 +128,16 @@ public class RoomGen : MonoBehaviour
                 walkY -= 1;
                 break;
         }
-        return rand;
+        if (walkX < mapWidth - 1 && walkX > 0 && walkY < mapHeight - 1 && walkY > 0)
+        {
+            return true;
+        }
+        
+        //if you're going to walk out of bounds roll back to previous tile and pick new direction
+        walkX = tilesWalked[lastIndex].x;
+        walkY = tilesWalked[lastIndex].y;
+        return false;
+        
+        
     }
 }

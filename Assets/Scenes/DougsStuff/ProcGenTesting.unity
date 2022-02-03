@@ -401,12 +401,15 @@ MonoBehaviour:
   tiles:
   - {fileID: 11400000, guid: b33c06c5ed7f48a43a7590eead9e9ff8, type: 2}
   - {fileID: 11400000, guid: cdf78871e39a9ba4b954130dd384fd3f, type: 2}
-  mapHeight: 25
-  mapWidth: 25
+  mapHeight: 50
+  mapWidth: 50
   roomsMax: 6
   roomSeeds: 0
   roomCenters: []
-  floorMax: 900
+  floorMax: 1500
+  testing: 0
+  walkX: 0
+  walkY: 0
 --- !u!4 &1379462477
 Transform:
   m_ObjectHideFlags: 0
