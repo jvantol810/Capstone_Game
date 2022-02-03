@@ -27,7 +27,7 @@ public class PHPManager : MonoBehaviour
         else
         {
             Debug.Log("Got it!");
+            Debug.Log(leaderboardGET.downloadHandler.text);
         }
-
     }
 }
