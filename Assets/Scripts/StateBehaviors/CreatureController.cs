@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
 public class CreatureController : MonoBehaviour
 {
+   
+    [Header("CreatureType")]
+    [SerializeField]
+    public CreatureTypes CreatureType;
     //References to components or other gameobjects
     [Header("References")]
     private Rigidbody2D m_rigidbody;
@@ -49,8 +53,8 @@ public class CreatureController : MonoBehaviour
     [Header("State")]
     public TextMeshProUGUI stateText;
 
-    [Header("Possession")]
-    public bool possessed = false;
+    //[Header("Possession")]
+    //public bool possessed = false;
 
 
 
@@ -60,7 +64,7 @@ public class CreatureController : MonoBehaviour
     {
         //Set references
         m_rigidbody = GetComponent<Rigidbody2D>();
-        weaponAnimator = weapon.GetComponent<Animator>();
+        //weaponAnimator = weapon.GetComponent<Animator>();
         m_animator = GetComponent<Animator>();
 
         //Go through each event assigned in the inspector window and add listeners 
@@ -76,12 +80,12 @@ public class CreatureController : MonoBehaviour
     {
         if (Input.GetKey("space"))
         {
-            //Set state to possessed
-            SetAnimatorStateToPossessed();
+            
+
         }
-        stateText.text = GetCurrentState();
+        //stateText.text = GetCurrentState();
        
-        stateText.transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, 0);
+        //stateText.transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, 0);
     }
 
     private void FixedUpdate()
@@ -102,27 +106,27 @@ public class CreatureController : MonoBehaviour
         }
     }
 
-    public string GetCurrentState()
-    {
-        AnimatorStateInfo currentStateInfo = m_animator.GetCurrentAnimatorStateInfo(0);
-        if (currentStateInfo.IsName("Wander"))
-        {
-            return "Wander";
-        }
-        else if (currentStateInfo.IsName("AttackPlayer"))
-        {
-            return "Attack";
-        }
-        else if (currentStateInfo.IsName("ChasePlayer"))
-        {
-            return "Chase";
-        }
-        else if (currentStateInfo.IsName("Possessed"))
-        {
-            return "Possessed";
-        }
-        else return "Not found";
-    }
+    //public string GetCurrentState()
+    //{
+    //    AnimatorStateInfo currentStateInfo = m_animator.GetCurrentAnimatorStateInfo(0);
+    //    if (currentStateInfo.IsName("Wander"))
+    //    {
+    //        return "Wander";
+    //    }
+    //    else if (currentStateInfo.IsName("AttackPlayer"))
+    //    {
+    //        return "Attack";
+    //    }
+    //    else if (currentStateInfo.IsName("ChasePlayer"))
+    //    {
+    //        return "Chase";
+    //    }
+    //    else if (currentStateInfo.IsName("Possessed"))
+    //    {
+    //        return "Possessed";
+    //    }
+    //    else return "Not found";
+    //}
 
     /// <summary>This method changes the gameobject's location by
     /// moving it in the given direction at the given speed.
@@ -241,14 +245,6 @@ public class CreatureController : MonoBehaviour
     {
         //Debug.Log("Transitioning to the wander state!");
         m_animator.SetBool("isPossessed", false);
-        m_animator.SetBool("isAttacking", false);
-        m_animator.SetBool("isChasing", false);
-    }
-
-    public void SetAnimatorStateToPossessed()
-    {
-        //Debug.Log("Transitioning to the possessed state!");
-        m_animator.SetBool("isPossessed", true);
         m_animator.SetBool("isAttacking", false);
         m_animator.SetBool("isChasing", false);
     }

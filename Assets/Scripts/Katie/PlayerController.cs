@@ -33,40 +33,56 @@ public class PlayerController : MonoBehaviour
     float horizontal;
     float vertical;
 
-    Vector2 lookDirection = new Vector2(1, 0);
+    public Vector2 lookDirection = new Vector2(1, 0);
 
     public GameObject projectilePrefab;
     public float launchForce;
 
     public GameObject player;
-    
+    private Animator m_animator;
 
+    public CreatureTypes CreatureState;
     // Start is called before the first frame update
     void Start()
     {
+        //Create a reference to the player's rigidbody
         rigidbody2d = GetComponent<Rigidbody2D>();
-
         currentHealth = maxHealth;
+
+        //Create a reference to the player's animator controller
+        m_animator = GetComponent<Animator>();
+
+        //Set the creature state to be Ghost on start
+        CreatureState = CreatureTypes.Ghost;
     }
 
     // Update is called once per frame
     void Update()
     {
         //disable player game object when possessing enemy
-        if (SampleEnemy.isPossessed == true)
-        {
-            player.SetActive(false);
-        }
-        if (SampleEnemy.isPossessed == false)
-        {
-            player.SetActive(true);
-        }
+        //if (SampleEnemy.isPossessed == true)
+        //{
+        //    player.SetActive(false);
+        //}
+        //if (SampleEnemy.isPossessed == false)
+        //{
+        //    player.SetActive(true);
+        //}
         
+
         //get input from user
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
 
         Vector2 move = new Vector2(horizontal, vertical);
+
+        //Check if you need to switch to the moving state
+        if (move != Vector2.zero)
+        {
+            m_animator.SetTrigger("PlayerMove");
+        }
+
+        
 
         //set look direction of sprite
         if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
@@ -74,7 +90,7 @@ public class PlayerController : MonoBehaviour
             lookDirection.Set(move.x, move.y);
             lookDirection.Normalize();
         }
-        
+
         //set invincible timer after hit
         if (isInvincible)
         {
@@ -83,20 +99,10 @@ public class PlayerController : MonoBehaviour
                 isInvincible = false;
         }
 
-        //public float timePoweredUp = 5.0f;
-        //bool isPoweredUp;
-        //float powerUpTimer;
 
-        if (isPoweredUp)
+        if(Input.GetKeyDown("space"))
         {
-            powerUpTimer -= Time.deltaTime;
-            if (powerUpTimer < 0)
-                isPoweredUp = false;
-        }
-
-        //throw projectile
-        if (Input.GetKeyDown(KeyCode.C))
-        {
+            //Fire a projectile at the enemy, possessing them on contact
             Launch();
         }
     }
@@ -104,11 +110,11 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         //use position to move sprite
-        Vector2 position = rigidbody2d.position;
-        position.x = position.x + speed * horizontal * Time.deltaTime;
-        position.y = position.y + speed * vertical * Time.deltaTime;
+        //Vector2 position = rigidbody2d.position;
+        //position.x = position.x + speed * horizontal * Time.deltaTime;
+        //position.y = position.y + speed * vertical * Time.deltaTime;
 
-        rigidbody2d.MovePosition(position);
+        //rigidbody2d.MovePosition(position);
     }
 
     public void ChangeHealth(int amount)
@@ -161,11 +167,13 @@ public class PlayerController : MonoBehaviour
         GameObject possessionObject = Instantiate(projectilePrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
 
         Possession possession = possessionObject.GetComponent<Possession>();
-        
+
         //throw projectile in direction player is facing
+
         possession.Launch(lookDirection, launchForce);
 
         //animator.SetTrigger("Launch");
         //PlaySound(throwingClip);
     }
+
 }

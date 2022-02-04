@@ -26,12 +26,25 @@ public class Possession : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        SampleEnemy e = other.collider.GetComponent<SampleEnemy>();
+        //SampleEnemy e = other.collider.GetComponent<SampleEnemy>();
 
 
-        if (e != null)
+        //if (e != null)
+        //{
+        //    SampleEnemy.isPossessed = true;
+        //}
+
+        //Get the PlayerController script from the player in the scene
+        PlayerController Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        Animator PlayerStateMachine = Player.GetComponent<Animator>();
+        CreatureController Creature = other.collider.gameObject.GetComponent<CreatureController>();
+
+        //Get the type of the creature that the player hit
+        switch (Creature.CreatureType)
         {
-            SampleEnemy.isPossessed = true;
+            case CreatureTypes.Minotaur:
+                PlayerStateMachine.SetTrigger("PossessMinotaur");
+                break;
         }
 
         Destroy(gameObject);
