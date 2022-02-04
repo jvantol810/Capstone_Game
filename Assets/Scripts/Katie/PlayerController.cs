@@ -23,6 +23,11 @@ public class PlayerController : MonoBehaviour
     bool isInvincible;
     float invincibleTimer;
 
+    public float timePoweredUp = 5.0f;
+    bool isPoweredUp;
+    float powerUpTimer;
+
+
     Rigidbody2D rigidbody2d;
 
     float horizontal;
@@ -78,6 +83,17 @@ public class PlayerController : MonoBehaviour
                 isInvincible = false;
         }
 
+        //public float timePoweredUp = 5.0f;
+        //bool isPoweredUp;
+        //float powerUpTimer;
+
+        if (isPoweredUp)
+        {
+            powerUpTimer -= Time.deltaTime;
+            if (powerUpTimer < 0)
+                isPoweredUp = false;
+        }
+
         //throw projectile
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -110,6 +126,33 @@ public class PlayerController : MonoBehaviour
         }
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        Debug.Log(currentHealth);
+        //UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
+    }
+
+    public void ChangeSpeed()
+    {
+        /*if (amount < 0)
+        {
+            //animator.SetTrigger("Hit");
+
+            if (isInvincible)
+                return;
+
+            isInvincible = true;
+            invincibleTimer = timeInvincible;
+            //PlaySound(hitClip);
+        }
+        */
+        isPoweredUp = true;
+
+        if(isPoweredUp)
+        {
+            speed = 14f;
+        }
+
+        //currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        Debug.Log(speed);
         //UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
     }
 
