@@ -4,29 +4,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    /*
-     * For possessing enemies
-     *  possibly use raycast to detect when you "hit" them
-     *      then change player sprite to enemy sprite for specified period of time
-     *          and change abilities to match enemy type
-     * 
-     * 
-     * 
-     */
     public float speed = 3.0f;
 
     public int maxHealth = 5;
     public int health { get { return currentHealth; } }
-    int currentHealth;
+    public int currentHealth;
 
     public float timeInvincible = 2.0f;
     bool isInvincible;
     float invincibleTimer;
-
-    public float timePoweredUp = 5.0f;
-    bool isPoweredUp;
-    float powerUpTimer;
-
 
     Rigidbody2D rigidbody2d;
 
@@ -59,16 +45,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //disable player game object when possessing enemy
-        //if (SampleEnemy.isPossessed == true)
-        //{
-        //    player.SetActive(false);
-        //}
-        //if (SampleEnemy.isPossessed == false)
-        //{
-        //    player.SetActive(true);
-        //}
-        
 
         //get input from user
         horizontal = Input.GetAxis("Horizontal");
@@ -81,8 +57,6 @@ public class PlayerController : MonoBehaviour
         {
             m_animator.SetTrigger("PlayerMove");
         }
-
-        
 
         //set look direction of sprite
         if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
@@ -99,8 +73,7 @@ public class PlayerController : MonoBehaviour
                 isInvincible = false;
         }
 
-
-        if(Input.GetKeyDown("space"))
+        if (Input.GetKeyDown("space"))
         {
             //Fire a projectile at the enemy, possessing them on contact
             Launch();
@@ -133,32 +106,6 @@ public class PlayerController : MonoBehaviour
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         Debug.Log(currentHealth);
-        //UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
-    }
-
-    public void ChangeSpeed()
-    {
-        /*if (amount < 0)
-        {
-            //animator.SetTrigger("Hit");
-
-            if (isInvincible)
-                return;
-
-            isInvincible = true;
-            invincibleTimer = timeInvincible;
-            //PlaySound(hitClip);
-        }
-        */
-        isPoweredUp = true;
-
-        if(isPoweredUp)
-        {
-            speed = 14f;
-        }
-
-        //currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        Debug.Log(speed);
         //UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
     }
 
