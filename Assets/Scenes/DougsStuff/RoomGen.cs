@@ -12,11 +12,12 @@ public class RoomGen : MonoBehaviour
     public AStarGrid aStarGrid;
     public Tile[] tiles;
 
+
     public int mapHeight;
     public int mapWidth;
-   // public int roomsMax;
-   // public int roomSeeds;
-    
+    // public int roomsMax;
+    // public int roomSeeds;
+
     public Vector2Int[] roomCenters;
 
     [Header("Walk Settings")] public int floorMax;
@@ -33,7 +34,14 @@ public class RoomGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //Set the map size according to the values put in the inspector -- NOT DOING THIS CURRENTLY, BUT YOU CAN IF YOU WANT TO SET MAP SIZE IN INSPECTOR FOR CONVENINECE
+        //LevelSettings.MapData.SetSize(mapHeight, mapWidth);
+
+        //Get the map size from the LevelSettings script
+        mapHeight = LevelSettings.MapData.height;
+        mapWidth = LevelSettings.MapData.width;
+
+        //Generate the world map
         GenerateWorld();
     }
 
