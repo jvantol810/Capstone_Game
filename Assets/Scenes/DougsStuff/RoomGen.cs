@@ -13,8 +13,8 @@ public class RoomGen : MonoBehaviour
     public Tile[] tiles;
 
 
-    public int mapHeight;
-    public int mapWidth;
+    private int mapHeight;
+    private int mapWidth;
     // public int roomsMax;
     // public int roomSeeds;
 
