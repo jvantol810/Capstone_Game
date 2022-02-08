@@ -378,6 +378,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1379462477}
   - component: {fileID: 1379462476}
+  - component: {fileID: 1379462478}
   m_Layer: 0
   m_Name: Generator
   m_TagString: Untagged
@@ -398,13 +399,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 1190100452}
+  aStarGrid: {fileID: 1379462478}
   tiles:
   - {fileID: 11400000, guid: b33c06c5ed7f48a43a7590eead9e9ff8, type: 2}
   - {fileID: 11400000, guid: cdf78871e39a9ba4b954130dd384fd3f, type: 2}
   mapHeight: 50
   mapWidth: 50
-  roomsMax: 6
-  roomSeeds: 0
   roomCenters: []
   floorMax: 1500
   testing: 0
@@ -424,3 +424,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1379462478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379462475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba2055e3af241744fadfc0994778ee0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  map: {fileID: 1190100452}
+  tileRow: []
