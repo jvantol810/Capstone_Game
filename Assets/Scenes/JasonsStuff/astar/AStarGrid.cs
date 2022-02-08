@@ -6,12 +6,38 @@ using UnityEngine.Tilemaps;
 public class AStarGrid : MonoBehaviour
 {
     //public Tilemap walkableMap;
-    public Tilemap unwalkableMap;
+    public Tilemap map;
     [SerializeField]
     public MapData mapData;
+    [SerializeField]
+    public WorldTileRow[] tileRow;
+
+    [System.Serializable]
+    public struct WorldTileRow
+    {
+        public WorldTile[] tileColumn;
+    }
     private void Start()
     {
-        CreateWorldTiles();
+        //CreateWorldTiles();
+        tileRow = new WorldTileRow[mapData.width];
+        //Go through tile array and create each column of height mapHeight
+        for(int i = 0; i < tileRow.Length; i++)
+        {
+            tileRow[i].tileColumn = new WorldTile[mapData.height];
+        }
+    }
+
+    public void AddTile(WorldTile newTile)
+    {
+        tileRow[newTile.gridX].tileColumn[newTile.gridY] = newTile;
+        Debug.Log("Tile added at (x: " + newTile.gridX + ", y: " + newTile.gridY + ") -- Walkable: " + newTile.walkable);
+    }
+
+    public void ReplaceTileAt(Vector2Int originalTilePosition, WorldTile newTile)
+    {
+        tileRow[originalTilePosition.x].tileColumn[newTile.gridY] = newTile;
+        Debug.Log("Tile at (x: " + originalTilePosition.x + ", y: " + originalTilePosition.y + ") replaced with new tile.");
     }
 
     //Create a 2D array of tiles from the map
@@ -29,7 +55,7 @@ public class AStarGrid : MonoBehaviour
                 
                 bool tileWalkable;
                 //If there's a tile on the unwalkable tilemap at this point, set the tile to be unwalkable
-                if (unwalkableMap.GetTile(new Vector3Int(j, i, 1)) != null) {
+                if (map.GetTile(new Vector3Int(j, i, 1)) != null) {
                     tileWalkable = false;
                 }
                 else

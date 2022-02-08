@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 public class RoomGen : MonoBehaviour
 {
     public Tilemap map;
+    public AStarGrid aStarGrid;
     public Tile[] tiles;
 
     public int mapHeight;
@@ -54,10 +55,13 @@ public class RoomGen : MonoBehaviour
         {
             for (int j = 0; j < mapWidth; j++)
             {
-                map.SetTile(new Vector3Int(j,i,0), tiles[0]);
+                //Add an unwalkable tile to the tilemap and aStar grid
+                AddTileToMap(false, new Vector2Int(j, i), tiles[0]);
+
             }
         }//end of outer loop
     }
+
 
     private void GenerateWorld()
     {
@@ -107,7 +111,7 @@ public class RoomGen : MonoBehaviour
         walkY = Mathf.RoundToInt(mapHeight / 2);
 
         //Seed of walk
-        map.SetTile(new Vector3Int(walkX, walkY,0), tiles[1]);
+        AddTileToMap(true, new Vector2Int(walkX, walkY), tiles[1]);
 
         //Rand walk
         for (int i = 0; i < floorMax; i++)
@@ -116,13 +120,20 @@ public class RoomGen : MonoBehaviour
             if (PickRandomDirection())
             {
                 //turn new tile into floor tile
-                map.SetTile(new Vector3Int(walkX, walkY, 0), tiles[1]);
+                AddTileToMap(true, new Vector2Int(walkX, walkY), tiles[1]);
                 tilesWalked.Add(new Vector3Int(walkX, walkY, 0));
             }
             
         }
     }
 
+    public void AddTileToMap(bool walkable, Vector2Int position, Tile tileObject)
+    {
+        //Set the tile onto the world's tilemap
+        map.SetTile(new Vector3Int(position.x, position.y, 0), tileObject);
+        //Add the tile data to the aStarGrid for pathfinding
+        aStarGrid.AddTile(new WorldTile(walkable, position.x, position.y));
+    }
     private bool PickRandomDirection()
     {
         int lastIndex = tilesWalked.Count - 1;

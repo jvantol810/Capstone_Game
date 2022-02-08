@@ -1161,10 +1161,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba2055e3af241744fadfc0994778ee0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unwalkableMap: {fileID: 0}
+  map: {fileID: 0}
   mapData:
     height: 25
     width: 25
+  tileRow: []
 --- !u!1 &1361941784
 GameObject:
   m_ObjectHideFlags: 0
@@ -1561,13 +1562,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1925389655}
   - component: {fileID: 1925389656}
+  - component: {fileID: 1925389657}
   m_Layer: 0
   m_Name: RoomGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1925389655
 Transform:
   m_ObjectHideFlags: 0
@@ -1595,6 +1597,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 2018857603}
+  aStarGrid: {fileID: 1925389657}
   tiles:
   - {fileID: 11400000, guid: b33c06c5ed7f48a43a7590eead9e9ff8, type: 2}
   - {fileID: 11400000, guid: cdf78871e39a9ba4b954130dd384fd3f, type: 2}
@@ -1605,6 +1608,23 @@ MonoBehaviour:
   testing: 0
   seeded: 0
   seed: 0
+--- !u!114 &1925389657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1925389654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba2055e3af241744fadfc0994778ee0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  map: {fileID: 2018857603}
+  mapData:
+    height: 25
+    width: 25
+  tileRow: []
 --- !u!1 &1957926091
 GameObject:
   m_ObjectHideFlags: 0

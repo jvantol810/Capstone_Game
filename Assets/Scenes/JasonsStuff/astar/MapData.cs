@@ -7,6 +7,4 @@ public class MapData
 {
     public int height;
     public int width;
-
-
 }
