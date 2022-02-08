@@ -16,17 +16,21 @@ public class AStarGrid : MonoBehaviour
     {
         public WorldTile[] tileColumn;
     }
-    private void Start()
+    private void Awake()
+    {
+       
+    }
+
+    public void InitGrid()
     {
         //CreateWorldTiles();
         tileRow = new WorldTileRow[LevelSettings.MapData.width];
         //Go through tile array and create each column of height mapHeight
-        for(int i = 0; i < tileRow.Length; i++)
+        for (int i = 0; i < tileRow.Length; i++)
         {
             tileRow[i].tileColumn = new WorldTile[LevelSettings.MapData.height];
         }
     }
-
     //Add a new WorldTile object to the two dimensional tileArray. This does not check if a tile already exists here, so it will replace it.
     public void AddTile(WorldTile newTile)
     {

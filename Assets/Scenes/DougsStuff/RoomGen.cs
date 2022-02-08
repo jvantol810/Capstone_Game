@@ -41,6 +41,8 @@ public class RoomGen : MonoBehaviour
         mapHeight = LevelSettings.MapData.height;
         mapWidth = LevelSettings.MapData.width;
 
+        //Initialize the aStar grid
+        aStarGrid.InitGrid();
         //Generate the world map
         GenerateWorld();
     }
