@@ -43,6 +43,7 @@ public class RoomGen : MonoBehaviour
 
         //Initialize the aStar grid
         aStarGrid.InitGrid();
+
         //Generate the world map
         GenerateWorld();
     }
@@ -54,9 +55,16 @@ public class RoomGen : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 GenerateWorld();
-            }  
+            }
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                List<WorldTile> path = aStarGrid.FindPath(new Vector2Int(25, 25), new Vector2Int(26, 26));
+                Debug.Log("Path: " + path.ToString());
+            }
         }
-        
+
+
+    
     }
 
     private void InitMap()
@@ -142,7 +150,7 @@ public class RoomGen : MonoBehaviour
         //Set the tile onto the world's tilemap
         map.SetTile(new Vector3Int(position.x, position.y, 0), tileObject);
         //Add the tile data to the aStarGrid for pathfinding
-        aStarGrid.AddTile(new WorldTile(walkable, position.x, position.y));
+        aStarGrid.AddTile(new WorldTile(walkable, position.x, position.y, aStarGrid));
     }
     private bool PickRandomDirection()
     {

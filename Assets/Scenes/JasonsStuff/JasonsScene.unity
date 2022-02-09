@@ -345,11 +345,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5684243186576125845, guid: 5a70a9b837cdba14181275b9628fe453, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.17
+      value: 4.84
       objectReference: {fileID: 0}
     - target: {fileID: 5684243186576125845, guid: 5a70a9b837cdba14181275b9628fe453, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.45
+      value: 0.63
       objectReference: {fileID: 0}
     - target: {fileID: 5684243186576125845, guid: 5a70a9b837cdba14181275b9628fe453, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1162,9 +1162,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 0}
-  mapData:
-    height: 25
-    width: 25
   tileRow: []
 --- !u!1 &1361941784
 GameObject:
@@ -1601,11 +1598,9 @@ MonoBehaviour:
   tiles:
   - {fileID: 11400000, guid: b33c06c5ed7f48a43a7590eead9e9ff8, type: 2}
   - {fileID: 11400000, guid: cdf78871e39a9ba4b954130dd384fd3f, type: 2}
-  mapHeight: 25
-  mapWidth: 25
   roomCenters: []
   floorMax: 900
-  testing: 0
+  testing: 1
   seeded: 0
   seed: 0
 --- !u!114 &1925389657
@@ -1621,9 +1616,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 2018857603}
-  mapData:
-    height: 25
-    width: 25
   tileRow: []
 --- !u!1 &1957926091
 GameObject:
