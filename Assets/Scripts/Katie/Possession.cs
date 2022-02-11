@@ -45,6 +45,9 @@ public class Possession : MonoBehaviour
             case CreatureTypes.Minotaur:
                 PlayerStateMachine.SetTrigger("PossessMinotaur");
                 break;
+            case CreatureTypes.Ogre:
+                PlayerStateMachine.SetTrigger("PossessOgre");
+                break;
         }
 
         Destroy(gameObject);

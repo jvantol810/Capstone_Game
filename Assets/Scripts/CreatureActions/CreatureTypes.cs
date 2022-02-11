@@ -7,4 +7,5 @@ public enum CreatureTypes
     Ghost,
     Minotaur,
     Spider,
+    Ogre
 }
