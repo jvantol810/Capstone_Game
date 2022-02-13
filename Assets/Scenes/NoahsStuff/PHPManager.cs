@@ -5,17 +5,23 @@ using UnityEngine.Networking;
 
 public class PHPManager : MonoBehaviour
 {
+    private string lastRetrievedLeaderboardData;
+    private bool connectionSuccess;
+
     private void Awake()
     {
-        CallGetGlobalLeaderboard();
+        //CallGetGlobalLeaderboard();
     }
 
-    public void CallGetGlobalLeaderboard()
+    public string CallGetGlobalLeaderboard()
     {
         StartCoroutine(GetGlobalLeaderboard());
+        return connectionSuccess.ToString() + "\t" + lastRetrievedLeaderboardData;
+        //CoroutineWithData cwd = new CoroutineWithData(this, LoadGlobal());
+        //yield return cwd.coroutine;
     }
-
-    IEnumerator GetGlobalLeaderboard()
+    
+    public IEnumerator GetGlobalLeaderboard()
     {
         UnityWebRequest leaderboardGET = UnityWebRequest.Get("http://localhost/capstone/globalleaderboard.php");
         yield return leaderboardGET.SendWebRequest();
@@ -23,11 +29,45 @@ public class PHPManager : MonoBehaviour
         {
             //Handle Error
             Debug.Log(leaderboardGET.result);
+            //connectionSuccess = false;
+            yield return "False";
         }
         else
         {
             Debug.Log("Got it!");
-            Debug.Log(leaderboardGET.downloadHandler.text);
+            //connectionSuccess = true;
+            //lastRetrievedLeaderboardData = leaderboardGET.downloadHandler.text;
+            //Debug.Log(lastRetrievedLeaderboardData);
+            yield return "True\t" + leaderboardGET.downloadHandler.text;
+        }
+    }
+    
+    public IEnumerator LoadGlobal()
+    {
+        CoroutineWithData cwd = new CoroutineWithData(this, LoadGlobal());
+        yield return cwd.coroutine;
+    }
+}
+
+//Thanks Ted-Bigham!
+//https://answers.unity.com/questions/24640/how-do-i-return-a-value-from-a-coroutine.html
+public class CoroutineWithData
+{
+    public Coroutine coroutine { get; private set; }
+    public object result;
+    private IEnumerator target;
+    public CoroutineWithData(MonoBehaviour owner, IEnumerator target)
+    {
+        this.target = target;
+        this.coroutine = owner.StartCoroutine(Run());
+    }
+
+    private IEnumerator Run()
+    {
+        while (target.MoveNext())
+        {
+            result = target.Current;
+            yield return result;
         }
     }
 }
