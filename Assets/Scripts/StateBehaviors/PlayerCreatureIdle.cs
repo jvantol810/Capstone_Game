@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMinotuarIdle : StateMachineBehaviour
+public class PlayerCreatureIdle : StateMachineBehaviour
 {
     [Header("Sprite To Change To")]
-    public Sprite MinotaurSprite;
+    public Sprite CreatureSprite;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     //When the player enters this state, create a reference to their PlayerController script. Also change their sprite to be a minotaur.
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //Get the player's SpriteRenderer component and set its sprite to be a minotaur
-        animator.GetComponent<SpriteRenderer>().sprite = MinotaurSprite;
+        animator.GetComponent<SpriteRenderer>().sprite = CreatureSprite;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
