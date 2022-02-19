@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody2D rigidbody2d;
 
+    private Vector2 moveInput;
     float horizontal;
     float vertical;
 
@@ -28,6 +29,15 @@ public class PlayerController : MonoBehaviour
     private Animator m_animator;
 
     public CreatureTypes CreatureState;
+
+    public bool chargingEnabled;
+    public float dashLength = .5f;
+    public float dashCooldown = 1f;
+    private float dashCounter;
+    private float dashCoolCounter;
+    private float activeMoveSpeed;
+    public float dashSpeed = 14;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,28 +50,27 @@ public class PlayerController : MonoBehaviour
 
         //Set the creature state to be Ghost on start
         CreatureState = CreatureTypes.Ghost;
+        activeMoveSpeed = speed;
     }
 
     // Update is called once per frame
     void Update()
     {
-
         //get input from user
-        horizontal = Input.GetAxis("Horizontal");
-        vertical = Input.GetAxis("Vertical");
-
-        Vector2 move = new Vector2(horizontal, vertical);
+        moveInput.x = Input.GetAxis("Horizontal");
+        moveInput.y = Input.GetAxis("Vertical");
+        //Vector2 move = new Vector2(moveInput.x, moveInput.y);
 
         //Check if you need to switch to the moving state
-        if (move != Vector2.zero)
+        if (moveInput != Vector2.zero)
         {
             m_animator.SetTrigger("PlayerMove");
         }
 
         //set look direction of sprite
-        if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
+        if (!Mathf.Approximately(moveInput.x, 0.0f) || !Mathf.Approximately(moveInput.y, 0.0f))
         {
-            lookDirection.Set(move.x, move.y);
+            lookDirection.Set(moveInput.x, moveInput.y);
             lookDirection.Normalize();
         }
 
@@ -78,16 +87,102 @@ public class PlayerController : MonoBehaviour
             //Fire a projectile at the enemy, possessing them on contact
             Launch();
         }
+        
+        rigidbody2d.velocity = moveInput * activeMoveSpeed;
+        //charching doesn't work when I set keycode to c, but it does work when I set it to space
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            if(dashCoolCounter <=0 && dashCounter <=0)
+            {
+                activeMoveSpeed = dashSpeed;
+                dashCounter = dashLength;
+            }
+        }
+
+        if(dashCounter > 0)
+        {
+            dashCounter -= Time.deltaTime;
+
+            if(dashCounter <= 0)
+            {
+                activeMoveSpeed = speed;
+                dashCoolCounter = dashCooldown;
+            }
+        }
+
+        if(dashCoolCounter > 0)
+        {
+            dashCoolCounter -= Time.deltaTime;
+        }
+
+        /*
+        if (chargingEnabled)
+        {
+            //charge left
+            if(Input.GetKeyDown(KeyCode.A)) {
+                if(doubleTapTime > Time.time && lastKeyCode == KeyCode.A){
+                    StartCoroutine(Dash(-1f));
+                }else{
+                    doubleTapTime = Time.time + 0.5f;
+                }
+
+                lastKeyCode = KeyCode.A;
+            }
+            //charge right
+            if (Input.GetKeyDown(KeyCode.D)) {
+                if (doubleTapTime > Time.time && lastKeyCode == KeyCode.D){
+                    StartCoroutine(Dash(1f));
+                } else {
+                    doubleTapTime = Time.time + 0.5f;
+                }
+
+                lastKeyCode = KeyCode.D;
+            }
+            /*
+            //charge up
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                if (doubleTapTime > Time.time && lastKeyCode == KeyCode.W)
+                {
+                    StartCoroutine(Dash(1f));
+                }
+                else
+                {
+                    doubleTapTime = Time.time + 0.5f;
+                }
+
+                lastKeyCode = KeyCode.W;
+            }
+            //charge down
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                if (doubleTapTime > Time.time && lastKeyCode == KeyCode.S)
+                {
+                    StartCoroutine(Dash(-1f));
+                }
+                else
+                {
+                    doubleTapTime = Time.time + 0.5f;
+                }
+
+                lastKeyCode = KeyCode.S;
+            }
+            */
+        
     }
 
     void FixedUpdate()
     {
-        //use position to move sprite
-        //Vector2 position = rigidbody2d.position;
-        //position.x = position.x + speed * horizontal * Time.deltaTime;
-        //position.y = position.y + speed * vertical * Time.deltaTime;
+    /*
+    //use position to move sprite
+    if(!isCharging)
+    {
+        Vector2 position = rigidbody2d.position;
+        position.x = position.x + speed * horizontal * Time.deltaTime;
+        position.y = position.y + speed * vertical * Time.deltaTime;
 
-        //rigidbody2d.MovePosition(position);
+        rigidbody2d.MovePosition(position);
+    }*/
     }
 
     public void ChangeHealth(int amount)
@@ -122,5 +217,13 @@ public class PlayerController : MonoBehaviour
         //animator.SetTrigger("Launch");
         //PlaySound(throwingClip);
     }
+
+    public void Charge(Vector2 direction, float force)
+    {
+        Debug.Log("charging");
+        rigidbody2d.AddForce(direction * force, ForceMode2D.Impulse);
+        //rigidbody2d.AddForce(direction * force);
+    }
+
 
 }
