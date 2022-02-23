@@ -29,11 +29,15 @@ public class RoomGen : MonoBehaviour
     private int walkY;
     private List<Vector3Int> tilesWalked = new List<Vector3Int>();
 
-    
-    
+    //Variables for pathfinding debugging, currently these are set to random values each frame to test the efficiency of the algorithm
+    Vector2Int pathStart;
+    Vector2Int pathEnd;
+    Vector2Int[] path;
     // Start is called before the first frame update
     void Start()
     {
+        pathStart = new Vector2Int(Random.Range(0, LevelSettings.MapData.width - 1), Random.Range(0, LevelSettings.MapData.height - 1));
+        pathEnd = new Vector2Int( Random.Range(0, LevelSettings.MapData.width - 1), Random.Range(0, LevelSettings.MapData.height - 1));
         //Set the map size according to the values put in the inspector -- NOT DOING THIS CURRENTLY, BUT YOU CAN IF YOU WANT TO SET MAP SIZE IN INSPECTOR FOR CONVENINECE
         //LevelSettings.MapData.SetSize(mapHeight, mapWidth);
 
@@ -46,7 +50,11 @@ public class RoomGen : MonoBehaviour
 
         //Generate the world map
         GenerateWorld();
+
+        //Generate a random path on the aStarGrid
+        path = aStarGrid.GetRandomPath();
     }
+    bool pathfinding = false;
 
     private void Update()
     {
@@ -58,13 +66,20 @@ public class RoomGen : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.F))
             {
-                List<WorldTile> path = aStarGrid.FindPath(new Vector2Int(25, 25), new Vector2Int(26, 26));
-                Debug.Log("Path: " + path.ToString());
+                pathfinding = true;
+                path = aStarGrid.GetRandomPath();
+            }
+            if (pathfinding)
+            {
+                
+                WorldTile[] route = aStarGrid.FindPath(path[0], path[1]);
+                path = aStarGrid.GetRandomPath();
             }
         }
+        
 
 
-    
+
     }
 
     private void InitMap()

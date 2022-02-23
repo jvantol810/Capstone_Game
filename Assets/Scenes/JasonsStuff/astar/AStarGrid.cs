@@ -32,17 +32,78 @@ public class AStarGrid : MonoBehaviour
             tileRow[i].tileColumn = new WorldTile[LevelSettings.MapData.height];
         }
     }
+
     //Add a new WorldTile object to the two dimensional tileArray. This does not check if a tile already exists here, so it will replace it.
     public void AddTile(WorldTile newTile)
     {
         tileRow[newTile.gridX].tileColumn[newTile.gridY] = newTile;
-        Debug.Log("Tile added at (x: " + newTile.gridX + ", y: " + newTile.gridY + ") -- Walkable: " + newTile.walkable);
+        //Debug.Log("Tile added at (x: " + newTile.gridX + ", y: " + newTile.gridY + ") -- Walkable: " + newTile.walkable);
     }
 
     public WorldTile GetTileAt(Vector2Int tilePosition)
     {
         return tileRow[tilePosition.x].tileColumn[tilePosition.y];
     }
+    public List<WorldTile> GetWalkableTiles()
+    {
+        List<WorldTile> walkableTiles = new List<WorldTile>();
+        //Iterate through each tile in the world map and collect the ones that are walkable into a list.
+        for (int i = 0; i < tileRow.Length; i++)
+        {
+            for (int j = 0; j < tileRow[i].tileColumn.Length; j++)
+            {
+                if (tileRow[i].tileColumn[j].walkable)
+                {
+                    walkableTiles.Add(tileRow[i].tileColumn[j]);
+                }
+            }
+        }
+        //Return the list of walkable tiles
+        return walkableTiles;
+    }
+
+    public List<Vector2Int> GetWalkableTileLocations()
+    {
+        List<Vector2Int> walkableTileLocations = new List<Vector2Int>();
+        //Iterate through each tile in the world map and collect the ones that are walkable into a list.
+        for (int i = 0; i < tileRow.Length; i++)
+        {
+            for (int j = 0; j < tileRow[i].tileColumn.Length; j++)
+            {
+                if (tileRow[i].tileColumn[j].walkable)
+                {
+                    walkableTileLocations.Add(tileRow[i].tileColumn[j].gridPosition);
+                }
+            }
+        }
+        //Return the list of walkable tiles
+        return walkableTileLocations;
+    }
+
+    public Vector2Int[] GetRandomPath()
+    {
+        List<Vector2Int> walkableTileLocations = GetWalkableTileLocations();
+        int randomIndex_1 = Random.Range(0, walkableTileLocations.Count);
+        int randomIndex_2 = Random.Range(0, walkableTileLocations.Count);
+        while(randomIndex_1 == randomIndex_2)
+        {
+            randomIndex_1 = Random.Range(0, walkableTileLocations.Count);
+            randomIndex_2 = Random.Range(0, walkableTileLocations.Count);
+        }
+        Vector2Int[] randomPath =
+        {
+            walkableTileLocations[randomIndex_1],
+            walkableTileLocations[randomIndex_2]
+        };
+        Debug.Log("Random path calculated: (" + randomPath[0] + ", " + randomPath[1] + ")");
+        return randomPath;
+    }
+
+    public bool tileIsOutOfBounds(Vector2Int tilePosition)
+    {
+        return tilePosition.x + 1 >= tileRow.Length || tilePosition.x < 0 || tilePosition.y >= tileRow.Length || tilePosition.y < 0;
+    }
+
     public int GetDistance(WorldTile tileA, WorldTile tileB)
     {
         int distanceX = Mathf.Abs(tileA.gridX - tileB.gridX);
@@ -58,7 +119,7 @@ public class AStarGrid : MonoBehaviour
         }
     }
 
-    List<WorldTile> RetracePath(WorldTile start, WorldTile end)
+    WorldTile[] RetracePath(WorldTile start, WorldTile end)
     {
         //Create a list of the world tiles called the path, and set current to the ending tile
         List<WorldTile> path = new List<WorldTile>();
@@ -72,31 +133,8 @@ public class AStarGrid : MonoBehaviour
         }
         
         path.Reverse();
-        return path;
+        return path.ToArray();
     }
-
-    //-- A STAR PATHFINDING PSEUDOCODE --//
-    //    OPEN_LIST
-    //CLOSED_LIST
-    //ADD start_cell to OPEN_LIST
-
-    //LOOP
-    //    current_cell = cell in OPEN_LIST with the lowest F_COST
-    //    REMOVE current_cell from OPEN_LIST
-    //    ADD current_cell to CLOSED_LIST
-
-    //IF current_cell is finish_cell
-    //    RETURN
-
-    //FOR EACH adjacent_cell to current_cell
-    //    IF adjacent_cell is unwalkable OR adjacent_cell is in CLOSED_LIST
-    //        SKIP to the next adjacent_cell
-
-    //    IF new_path to adjacent_cell is shorter OR adjacent_cell is not in OPEN_LIST
-    //        SET F_COST of adjacent_cell
-    //        SET parent of adjacent_cell to current_cell
-    //        IF adjacent_cell is not in OPEN_LIST
-    //            ADD adjacent_cell to OPEN_LIST
 
     private void OnDrawGizmos()
     {
@@ -110,65 +148,96 @@ public class AStarGrid : MonoBehaviour
         {
             for (int j = 0; j < tileRow[i].tileColumn.Length; j++) {
                 WorldTile tile = tileRow[i].tileColumn[j];
-                Handles.Label(new Vector3(tile.globalPosition.x, tile.globalPosition.y, 0), "("+tile.gridX +", " + tile.gridY + ")");
+                Handles.Label(new Vector3(tile.worldPosition.x, tile.worldPosition.y, 0), "("+tile.gridX +", " + tile.gridY + "),\n" + 
+                    "G: " + tile.gCost + ", H: " + tile.hCost + ", F: " + tile.fCost);
             }
         }
     }
-    public List<WorldTile> FindPath(Vector2Int startPos, Vector2Int endPos)
+
+    bool done = false;
+
+    [Header("Markers for Debugging")]
+    public GameObject pointMarker;
+    public Color startColor;
+    public Color endColor;
+    public Color closedMarkerColor;
+    public Color openMarkerColor;
+    public void PlaceMarker(Vector2 position, Color color)
     {
-        WorldTile start = GetTileAt(startPos);
-        WorldTile end = GetTileAt(endPos);
+        GameObject marker = Instantiate(pointMarker, (Vector3)position, Quaternion.identity);
+        marker.GetComponent<SpriteRenderer>().color = color;
+    }
 
-        List<WorldTile> openSet = new List<WorldTile>();
-        List<WorldTile> path = new List<WorldTile>();
-        HashSet<WorldTile> closedSet = new HashSet<WorldTile>();
-        openSet.Add(start);
-
-        while(openSet.Count > 0)
+    void RemoveAllMarkers()
+    {
+        GameObject[] markers = GameObject.FindGameObjectsWithTag("Marker");
+        foreach (GameObject m in markers)
         {
-            WorldTile current = openSet[0];
-            for(int i = 0; i < openSet.Count; i++)
+            Destroy(m);
+        }
+    }
+
+
+    public void PrintOpenSet(List<WorldTile> set)
+    {
+        string tilesString = "";
+        foreach (WorldTile tile in set)
+        {
+            tilesString += "( " + tile.gridPosition.x + ", " + tile.gridPosition.y + " ) \n";
+        }
+        //Debug.Log("Open Set Contains Tiles At: \n" + tilesString);
+    }
+
+    public WorldTile[] FindPath(Vector2Int startPosition, Vector2Int endPosition)
+    {
+        RemoveAllMarkers();
+        WorldTile startNode = GetTileAt(startPosition);
+        PlaceMarker(startPosition, startColor);
+        WorldTile targetNode = GetTileAt(endPosition);
+        PlaceMarker(endPosition, endColor);
+        List<WorldTile> openSet = new List<WorldTile>();
+        HashSet<WorldTile> closedSet = new HashSet<WorldTile>();
+        openSet.Add(startNode);
+
+        while (openSet.Count > 0)
+        {
+            WorldTile currentNode = openSet[0];
+            for (int i = 1; i < openSet.Count; i++)
             {
-                if(openSet[i].fCost < current.fCost || openSet[i].fCost == current.fCost && openSet[i].hCost < current.hCost)
+                if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
                 {
-                    current = openSet[i];
+                    currentNode = openSet[i];
                 }
             }
 
-            openSet.Remove(current);
-            closedSet.Add(current);
+            openSet.Remove(currentNode);
+            closedSet.Add(currentNode);
 
-            if(current == end)
+            if (currentNode == targetNode)
             {
-                path = RetracePath(start, end);
-                return path;
+                WorldTile[] finalPath = RetracePath(startNode, targetNode);
+                return finalPath;
             }
 
-            //Get the neighbors based on their location
-            List<WorldTile> neighbors = new List<WorldTile>();
-            foreach(Vector2Int neighborLocation in current.neighborLocations)
-            {
-                Debug.Log("Neighbor location: " + neighborLocation);
-                neighbors.Add(GetTileAt(neighborLocation));
-            }
-
-            foreach (WorldTile neighbour in neighbors)
+            foreach (WorldTile neighbour in currentNode.neighborTiles)
             {
                 if (!neighbour.walkable || closedSet.Contains(neighbour)) continue;
 
-                int newMovementCostToNeighbour = current.gCost + GetDistance(current, neighbour);
+                float newMovementCostToNeighbour = currentNode.gCost + Vector2.Distance(currentNode.worldPosition, neighbour.worldPosition);
                 if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
                 {
                     neighbour.gCost = newMovementCostToNeighbour;
-                    neighbour.hCost = GetDistance(neighbour, end);
-                    neighbour.parent = current;
+                    neighbour.hCost = GetDistance(neighbour, targetNode);
+                    neighbour.parent = currentNode;
 
                     if (!openSet.Contains(neighbour))
+                        //Add the neighbor to the open list because we want to explore it
                         openSet.Add(neighbour);
+                        PlaceMarker(neighbour.worldPosition, Color.cyan);
                 }
             }
         }
 
-        return path;
+        return new WorldTile[] { };
     }
 }

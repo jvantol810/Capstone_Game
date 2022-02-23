@@ -31,10 +31,9 @@ public class PlayerController : MonoBehaviour
     public CreatureTypes CreatureState;
 
     public bool chargingEnabled;
-    public float dashLength = .5f;
+    public float dashLength = 5f;
     public float dashCooldown = 1f;
-    private float dashCounter;
-    private float dashCoolCounter;
+    public float dashCoolCounter;
     private float activeMoveSpeed;
     public float dashSpeed = 14;
 
@@ -51,8 +50,12 @@ public class PlayerController : MonoBehaviour
         //Set the creature state to be Ghost on start
         CreatureState = CreatureTypes.Ghost;
         activeMoveSpeed = speed;
+
+        dashCoolCounter = dashLength;
     }
 
+    Vector2 lastDirectionFaced = Vector2.zero;
+    bool isDashing = false;
     // Update is called once per frame
     void Update()
     {
@@ -60,7 +63,7 @@ public class PlayerController : MonoBehaviour
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
         //Vector2 move = new Vector2(moveInput.x, moveInput.y);
-
+        
         //Check if you need to switch to the moving state
         if (moveInput != Vector2.zero)
         {
@@ -82,38 +85,71 @@ public class PlayerController : MonoBehaviour
                 isInvincible = false;
         }
 
+        //if (Input.GetKeyDown("space"))
+        //{
+        //    //Fire a projectile at the enemy, possessing them on contact
+        //    Launch();
+        //}
+        
+        //rigidbody2d.velocity = moveInput * activeMoveSpeed;
+        //charching doesn't work when I set keycode to c, but it does work when I set it to space
+
+        Debug.Log("I'm moving in this direction: " + "( " + moveInput.x + ", " + moveInput.y + ")");
+        
         if (Input.GetKeyDown("space"))
         {
-            //Fire a projectile at the enemy, possessing them on contact
-            Launch();
+
+            isDashing = true;
+           
         }
-        
-        rigidbody2d.velocity = moveInput * activeMoveSpeed;
-        //charching doesn't work when I set keycode to c, but it does work when I set it to space
-        if(Input.GetKeyDown(KeyCode.C))
+
+        if (isDashing && dashCoolCounter > 0)
         {
-            if(dashCoolCounter <=0 && dashCounter <=0)
+
+            //Cache the direction they were in when they executed the dash
+            if (lastDirectionFaced == Vector2.zero)
             {
-                activeMoveSpeed = dashSpeed;
-                dashCounter = dashLength;
+
+                lastDirectionFaced = moveInput;
+                Debug.Log("Ima dashin in this direction: " + lastDirectionFaced);
             }
-        }
 
-        if(dashCounter > 0)
-        {
-            dashCounter -= Time.deltaTime;
+            //Move player in that direction
+            rigidbody2d.MovePosition(rigidbody2d.position + Vector2.right * speed * 20f);
 
-            if(dashCounter <= 0)
-            {
-                activeMoveSpeed = speed;
-                dashCoolCounter = dashCooldown;
-            }
-        }
-
-        if(dashCoolCounter > 0)
-        {
+            //Inc counter
             dashCoolCounter -= Time.deltaTime;
         }
+        else if (dashCoolCounter <= 0 && isDashing)
+        {
+            isDashing = false;
+            dashCoolCounter = dashLength;
+            lastDirectionFaced = Vector2.zero;
+        }
+        //if(Input.GetKeyDown("space"))
+        //{
+        //    if(dashCoolCounter <= 0 && dashCounter <= 0)
+        //    {
+        //        activeMoveSpeed = dashSpeed;
+        //        dashCounter = dashLength;
+        //    }
+        //}
+
+        //if(dashCounter > 0)
+        //{
+        //    dashCounter -= Time.deltaTime;
+
+        //    if(dashCounter <= 0)
+        //    {
+        //        activeMoveSpeed = speed;
+        //        dashCoolCounter = dashCooldown;
+        //    }
+        //}
+
+        //if(dashCoolCounter > 0)
+        //{
+        //    dashCoolCounter -= Time.deltaTime;
+        //}
 
         /*
         if (chargingEnabled)
@@ -168,7 +204,7 @@ public class PlayerController : MonoBehaviour
                 lastKeyCode = KeyCode.S;
             }
             */
-        
+
     }
 
     void FixedUpdate()
