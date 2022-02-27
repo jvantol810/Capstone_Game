@@ -94,8 +94,7 @@ public class RoomGen : MonoBehaviour
             }
         }//end of outer loop
     }
-
-
+    
     private void GenerateWorld()
     {
         if (seeded)
@@ -111,31 +110,7 @@ public class RoomGen : MonoBehaviour
         InitMap();
         DrunkenWalkGen();
     }
-
-    //Generation for square like rooms **WIP**
-    private void CreateRooms()
-    {
-       /* for (int i = 0; i < mapHeight; i++)
-        {
-            for (int j = 0; j < mapWidth; j++)
-            {
-                int rand = Random.Range(0, 100);
-                if (rand <= 1)
-                {
-                    if (roomSeeds < roomsMax)
-                    {
-                        map.SetTile(new Vector3Int(j,i,0), tiles[1]);
-                        roomSeeds++;
-                    }
-                }
-            }
-        }//end of outer loop*/
-       
-       
-
-
-    }
-
+    
     //Randomly 'Walks' to create walkable area for player
     private void DrunkenWalkGen()
     {
@@ -196,6 +171,12 @@ public class RoomGen : MonoBehaviour
         walkY = tilesWalked[lastIndex].y;
         return false;
         
+        
+    }
+
+    //Converts String array into a Tilemap prefab
+    private void ConvertToPrefab()
+    {
         
     }
 }

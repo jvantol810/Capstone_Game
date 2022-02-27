@@ -379,6 +379,7 @@ GameObject:
   - component: {fileID: 1379462477}
   - component: {fileID: 1379462476}
   - component: {fileID: 1379462478}
+  - component: {fileID: 1379462479}
   m_Layer: 0
   m_Name: Generator
   m_TagString: Untagged
@@ -403,8 +404,6 @@ MonoBehaviour:
   tiles:
   - {fileID: 11400000, guid: b33c06c5ed7f48a43a7590eead9e9ff8, type: 2}
   - {fileID: 11400000, guid: cdf78871e39a9ba4b954130dd384fd3f, type: 2}
-  mapHeight: 50
-  mapWidth: 50
   roomCenters: []
   floorMax: 1500
   testing: 0
@@ -438,3 +437,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   map: {fileID: 1190100452}
   tileRow: []
+--- !u!114 &1379462479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379462475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f906166845aa83643a9e98b31c16d0ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
