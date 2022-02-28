@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -11,7 +13,7 @@ public class RoomGen : MonoBehaviour
     public Tilemap map;
     public AStarGrid aStarGrid;
     public Tile[] tiles;
-
+    private List<RoomPrefab> prefabs =new List<RoomPrefab>();
 
     private int mapHeight;
     private int mapWidth;
@@ -50,6 +52,8 @@ public class RoomGen : MonoBehaviour
 
         //Generate the world map
         GenerateWorld();
+        
+        DoPrefabStuff();
 
         //Generate a random path on the aStarGrid
         path = aStarGrid.GetRandomPath();
@@ -142,6 +146,15 @@ public class RoomGen : MonoBehaviour
         //Add the tile data to the aStarGrid for pathfinding
         aStarGrid.AddTile(new WorldTile(walkable, position.x, position.y, aStarGrid));
     }
+    
+    //Overloaded to accept WorldTiles  as parameter 
+    public void AddTileToMap(WorldTile worldTile, Tile tileObject)
+    {
+        //Set the tile onto the world's tilemap
+        map.SetTile(new Vector3Int(worldTile.gridX, worldTile.gridY, 0), tileObject);
+        //Add the tile data to the aStarGrid for pathfinding
+        aStarGrid.AddTile(worldTile);
+    }
     private bool PickRandomDirection()
     {
         int lastIndex = tilesWalked.Count - 1;
@@ -174,9 +187,105 @@ public class RoomGen : MonoBehaviour
         
     }
 
+
+    private void DoPrefabStuff()
+    {
+        ConvertToPrefab();
+        PlacePrefab();
+    }
+    
     //Converts String array into a Tilemap prefab
     private void ConvertToPrefab()
     {
+        String[,] stringArray = FileParse.ParseTextFile();
+        RoomPrefab roomTiles = new RoomPrefab();
         
+        //Loops through 2d string array and converts it into a 'RoomPrefab'
+        for (int i = 0; i < stringArray.GetLength(0); i++)
+        {
+            for (int j = 0; j < stringArray.GetLength(1); j++)
+            {
+                //This trims the 2d array down to just the parts that represent tiles
+                if (stringArray[j, i] != null)
+                {
+                    //A "1" is a wall, "0" for floors 
+                    if (stringArray[j, i] == "1")
+                    {
+                        //roomTiles.prefabTiles[j][i] = new WorldTile(false, 0, 0, aStarGrid);
+                        roomTiles.prefabTiles[j].Insert(i , new WorldTile(false, 0, 0, aStarGrid));
+                    }
+                    else
+                    {
+                        
+                        //roomTiles.prefabTiles[j][i] = new WorldTile(true, 0, 0, aStarGrid);
+                        roomTiles.prefabTiles[j].Insert(i , new WorldTile(false, 0, 0, aStarGrid));
+                    }
+
+                }
+            }
+        }
+        //Add to prefab list
+        prefabs.Add(roomTiles);
+    }
+
+    private void PlacePrefab()
+    {
+        List<Vector2Int> usablePoints = FindPrefabSpace();
+        int totalTiles = 0;
+        //Loops through the prefabs tiles setting their positions to an empty area 
+        for (int i = 0; i < prefabs[0].prefabTiles.Count; i++)
+        {
+            for (int j = 0; j < prefabs[0].prefabTiles[i].Count; j++)
+            {
+                prefabs[0].prefabTiles[j][i].gridX = usablePoints[totalTiles].x;
+                prefabs[0].prefabTiles[j][i].gridY = usablePoints[totalTiles].y;
+                totalTiles++;
+                
+                Debug.Log(prefabs[0].prefabTiles[j][i]);
+                //If walkable set the map to floor if not walls and add to map and astar grid
+                if (prefabs[0].prefabTiles[j][i].walkable)
+                {
+                    AddTileToMap(prefabs[0].prefabTiles[j][i], tiles[2]);
+                }
+                else
+                {
+                    AddTileToMap(prefabs[0].prefabTiles[j][i], tiles[2]);
+                }
+            }
+        }
+        Debug.Log("Total:" + totalTiles);
+    }
+
+    private List<Vector2Int> FindPrefabSpace()
+    {
+        List<Vector2Int> prefabPoints = new List<Vector2Int>();
+        int pWidth = prefabs[0].prefabTiles[0].Count;
+        int pHeight = prefabs[0].prefabTiles.Count;
+        List<Vector2Int> unwalkableLocations = aStarGrid.GetUnWalkableTileLocations();
+        
+        //Get random point 
+        int randIndex = Random.Range(0, unwalkableLocations.Count);
+        Vector2Int randomPoint = unwalkableLocations[randIndex];
+
+        for (int i = randomPoint.y; i < randomPoint.y + pHeight; i++)
+        {
+            for (int j = randomPoint.x; j < randomPoint.x + pWidth; j++)
+            {
+                if (randomPoint.y + pHeight >= mapHeight - 1 || randomPoint.x + pWidth >= mapWidth)
+                {
+                    FindPrefabSpace();
+                }
+                if (aStarGrid.GetTileAt(new Vector2Int(j,i)).walkable == false)//Getting weird Out of bound here sometimes
+                {
+                    prefabPoints.Add(new Vector2Int(j, i));
+                }
+                else
+                {
+                    FindPrefabSpace();
+                }
+            }
+        }
+
+        return prefabPoints;
     }
 }

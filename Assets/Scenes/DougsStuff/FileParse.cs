@@ -5,32 +5,27 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class FileParse : MonoBehaviour
+public static class FileParse 
 {
-    private String path;
-    private String jsonString;
+    private static String path;
+    private static String jsonString;
     
     //This is a bigger area than rooms should need
-    private string[,] lines = new String[20, 20];
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-       ParseTextFile();
-    }
+    private static string[,] lines = new String[20, 20];
 
     //Reads in text file splits into a String 2d array
-    private String[,] ParseTextFile()
+    public static String[,] ParseTextFile()
     {
-        path = Application.persistentDataPath + "/TextPrefab.txt";
-        String input = File.ReadAllText(path);
+        String textPath = Application.persistentDataPath + "/TextPrefab.txt";
+        String input = File.ReadAllText(textPath);
 
         
         int i = 0, j = 0;
         
-        foreach (var row in input.Split('\n'))
+        foreach (string row in input.Split('\n'))
         {
-            foreach (var col in row.Trim().Split(','))
+            j = 0;
+            foreach (string col in row.Trim().Split(','))
             {
                 lines[j, i] = col.Trim();
                 j++;
@@ -43,7 +38,7 @@ public class FileParse : MonoBehaviour
     }
     
     //Reads in from JSON -- Doesn't Work -.-
-    private void ParseJSON()
+    private static void ParseJSON()
     {
         path = Application.persistentDataPath + "/TestPrefab.json";
         

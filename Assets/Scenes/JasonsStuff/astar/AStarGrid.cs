@@ -79,6 +79,24 @@ public class AStarGrid : MonoBehaviour
         //Return the list of walkable tiles
         return walkableTileLocations;
     }
+    
+    public List<Vector2Int> GetUnWalkableTileLocations()
+    {
+        List<Vector2Int> unwalkableTileLocations = new List<Vector2Int>();
+        //Iterate through each tile in the world map and collect the ones that are walkable into a list.
+        for (int i = 0; i < tileRow.Length; i++)
+        {
+            for (int j = 0; j < tileRow[i].tileColumn.Length; j++)
+            {
+                if (tileRow[i].tileColumn[j].walkable == false)
+                {
+                    unwalkableTileLocations.Add(tileRow[i].tileColumn[j].gridPosition);
+                }
+            }
+        }
+        //Return the list of Unwalkable tiles
+        return unwalkableTileLocations;
+    }
 
     public Vector2Int[] GetRandomPath()
     {
