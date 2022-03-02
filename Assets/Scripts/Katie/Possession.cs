@@ -44,15 +44,19 @@ public class Possession : MonoBehaviour
         {
             case CreatureTypes.Minotaur:
                 //Player.chargingEnabled = true;
+                //add dash power to the queue
                 Player.AddPower(Powers.Dash);
                 Debug.Log("Charging enabled");
                 //PlayerStateMachine.SetTrigger("PossessMinotaur");
                 break;
             case CreatureTypes.Spider:
                 Player.AddPower(Powers.ShootWeb);
+                Debug.Log(Powers.ShootWeb);
                 break;
-            case CreatureTypes.Ogre:
-                PlayerStateMachine.SetTrigger("PossessOgre");
+            case CreatureTypes.Bomb:
+                //PlayerStateMachine.SetTrigger("PossessOgre");
+                Player.AddPower(Powers.Explode);
+                Debug.Log(Powers.Explode);
                 break;
         }
 

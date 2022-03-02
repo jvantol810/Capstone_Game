@@ -53,7 +53,8 @@ public class RoomGen : MonoBehaviour
         //Generate the world map
         GenerateWorld();
         
-        DoPrefabStuff();
+        //commenting out because unity is giving me errors - katie
+        //DoPrefabStuff();
 
         //Generate a random path on the aStarGrid
         path = aStarGrid.GetRandomPath();
