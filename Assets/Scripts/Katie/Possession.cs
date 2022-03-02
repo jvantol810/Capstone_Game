@@ -43,9 +43,13 @@ public class Possession : MonoBehaviour
         switch (Creature.CreatureType)
         {
             case CreatureTypes.Minotaur:
-                Player.chargingEnabled = true;
+                //Player.chargingEnabled = true;
+                Player.AddPower(Powers.Dash);
                 Debug.Log("Charging enabled");
                 //PlayerStateMachine.SetTrigger("PossessMinotaur");
+                break;
+            case CreatureTypes.Spider:
+                Player.AddPower(Powers.ShootWeb);
                 break;
             case CreatureTypes.Ogre:
                 PlayerStateMachine.SetTrigger("PossessOgre");

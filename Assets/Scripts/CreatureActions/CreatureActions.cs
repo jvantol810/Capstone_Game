@@ -46,6 +46,9 @@ public static class CreatureActions
     /// </summary>
     public static float MoveTowards(Rigidbody2D creatureRigidbody, Vector2 destination, float speed)
     {
+        //Based on the destination, generate a path using an aStarGrid pathfinding
+       
+
         //Debug.Log("Player is moving!");
         //Calculate direction and store it
         Vector2 direction = ((Vector3)destination - (Vector3)creatureRigidbody.position).normalized;

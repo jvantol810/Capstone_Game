@@ -36,6 +36,28 @@ public class PlayerController : MonoBehaviour
     public float startDashTime;
     private int direction;
 
+    [SerializeField]
+    public Queue<Powers> playerPowers = new Queue<Powers>();
+    private int maxNumberOfPowers = 2;
+
+    public void AddPower(Powers power)
+    {
+        //Add the power if it isn't already in the power list
+        if (playerPowers.Contains(power) == false)
+        {
+            if(playerPowers.Count >= maxNumberOfPowers)
+            {
+                playerPowers.Dequeue();
+            }
+            playerPowers.Enqueue(power);
+        }
+    }
+
+    bool HasPower(Powers power)
+    {
+        return playerPowers.Contains(power);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,11 +82,28 @@ public class PlayerController : MonoBehaviour
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
         //Vector2 move = new Vector2(moveInput.x, moveInput.y);
-        
+
+        //Check if mouse button is pressed. If so, execute power one.
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Do power one");
+        }
         //Check if you need to switch to the moving state
+        //if (moveInput != Vector2.zero)
+        //{
+        //    m_animator.SetTrigger("PlayerMove");
+        //}
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    AddPower(Powers.ShootWeb);
+        //}
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    AddPower(Powers.SlashBig);
+        //}
         if (moveInput != Vector2.zero)
         {
-            m_animator.SetTrigger("PlayerMove");
+            CreatureActions.Move(rigidbody2d, moveInput, speed);
         }
 
         //set look direction of sprite
@@ -88,7 +127,7 @@ public class PlayerController : MonoBehaviour
             Launch();
         }
 
-        if (chargingEnabled)
+        if (HasPower(Powers.Dash))
         {
             if (direction == 0)
             {
@@ -180,5 +219,21 @@ public class PlayerController : MonoBehaviour
 
         //animator.SetTrigger("Launch");
         //PlaySound(throwingClip);
+    }
+
+    void ActivatePower(Powers power)
+    {
+        switch (power)
+        {
+            case Powers.Dash:
+                //Do the dash
+                break;
+            case Powers.ShootWeb:
+                //Shoot web
+                break;
+            case Powers.Explode:
+                //Slash big
+                break;
+        }
     }
 }
