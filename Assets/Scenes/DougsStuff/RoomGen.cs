@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Newtonsoft.Json.Serialization;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -39,6 +38,7 @@ public class RoomGen : MonoBehaviour
     Vector2Int pathStart;
     Vector2Int pathEnd;
     Vector2Int[] path;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -82,10 +82,6 @@ public class RoomGen : MonoBehaviour
                 path = aStarGrid.GetRandomPath();
             }
         }
-        
-
-
-
     }
 
     private void InitMap()
@@ -115,7 +111,7 @@ public class RoomGen : MonoBehaviour
         }
         InitMap();
         DrunkenWalkGen();
-        DoPrefabStuff();
+        GeneratePrefabs();
     }
     
     //Randomly 'Walks' to create walkable area for player
@@ -191,7 +187,7 @@ public class RoomGen : MonoBehaviour
     }
 
 
-    private void DoPrefabStuff()
+    private void GeneratePrefabs()
     {
         ConvertToPrefab();
         FindPrefabSpace();
@@ -204,7 +200,8 @@ public class RoomGen : MonoBehaviour
         String[,] stringArray = FileParse.ParseTextFile();
         RoomPrefab roomTiles = new RoomPrefab();
         
-        //Have second dimension loop be the biggest dimension loop through to find biggest
+        //Need to test different shapes 
+        //Probably have to to actually check to see which dimension is the biggest and set the upper bounds to that dimension
         
         //Loops through 2d string array and converts it into a 'RoomPrefab'
         for (int i = 0; i < stringArray.GetLength(0); i++)
@@ -217,16 +214,12 @@ public class RoomGen : MonoBehaviour
                     //A "1" is a wall, "0" for floors 
                     if (stringArray[j, i] == "1")
                     {
-                        //roomTiles.prefabTiles[j][i] = new WorldTile(false, 0, 0, aStarGrid);
                         roomTiles.prefabTiles[j].Insert(i , new WorldTile(false, 0, 0, aStarGrid));
                     }
                     else
                     {
-                        
-                        //roomTiles.prefabTiles[j][i] = new WorldTile(true, 0, 0, aStarGrid);
                         roomTiles.prefabTiles[j].Insert(i , new WorldTile(true, 0, 0, aStarGrid));
                     }
-
                 }
             }
         }
@@ -234,6 +227,7 @@ public class RoomGen : MonoBehaviour
         prefabs.Add(roomTiles);
     }
 
+    //Adds prefab to map and astar grid
     private void PlacePrefab()
     {
         List<Vector2Int> usablePoints = prefabPoints;
@@ -262,9 +256,9 @@ public class RoomGen : MonoBehaviour
         }
     }
 
+    //Finds space for prefab to fit
     private void FindPrefabSpace()
     {
-        //List<Vector2Int> prefabPoints = new List<Vector2Int>();
         prefabPoints.Clear();
         int pWidth = prefabs[0].prefabTiles[0].Count;
         int pHeight = prefabs[0].prefabTiles.Count;
@@ -290,23 +284,26 @@ public class RoomGen : MonoBehaviour
         }
         
     }
-
+    
+    //Checks the space to make sure the points are valid
     private bool GetPrefabPoints(Vector2Int randomPoint, int upperY, int upperX)
     {
+        //Loop through all the points to make sure their valid for placing 
         for (int i = randomPoint.y; i < upperY; i++)
         {
             for (int j = randomPoint.x; j < upperX; j++)
             {
-                //Debug.Log("J:"+j+"I:"+i); 
+                //There is already an out of bounds catch in PlacePrefab but for some reason it doesn't catch everything?
                 if (i >= LevelSettings.MapData.height || j >= LevelSettings.MapData.width)
                 {
                     Debug.Log("OOB GPP");
                     FindPrefabSpace();
                     break;
                 }
+                //If the tile is valid add it to the list of points
                 if (aStarGrid.GetTileAt(new Vector2Int(j,i)).walkable == false)
                 {
-                    aStarGrid.PlaceMarker(new Vector2Int(j, i), Color.red);
+                    //aStarGrid.PlaceMarker(new Vector2Int(j, i), Color.red);
                     prefabPoints.Add(new Vector2Int(j, i));
                 }
                 else
@@ -315,7 +312,6 @@ public class RoomGen : MonoBehaviour
                 }
             }
         }
-       
         return true;
     }//end function
     
