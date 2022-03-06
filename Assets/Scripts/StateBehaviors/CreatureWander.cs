@@ -5,76 +5,98 @@ using UnityEngine;
 public class CreatureWander : StateMachineBehaviour
 {
     public CreatureController creatureController;
-    public Vector2 currentDestination;
+    public Vector2 creatureColliderPosition;
+    
     public CooldownTimer wanderCooldown;
+    [Header("Pathfinding")]
+    public Vector2 currentDestination;
+    int nextTileIndex = 1;
+    Vector2[] currentPath;
     //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        //Teleport the creature to a walkable tile
         creatureController = animator.GetComponent<CreatureController>();
         currentDestination = GenerateNewDestination();
+        AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
+        currentPath = grid.FindPath(animator.transform.position, currentDestination);
     }
 
     //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {   
-        //Move towards the current destination
-        creatureController.MoveTowards(currentDestination, creatureController.speed);
-        
-        //If the creature has detected the player, switch the state to chase
-        if( creatureController.isPlayerDetected() )
+    {
+        ////Calculate the path to the destination
+        //Debug.Log("Reached destination: " + hasReached(currentDestination));
+        //While you haven't reached the current destination, continue moving towards it along the path
+        if (!hasReached(currentDestination) && nextTileIndex < currentPath.Length)
         {
-            SetStateToChase(animator);
+            //if(nextTileIndex >= currentPath.Length) { return; }
+            //Move towards the next tile in the path that you have generated
+            creatureController.MoveTowards(currentPath[nextTileIndex], creatureController.speed);
+            if (hasReached(currentPath[nextTileIndex]))
+            {
+                nextTileIndex++;
+            }
         }
-
-        //If the creature has reached the current destination, calculate a new one
-        if (ReachedDestination())
+        //Otherwise, if you've reached the destination, generate a new one.
+        else
         {
+            //Debug.Log("Reached the destination!");
             //If the wander cooldown is not complete, skip execution
             if (wanderCooldown.cooldownComplete == false) { return; }
 
-            //Start the cooldown
+            ////Start the cooldown
             wanderCooldown.StartCooldown();
 
+            //Log the current cooldown amount?
+            Debug.Log("Cooldown amount: " + wanderCooldown.cooldownAmount);
+            Debug.Log("Cooldown complete: " + wanderCooldown.cooldownComplete);
             //Update the current destination
-            currentDestination = GenerateNewDestination();
+            UpdatePath();
         }
-
-        
+        //If the creature has detected the player, switch the state to chase
+        if (creatureController.isPlayerDetected())
+        {
+            SetStateToChase(animator);
+        }
     }
 
+    
     public Vector2 GenerateNewDestination()
     {
-        //Generate a random direction
-        Vector2 randomDirection = new Vector2(
-            Mathf.RoundToInt( Random.Range(0f, 1f) ),
-            Mathf.RoundToInt( Random.Range(0f, 1f) ) 
-        );
+        AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
+        Vector2Int tilePosition = grid.ConvertWorldPositionToTilePosition(creatureController.transform.position);
+        //Debug.Log("Starting tile position: " + tilePosition);
+        //Get a random nearby walkable tile in the aStarGrid
+        WorldTile newDestination = grid.GetWalkableTileWithinRange(tilePosition, 10f, 20f);
 
-        //Pick a distance -- picking 5f for now
-        float distance = Random.Range(2f, 4f);
+        //Place a yellow marker on your current destination
+        //grid.PlaceMarker(newDestination.gridPosition, Color.yellow);
 
-        //Cast a ray to that destination
-        Debug.DrawRay(creatureController.transform.position, randomDirection * distance, Color.red, 20, true);
-        RaycastHit2D hit = Physics2D.Raycast(creatureController.transform.position, randomDirection, distance);
-       
-        //If the hit intersects with an object, calculate the distance and move up to that point (so the destination is never set into an impossible to reach area)
-        if (hit.collider)
-        {
-            Debug.Log("Collided with: " + hit.collider.gameObject.tag);
-            //Call the function again
-            return GenerateNewDestination();
-        }
-        else
-        {
-            return randomDirection * distance;
-        }
-        
+        //return the new destination's location
+        Debug.Log("New destination: " + newDestination.centerWorldPosition);
+        return newDestination.centerWorldPosition;
     }
 
-    public bool ReachedDestination()
+    public void UpdatePath()
     {
-        return Vector2.Distance(creatureController.transform.position, currentDestination) <= 0.1f;
+        currentDestination = GenerateNewDestination();
+        AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
+        currentPath = grid.FindPath(creatureController.transform.position, currentDestination);
+        nextTileIndex = 1;
     }
+   
+
+    public bool hasReached(Vector2Int position)
+    {
+        return Vector2.Distance(creatureController.transform.position, position) <= 0.1f;
+    }
+
+    public bool hasReached(Vector2 position)
+    {
+        return Vector2.Distance(creatureController.transform.position, position) <= 0.1f;
+    }
+
 
     public void SetStateToChase(Animator anim)
     {

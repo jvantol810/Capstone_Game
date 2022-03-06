@@ -13,6 +13,7 @@ public class RoomGen : MonoBehaviour
     public Tilemap map;
     public AStarGrid aStarGrid;
     public Tile[] tiles;
+    public GameObject enemyPrefab;
     private List<RoomPrefab> prefabs =new List<RoomPrefab>();
 
     private int mapHeight;
@@ -50,6 +51,9 @@ public class RoomGen : MonoBehaviour
         //Initialize the aStar grid
         aStarGrid.InitGrid();
 
+        //Set the aStarGrid in LevelSettings to be the aStarGrid assigned in inspector (this way any class can now reference the aStarGrid from LevelSettings)
+        LevelSettings.MapData.SetAStarGrid(aStarGrid);
+
         //Generate the world map
         GenerateWorld();
         
@@ -68,16 +72,13 @@ public class RoomGen : MonoBehaviour
             {
                 GenerateWorld();
             }
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                pathfinding = true;
-                path = aStarGrid.GetRandomPath();
-            }
             if (pathfinding)
             {
+
+                //WorldTile[] route = aStarGrid.FindPath(path[0], path[1]);
+                //path = aStarGrid.GetRandomPath();
+                aStarGrid.GetWalkableTileWithinRange(path[0], 1, 5);
                 
-                WorldTile[] route = aStarGrid.FindPath(path[0], path[1]);
-                path = aStarGrid.GetRandomPath();
             }
         }
         
@@ -113,6 +114,13 @@ public class RoomGen : MonoBehaviour
         }
         InitMap();
         DrunkenWalkGen();
+        //Add enemies
+        for (int i = 0; i < 3; i++)
+        {
+            Vector2 spawnPoint = aStarGrid.GetRandomWalkableTile().centerWorldPosition;
+            Instantiate(enemyPrefab, new Vector3(spawnPoint.x, spawnPoint.y, 0), Quaternion.identity);
+        }
+        LevelSettings.MapData.activeAStarGrid.MarkNeighbors();
     }
     
     //Randomly 'Walks' to create walkable area for player
@@ -261,7 +269,7 @@ public class RoomGen : MonoBehaviour
         List<Vector2Int> prefabPoints = new List<Vector2Int>();
         int pWidth = prefabs[0].prefabTiles[0].Count;
         int pHeight = prefabs[0].prefabTiles.Count;
-        List<Vector2Int> unwalkableLocations = aStarGrid.GetUnWalkableTileLocations();
+        List<Vector2Int> unwalkableLocations = aStarGrid.GetUnwalkableTileLocations();
         
         //Get random point 
         int randIndex = Random.Range(0, unwalkableLocations.Count);

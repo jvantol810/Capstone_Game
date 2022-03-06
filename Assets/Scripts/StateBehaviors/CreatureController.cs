@@ -161,6 +161,8 @@ public class CreatureController : MonoBehaviour
     /// </summary>
     public float MoveTowards(Vector2 destination, float speed)
     {
+        //Invoke the enemyMove event
+        GameEvents.OnEnemyMove.Invoke(LevelSettings.MapData.activeAStarGrid.ConvertWorldPositionToTilePosition(transform.position));
         //Calculate direction and store it
         Vector2 direction = ((Vector3)destination - (Vector3)m_rigidbody.position).normalized;
         //Calculate distance between creature and destination

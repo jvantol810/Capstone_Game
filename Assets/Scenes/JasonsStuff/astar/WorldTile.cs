@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Tilemaps;
 [System.Serializable]
 public class WorldTile 
 {
     public bool walkable;
+    public bool occupied = false;
     public Transform parentTilemap;
     public AStarGrid parentGrid;
     public float gCost; //walking cost from the start node -- 10 for nondiagonal movement, 14 for diagonal movement
@@ -24,7 +25,8 @@ public class WorldTile
         List<Vector2Int> tempNeighborLocations = new List<Vector2Int>();
         Vector2Int[] directions = new Vector2Int[8]{Vector2Int.up, new Vector2Int(1, 1), Vector2Int.right, new Vector2Int(1, -1),
             Vector2Int.down, new Vector2Int(-1, -1), Vector2Int.left, new Vector2Int(-1, 1)};
-
+        //Vector2Int[] directions = new Vector2Int[4]{Vector2Int.up, Vector2Int.right,
+        //    Vector2Int.down, Vector2Int.left};
         for (int i = 0; i < directions.Length; i++)
         {
             if (!parentGrid.tileIsOutOfBounds(this.gridPosition + directions[i]))
@@ -32,7 +34,10 @@ public class WorldTile
                 //WorldTile neighboringTile = parentGrid.GetTileAt(this.gridPosition + directions[i]);
                 //if (neighboringTile.walkable) { tempNeighborLocations.Add(neighboringTile.gridPosition); }
                 tempNeighborLocations.Add(this.gridPosition + directions[i]);
+                //Debug.Log("Adding direction: " + directions[i]);
+                //parentGrid.PlaceMarker(tempNeighborLocations[i], Color.yellow);
             }
+            
         }
         this.neighborLocations = tempNeighborLocations.ToArray();
     }
@@ -44,8 +49,8 @@ public class WorldTile
     }
     public Vector2Int gridPosition { get { return new Vector2Int(gridX, gridY); } }
     public Vector2 worldPosition { get { return new Vector2(parentTilemap.position.x + gridX, parentTilemap.position.y + gridY); } }
-    
-
+    public Vector2 centerWorldPosition { get { return parentTilemap.GetComponent<Tilemap>().GetCellCenterWorld((Vector3Int)gridPosition); } }
+   
     public float fCost { get { return gCost + hCost; } }
     public Vector2Int[] neighborLocations;
     //public List<WorldTile> neighborTiles = new List<WorldTile>();
