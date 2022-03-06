@@ -25,6 +25,12 @@ public class PlayerController : MonoBehaviour
     public GameObject projectilePrefab;
     public float launchForce;
 
+    public GameObject webPrefab;
+    public float webForce;
+
+    public GameObject bombPrefab;
+    public float bombForce;
+
     public GameObject player;
     private Animator m_animator;
 
@@ -84,10 +90,11 @@ public class PlayerController : MonoBehaviour
         //Vector2 move = new Vector2(moveInput.x, moveInput.y);
 
         //Check if mouse button is pressed. If so, execute power one.
-        if (Input.GetMouseButtonDown(0))
+        /*if (Input.GetMouseButtonDown(0))
         {
             Debug.Log("Do power one");
         }
+        */
         //Check if you need to switch to the moving state
         //if (moveInput != Vector2.zero)
         //{
@@ -127,10 +134,13 @@ public class PlayerController : MonoBehaviour
             Launch();
         }
 
+        //check if Dash is in th Powers queue
         if (HasPower(Powers.Dash))
         {
+            //If player is not currently dashing
             if (direction == 0)
             {
+                //set direction based on where the player is facing
                 if (Input.GetKeyDown(KeyCode.C) && lookDirection.x == -1)
                 {
                     direction = 1;
@@ -150,6 +160,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
+                //set everything back to normal when the player finishes dashing
                 if (dashTime <= 0)
                 {
                     direction = 0;
@@ -159,8 +170,10 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
+                    //decrement the dash timer
                     dashTime -= Time.deltaTime;
 
+                    //make player dash in direction they're facing
                     if (direction == 1)
                     {
                         rigidbody2d.velocity = Vector2.left * dashSpeed;
@@ -179,8 +192,25 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
+
         }
-     
+        else if (HasPower(Powers.ShootWeb))
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                ActivatePower(Powers.ShootWeb);
+            }
+        }
+        else if (HasPower(Powers.Explode))
+        {
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                ActivatePower(Powers.Explode);
+                Debug.Log("Throwing bomb");
+            }
+        }
+
+
     }
 
     void FixedUpdate()
@@ -230,9 +260,21 @@ public class PlayerController : MonoBehaviour
                 break;
             case Powers.ShootWeb:
                 //Shoot web
+                GameObject web = Instantiate(webPrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
+
+                ShootWeb shootWeb = web.GetComponent<ShootWeb>();
+                
+                //shoot web in direction player is facing
+                shootWeb.Launch(lookDirection, webForce);
                 break;
             case Powers.Explode:
                 //Slash big
+                GameObject bomb = Instantiate(bombPrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
+
+                Explosion dropBomb = bomb.GetComponent<Explosion>();
+
+                //throw bomb in direction player is facing
+                dropBomb.Launch();
                 break;
         }
     }

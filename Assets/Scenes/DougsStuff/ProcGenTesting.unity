@@ -409,6 +409,7 @@ MonoBehaviour:
   testing: 0
   seeded: 0
   seed: 0
+  prefabPoints: []
 --- !u!4 &1379462477
 Transform:
   m_ObjectHideFlags: 0
@@ -437,7 +438,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   map: {fileID: 1190100452}
   tileRow: []
-  pointMarker: {fileID: 0}
+  pointMarker: {fileID: 3136363211983795819, guid: 6ab397490fa623449919b829d06df648, type: 3}
   startColor: {r: 0, g: 0, b: 0, a: 0}
   endColor: {r: 0, g: 0, b: 0, a: 0}
   closedMarkerColor: {r: 0, g: 0, b: 0, a: 0}
