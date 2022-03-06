@@ -112,15 +112,15 @@ public class RoomGen : MonoBehaviour
         }
         InitMap();
         DrunkenWalkGen();
-		GeneratePrefabs();
-		
+        //GeneratePrefabs();
+        //Instantiate(new GameObject(), new Vector3(0, 0, 0), Quaternion.identity);
         //Add enemies
         for (int i = 0; i < 3; i++)
         {
             Vector2 spawnPoint = aStarGrid.GetRandomWalkableTile().centerWorldPosition;
             Instantiate(enemyPrefab, new Vector3(spawnPoint.x, spawnPoint.y, 0), Quaternion.identity);
         }
-        LevelSettings.MapData.activeAStarGrid.MarkNeighbors(); 
+        //LevelSettings.MapData.activeAStarGrid.MarkNeighbors(); 
     }
     
     //Randomly 'Walks' to create walkable area for player

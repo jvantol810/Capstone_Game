@@ -353,11 +353,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5684243186576125845, guid: 5a70a9b837cdba14181275b9628fe453, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 31.03
+      value: 11.97
       objectReference: {fileID: 0}
     - target: {fileID: 5684243186576125845, guid: 5a70a9b837cdba14181275b9628fe453, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 25.4
+      value: -0.29
       objectReference: {fileID: 0}
     - target: {fileID: 5684243186576125845, guid: 5a70a9b837cdba14181275b9628fe453, type: 3}
       propertyPath: m_LocalPosition.z
@@ -547,7 +547,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 365183511}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 9fb506d124e5179458b459e5bebf00e0, type: 2}
   m_CullingMode: 0
@@ -1216,11 +1216,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   map: {fileID: 0}
   tileRow: []
+  enemiesOnGrid: []
+  walkableTiles: []
   pointMarker: {fileID: 0}
   startColor: {r: 0, g: 0, b: 0, a: 0}
   endColor: {r: 0, g: 0, b: 0, a: 0}
   closedMarkerColor: {r: 0, g: 0, b: 0, a: 0}
   openMarkerColor: {r: 0, g: 0, b: 0, a: 0}
+  maxMarkerCount: 3
 --- !u!1 &1361941784
 GameObject:
   m_ObjectHideFlags: 0
@@ -1478,7 +1481,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1487447107
 GameObject:
@@ -1543,7 +1546,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1487447107}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 9fb506d124e5179458b459e5bebf00e0, type: 2}
   m_CullingMode: 0
@@ -1845,9 +1848,10 @@ MonoBehaviour:
   enemyPrefab: {fileID: 3478504488273262670, guid: 5ae75022e7c763440a7a8b136da08bc8, type: 3}
   roomCenters: []
   floorMax: 900
-  testing: 1
+  testing: 0
   seeded: 0
   seed: 0
+  prefabPoints: []
 --- !u!114 &1925389657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1862,11 +1866,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   map: {fileID: 2018857603}
   tileRow: []
+  enemiesOnGrid: []
+  walkableTiles: []
   pointMarker: {fileID: 3136363211983795819, guid: 6ab397490fa623449919b829d06df648, type: 3}
   startColor: {r: 0.12918305, g: 1, b: 0, a: 1}
   endColor: {r: 1, g: 0, b: 0, a: 1}
   closedMarkerColor: {r: 1, g: 0.8816934, b: 0, a: 1}
   openMarkerColor: {r: 0, g: 0.5344336, b: 1, a: 1}
+  maxMarkerCount: 3
 --- !u!1 &1957926091
 GameObject:
   m_ObjectHideFlags: 0
@@ -1990,7 +1997,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2013031082
 GameObject:
@@ -2055,7 +2062,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2013031082}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 9fb506d124e5179458b459e5bebf00e0, type: 2}
   m_CullingMode: 0
