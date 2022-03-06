@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -30,6 +32,8 @@ public class RoomGen : MonoBehaviour
     private int walkX;
     private int walkY;
     private List<Vector3Int> tilesWalked = new List<Vector3Int>();
+    
+    public List<Vector2Int> prefabPoints = new List<Vector2Int>();
 
     //Variables for pathfinding debugging, currently these are set to random values each frame to test the efficiency of the algorithm
     Vector2Int pathStart;
@@ -52,9 +56,6 @@ public class RoomGen : MonoBehaviour
 
         //Generate the world map
         GenerateWorld();
-        
-        //commenting out because unity is giving me errors - katie
-        //DoPrefabStuff();
 
         //Generate a random path on the aStarGrid
         path = aStarGrid.GetRandomPath();
@@ -114,6 +115,7 @@ public class RoomGen : MonoBehaviour
         }
         InitMap();
         DrunkenWalkGen();
+        DoPrefabStuff();
     }
     
     //Randomly 'Walks' to create walkable area for player
@@ -192,6 +194,7 @@ public class RoomGen : MonoBehaviour
     private void DoPrefabStuff()
     {
         ConvertToPrefab();
+        FindPrefabSpace();
         PlacePrefab();
     }
     
@@ -200,6 +203,8 @@ public class RoomGen : MonoBehaviour
     {
         String[,] stringArray = FileParse.ParseTextFile();
         RoomPrefab roomTiles = new RoomPrefab();
+        
+        //Have second dimension loop be the biggest dimension loop through to find biggest
         
         //Loops through 2d string array and converts it into a 'RoomPrefab'
         for (int i = 0; i < stringArray.GetLength(0); i++)
@@ -219,7 +224,7 @@ public class RoomGen : MonoBehaviour
                     {
                         
                         //roomTiles.prefabTiles[j][i] = new WorldTile(true, 0, 0, aStarGrid);
-                        roomTiles.prefabTiles[j].Insert(i , new WorldTile(false, 0, 0, aStarGrid));
+                        roomTiles.prefabTiles[j].Insert(i , new WorldTile(true, 0, 0, aStarGrid));
                     }
 
                 }
@@ -231,7 +236,8 @@ public class RoomGen : MonoBehaviour
 
     private void PlacePrefab()
     {
-        List<Vector2Int> usablePoints = FindPrefabSpace();
+        List<Vector2Int> usablePoints = prefabPoints;
+        if(usablePoints.Count == 0){Debug.Log("No points found!"); return; }
         int totalTiles = 0;
         //Loops through the prefabs tiles setting their positions to an empty area 
         for (int i = 0; i < prefabs[0].prefabTiles.Count; i++)
@@ -242,24 +248,24 @@ public class RoomGen : MonoBehaviour
                 prefabs[0].prefabTiles[j][i].gridY = usablePoints[totalTiles].y;
                 totalTiles++;
                 
-                Debug.Log(prefabs[0].prefabTiles[j][i]);
+                
                 //If walkable set the map to floor if not walls and add to map and astar grid
                 if (prefabs[0].prefabTiles[j][i].walkable)
                 {
-                    AddTileToMap(prefabs[0].prefabTiles[j][i], tiles[2]);
+                    AddTileToMap(prefabs[0].prefabTiles[j][i], tiles[1]);
                 }
                 else
                 {
-                    AddTileToMap(prefabs[0].prefabTiles[j][i], tiles[2]);
+                    AddTileToMap(prefabs[0].prefabTiles[j][i], tiles[0]);
                 }
             }
         }
-        Debug.Log("Total:" + totalTiles);
     }
 
-    private List<Vector2Int> FindPrefabSpace()
+    private void FindPrefabSpace()
     {
-        List<Vector2Int> prefabPoints = new List<Vector2Int>();
+        //List<Vector2Int> prefabPoints = new List<Vector2Int>();
+        prefabPoints.Clear();
         int pWidth = prefabs[0].prefabTiles[0].Count;
         int pHeight = prefabs[0].prefabTiles.Count;
         List<Vector2Int> unwalkableLocations = aStarGrid.GetUnWalkableTileLocations();
@@ -268,25 +274,49 @@ public class RoomGen : MonoBehaviour
         int randIndex = Random.Range(0, unwalkableLocations.Count);
         Vector2Int randomPoint = unwalkableLocations[randIndex];
 
-        for (int i = randomPoint.y; i < randomPoint.y + pHeight; i++)
+        while (randomPoint.x + pWidth > LevelSettings.MapData.width - 2 & randomPoint.y + pHeight > LevelSettings.MapData.height - 2)
         {
-            for (int j = randomPoint.x; j < randomPoint.x + pWidth; j++)
+            Debug.Log("point out of bounds");
+            randIndex = Random.Range(0, unwalkableLocations.Count);
+            randomPoint = unwalkableLocations[randIndex];
+        }
+
+        int upperX = randomPoint.x + pWidth;
+        int upperY = randomPoint.y + pHeight;
+
+        if (!GetPrefabPoints(randomPoint, upperY, upperX))
+        {
+            FindPrefabSpace();
+        }
+        
+    }
+
+    private bool GetPrefabPoints(Vector2Int randomPoint, int upperY, int upperX)
+    {
+        for (int i = randomPoint.y; i < upperY; i++)
+        {
+            for (int j = randomPoint.x; j < upperX; j++)
             {
-                if (randomPoint.y + pHeight >= mapHeight - 1 || randomPoint.x + pWidth >= mapWidth)
+                //Debug.Log("J:"+j+"I:"+i); 
+                if (i >= LevelSettings.MapData.height || j >= LevelSettings.MapData.width)
                 {
+                    Debug.Log("OOB GPP");
                     FindPrefabSpace();
+                    break;
                 }
-                if (aStarGrid.GetTileAt(new Vector2Int(j,i)).walkable == false)//Getting weird Out of bound here sometimes
+                if (aStarGrid.GetTileAt(new Vector2Int(j,i)).walkable == false)
                 {
+                    aStarGrid.PlaceMarker(new Vector2Int(j, i), Color.red);
                     prefabPoints.Add(new Vector2Int(j, i));
                 }
                 else
                 {
-                    FindPrefabSpace();
+                    return false;
                 }
             }
         }
-
-        return prefabPoints;
-    }
+       
+        return true;
+    }//end function
+    
 }
