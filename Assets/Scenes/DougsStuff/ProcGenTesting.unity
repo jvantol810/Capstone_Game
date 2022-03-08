@@ -404,7 +404,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b33c06c5ed7f48a43a7590eead9e9ff8, type: 2}
   - {fileID: 11400000, guid: cdf78871e39a9ba4b954130dd384fd3f, type: 2}
   - {fileID: 11400000, guid: b70d1fa8056903143a77d3ea981bbda6, type: 2}
-  roomCenters: []
+  enemyPrefab: {fileID: 0}
   floorMax: 1500
   testing: 0
   seeded: 0
@@ -438,8 +438,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   map: {fileID: 1190100452}
   tileRow: []
+  enemiesOnGrid: []
+  walkableTiles: []
   pointMarker: {fileID: 3136363211983795819, guid: 6ab397490fa623449919b829d06df648, type: 3}
   startColor: {r: 0, g: 0, b: 0, a: 0}
   endColor: {r: 0, g: 0, b: 0, a: 0}
   closedMarkerColor: {r: 0, g: 0, b: 0, a: 0}
   openMarkerColor: {r: 0, g: 0, b: 0, a: 0}
+  maxMarkerCount: 3

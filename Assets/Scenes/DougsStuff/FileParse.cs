@@ -7,6 +7,7 @@ public static class FileParse
 {
     private static String path;
     private static String jsonString;
+    public static int listDepth = 0;
     
     //This is a bigger area than rooms should need
     private static string[,] lines = new String[20, 20];
@@ -14,7 +15,9 @@ public static class FileParse
     //Reads in text file splits into a String 2d array
     public static String[,] ParseTextFile()
     {
-        String textPath = Application.persistentDataPath + "/TextPrefab.txt";
+        //IMPORTANT
+        //The formatting of a room prefab has to be in a square shape see TestPrefab.txt for reference
+        String textPath = Application.persistentDataPath + "/TestPrefab.txt";
         String input = File.ReadAllText(textPath);
 
         
@@ -27,6 +30,7 @@ public static class FileParse
             {
                 lines[j, i] = col.Trim();
                 j++;
+                listDepth = j;
             }
 
             i++;

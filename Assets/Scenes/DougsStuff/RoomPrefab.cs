@@ -6,14 +6,14 @@ using UnityEngine.Tilemaps;
 public class RoomPrefab
 {
     public List<List<WorldTile>> prefabTiles = new List<List<WorldTile>>();
-
-    public RoomPrefab()
+    public int maxListSize = 25;
+    
+    public void InitInnerLists(int roomHeight)
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < roomHeight ; i++)
         {
-            prefabTiles.Capacity = 25;
-            prefabTiles.Add(new List<WorldTile>(25));
+            prefabTiles.Capacity = maxListSize;
+            prefabTiles.Add(new List<WorldTile>(maxListSize));
         }
     }
-    
 }

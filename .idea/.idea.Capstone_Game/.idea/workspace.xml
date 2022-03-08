@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e2855985-2c7a-414b-8d5a-eab741c63575" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/FileParse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/FileParse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/ProcGenTesting.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/ProcGenTesting.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomGen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomGen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomPrefab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomPrefab.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +34,7 @@
       <option value="$PROJECT_DIR$/Assets/Scenes/JasonsStuff/astar/AStarGrid.cs" />
       <option value="$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomPrefab.cs" />
       <option value="$PROJECT_DIR$/Assets/Scenes/DougsStuff/FileParse.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/Pathfinding/AStarGrid.cs" />
       <option value="$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomGen.cs" />
     </changedPaths>
   </component>
@@ -88,7 +92,8 @@
       <workItem from="1643848022139" duration="9806000" />
       <workItem from="1644561882725" duration="7473000" />
       <workItem from="1644782528362" duration="2209000" />
-      <workItem from="1645991707987" duration="38067000" />
+      <workItem from="1645991707987" duration="45851000" />
+      <workItem from="1646616690544" duration="5215000" />
     </task>
     <servers />
   </component>
