@@ -102,6 +102,24 @@ public class AStarGrid : MonoBehaviour
         //Debug.Log("Tile added at (x: " + newTile.gridX + ", y: " + newTile.gridY + ") -- Walkable: " + newTile.walkable);
     }
 
+    public WorldTile GetNearestWalkableTile(Vector2 startingPosition)
+    {
+        WorldTile nearestTile = null;
+        float minDistance = 0;
+        foreach (WorldTile tile in walkableTiles)
+        {
+            float distance = Vector2.Distance(startingPosition, tile.centerWorldPosition);
+            if (minDistance == 0 || distance < minDistance)
+            {
+                minDistance = distance;
+                nearestTile = tile;
+            }
+        }
+        return nearestTile;
+    }
+
+   
+
     public WorldTile GetTileAt(Vector2Int tilePosition)
     {
         return tileRow[tilePosition.x].tileColumn[tilePosition.y];
