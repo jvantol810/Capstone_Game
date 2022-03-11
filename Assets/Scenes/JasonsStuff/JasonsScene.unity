@@ -1846,9 +1846,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b33c06c5ed7f48a43a7590eead9e9ff8, type: 2}
   - {fileID: 11400000, guid: cdf78871e39a9ba4b954130dd384fd3f, type: 2}
   enemyPrefab: {fileID: 3478504488273262670, guid: 5ae75022e7c763440a7a8b136da08bc8, type: 3}
-  roomCenters: []
-  floorMax: 900
   testing: 0
+  floorMax: 900
   seeded: 0
   seed: 0
   prefabPoints: []
@@ -2278,15 +2277,39 @@ Tilemap:
   m_Enabled: 1
   m_Tiles: {}
   m_AnimatedTiles: {}
-  m_TileAssetArray: []
-  m_TileSpriteArray: []
-  m_TileMatrixArray: []
-  m_TileColorArray: []
+  m_TileAssetArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  m_TileSpriteArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  m_TileMatrixArray:
+  - m_RefCount: 0
+    m_Data:
+      e00: -1.084227e-19
+      e01: -0.0026778989
+      e02: 1.0964755e-19
+      e03: 7.479618
+      e10: 8.48e-43
+      e11: 4.5905e-41
+      e12: 8.5e-43
+      e13: 8.48e-43
+      e20: 6e-45
+      e21: 1.68988e+27
+      e22: 1.6897501e+27
+      e23: 1.6897501e+27
+      e30: 0
+      e31: 2.28e-43
+      e32: 2.28e-43
+      e33: 2.28e-43
+  m_TileColorArray:
+  - m_RefCount: 0
+    m_Data: {r: 3.1955e-41, g: 3.1955e-41, b: 3.1955e-41, a: 3.1955e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: 0, y: 0, z: 0}
-  m_Size: {x: 0, y: 0, z: 1}
+  m_Origin: {x: -19, y: -5, z: 0}
+  m_Size: {x: 37, y: 10, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
