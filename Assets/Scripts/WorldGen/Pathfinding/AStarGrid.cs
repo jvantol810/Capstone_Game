@@ -117,6 +117,28 @@ public class AStarGrid : MonoBehaviour
         }
         return nearestTile;
     }
+    
+    //Overloaded with list of tiles to ignore
+    public WorldTile GetNearestWalkableTile(Vector2 startingPosition, List<Vector2Int> ignoreTiles)
+    {
+        WorldTile nearestTile = null;
+        float minDistance = 0;
+        foreach (WorldTile tile in walkableTiles)
+        {
+            //We want to ignore all the tiles in the prefab 
+            if (!ignoreTiles.Contains(tile.gridPosition))
+            {
+                float distance = Vector2.Distance(startingPosition, tile.centerWorldPosition);
+                if (minDistance == 0 || distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestTile = tile;
+                } 
+            }
+            
+        }
+        return nearestTile;
+    }
 
    
 
@@ -378,7 +400,7 @@ public class AStarGrid : MonoBehaviour
         //Debug.Log("Open Set Contains Tiles At: \n" + tilesString);
     }
 
-    public WorldTile[] FindPath(Vector2Int startPosition, Vector2Int endPosition)
+    public WorldTile[] FindPath(Vector2Int startPosition, Vector2Int endPosition, bool ignoreWalkableTiles=true)
     {
         RemoveAllMarkers();
         WorldTile startNode = GetTileAt(startPosition);
@@ -411,7 +433,7 @@ public class AStarGrid : MonoBehaviour
 
             foreach (WorldTile neighbour in currentNode.neighborTiles)
             {
-                if (!neighbour.walkable || closedSet.Contains(neighbour)) continue;
+                if (!neighbour.walkable && ignoreWalkableTiles || closedSet.Contains(neighbour)) continue;
 
                 float newMovementCostToNeighbour = currentNode.gCost + Vector2.Distance(currentNode.centerWorldPosition, neighbour.centerWorldPosition);
                 if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
@@ -427,18 +449,18 @@ public class AStarGrid : MonoBehaviour
                 }
             }
         }
-
         return new WorldTile[] { };
     }
-    public Vector2[] FindPath(Vector2 worldStartPosition, Vector2 worldEndPosition, bool ignoreWalkableTiles=true)
+
+    public Vector2[] FindPath(Vector2 worldStartPosition, Vector2 worldEndPosition, bool ignoreWalkableTile=true)
     {
         RemoveAllMarkers();
         Vector2Int startPosition = ConvertWorldPositionToTilePosition(worldStartPosition);
         WorldTile startNode = GetTileAt(startPosition);
         Debug.Log("Starting at: " + startPosition);
-        //PlaceMarker(startPosition, startColor);
+        PlaceMarker(startPosition, startColor);
         WorldTile targetNode = GetTileAt(ConvertWorldPositionToTilePosition(worldEndPosition));
-        //PlaceMarker(worldEndPosition, endColor);
+        PlaceMarker(worldEndPosition, endColor);
         List<WorldTile> openSet = new List<WorldTile>();
         HashSet<WorldTile> closedSet = new HashSet<WorldTile>();
         openSet.Add(startNode);
@@ -471,7 +493,8 @@ public class AStarGrid : MonoBehaviour
             foreach (WorldTile neighbour in currentNode.neighborTiles)
             {
                 if (!neighbour.walkable && ignoreWalkableTiles || neighbour.occupied || closedSet.Contains(neighbour)) continue;
-                //PlaceMarker(neighbour.centerWorldPosition, Color.cyan);
+                if (!neighbour.walkable && ignoreWalkableTile|| neighbour.occupied || closedSet.Contains(neighbour)) continue;
+                PlaceMarker(neighbour.centerWorldPosition, Color.cyan);
                 float newMovementCostToNeighbour = currentNode.gCost + Vector2.Distance(currentNode.centerWorldPosition, neighbour.centerWorldPosition);
                 if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
                 {

@@ -17,7 +17,7 @@ public static class FileParse
     {
         //IMPORTANT
         //The formatting of a room prefab has to be in a square shape see TestPrefab.txt for reference
-        String textPath = Application.persistentDataPath + "/TestPrefab.txt";
+        String textPath = Application.persistentDataPath + "/TestPrefab2.txt";
         String input = File.ReadAllText(textPath);
 
         
