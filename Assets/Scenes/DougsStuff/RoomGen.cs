@@ -206,7 +206,13 @@ public class RoomGen : MonoBehaviour
     private void GeneratePrefabs()
     {
         ConvertToPrefab();
-        FindPrefabSpace();
+        roomCenters.Add(FindPrefabSpace());
+        /*
+        Debug.Log("Checking RoomCenters");
+        for(int i = 0; i < roomCenters.Count; i++)
+        {
+            Debug.Log(roomCenters[i]);
+        }*/
         PlacePrefab();
         ConnectPrefab();
     }
@@ -273,12 +279,13 @@ public class RoomGen : MonoBehaviour
     }
 
     //Finds space for prefab to fit
-    private void FindPrefabSpace()
+    private Vector2Int FindPrefabSpace()
     {
+       // Debug.Log("Called FindPrefabSpace");
         prefabPoints.Clear();
         int pWidth = allRooms[0].prefabTiles[0].Count;
         int pHeight = allRooms[0].prefabTiles.Count;
-        Debug.Log("wid:" + pWidth + "Hei:"+ pHeight);
+        //Debug.Log("wid:" + pWidth + "Hei:"+ pHeight);
         //Grab the center ish coordinate of the prefab for room connections
         
         
@@ -298,16 +305,18 @@ public class RoomGen : MonoBehaviour
         int upperX = randomPoint.x + pWidth;
         int upperY = randomPoint.y + pHeight;
         
-        int xCenter = upperX-(pWidth / 2);
-        int yCenter = upperY-(pHeight / 2);
-        roomCenters.Add(new Vector2Int(xCenter,yCenter));
+        int xCenter = randomPoint.x + (pWidth / 2);
+        int yCenter = randomPoint.y + (pHeight / 2);
+
+       // Debug.Log("Random X:" + randomPoint.x + "Random Y:" + randomPoint.y);
+        //Debug.Log("upperX:" + upperX + "UpperY:" + upperY);
 
         if (!GetPrefabPoints(randomPoint, upperY, upperX))
         {
-            FindPrefabSpace();
+            //Debug.Log("Points not valid.");
+            return FindPrefabSpace();
         }
-        Debug.Log("X:" + randomPoint.x + "Y:" + randomPoint.y);
-        Debug.Log("upperX:" + upperX + "UpperY:" + upperY);
+        return new Vector2Int(xCenter, yCenter);
     }
     
     //Checks the space to make sure the points are valid
@@ -343,14 +352,15 @@ public class RoomGen : MonoBehaviour
     private void ConnectPrefab()
     {
         WorldTile closestTile = aStarGrid.GetNearestWalkableTile(roomCenters[0], prefabPoints);
-        Debug.Log(closestTile.gridPosition);
-        Debug.Log(roomCenters[0]);
-        WorldTile[] closestPath = aStarGrid.FindPath(closestTile.gridPosition, roomCenters[0], false);
+        Debug.Log("closettile: " + closestTile.gridPosition);
+        Debug.Log("room center: " + roomCenters[0]);
+        WorldTile[] closestPath = aStarGrid.FindPath(roomCenters[0], closestTile.gridPosition, false);
+        //Vector2[] closestPath = aStarGrid.FindPath(aStarGrid.ConvertFromGridToWorldPosition(roomCenters[0]), closestTile.centerWorldPosition, false);
         Debug.Log(closestPath.Length);
         foreach (var tile in closestPath)
         {
             AddTileToMap(tile, tiles[2]);
-            Debug.Log("placed tile");
+            //Debug.Log("placed tile");
         }
     }
     

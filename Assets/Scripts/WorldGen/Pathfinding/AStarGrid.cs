@@ -507,4 +507,9 @@ public class AStarGrid : MonoBehaviour
         }
         return new Vector2[] { };
     }
+
+    public Vector2 ConvertFromGridToWorldPosition(Vector2Int gridPosition)
+    {
+        return map.GetCellCenterWorld((Vector3Int)gridPosition);
+    }
 }
