@@ -16,7 +16,7 @@ public class RoomGen : MonoBehaviour
     public AStarGrid aStarGrid;
     public Tile[] tiles;
     public GameObject enemyPrefab;
-    
+    public GameObject playerPrefab;
     //List for allRooms and list of their centers for connecting them to main map
     private List<RoomPrefab> allRooms = new List<RoomPrefab>();
     private List<Vector2> roomCenters = new List<Vector2>();
@@ -118,7 +118,7 @@ public class RoomGen : MonoBehaviour
         }
         InitMap();
         DrunkenWalkGen();
-        GeneratePrefabs();
+        //GeneratePrefabs();
         //Instantiate(new GameObject(), new Vector3(0, 0, 0), Quaternion.identity);
         //Add enemies
         for (int i = 0; i < 3; i++)
@@ -126,6 +126,8 @@ public class RoomGen : MonoBehaviour
             Vector2 spawnPoint = aStarGrid.GetRandomWalkableTile().centerWorldPosition;
             Instantiate(enemyPrefab, new Vector3(spawnPoint.x, spawnPoint.y, 0), Quaternion.identity);
         }
+        Vector2 spawnPoint2 = aStarGrid.GetRandomWalkableTile().centerWorldPosition;
+        Instantiate(playerPrefab, new Vector3(spawnPoint2.x, spawnPoint2.y, 0), Quaternion.identity);
         //LevelSettings.MapData.activeAStarGrid.MarkNeighbors(); 
     }
     

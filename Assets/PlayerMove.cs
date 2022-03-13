@@ -22,7 +22,7 @@ public class PlayerMove : StateMachineBehaviour
 
         Vector2 moveDirection = new Vector2(horizontal, vertical);
 
-        CreatureActions.Move(m_rigidbody, moveDirection, player.speed);
+        CreatureActions.Move(m_rigidbody, moveDirection, player.currentSpeed);
 
         if(moveDirection == Vector2.zero)
         {

@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
-
+using UnityEditor;
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 3.0f;
-
+    public float baseSpeed = 7f;
+    public float currentSpeed;
     public int maxHealth = 5;
     public int health { get { return currentHealth; } }
     public int currentHealth;
@@ -44,8 +45,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     public Queue<Powers> playerPowers = new Queue<Powers>();
+    
     private int maxNumberOfPowers = 2;
-
+    public HashSet<StatusEffect> statusEffects = new HashSet<StatusEffect>();
+    public string powersText { get { return GetPowersText(); } }
     public void AddPower(Powers power)
     {
         //Add the power if it isn't already in the power list
@@ -79,38 +82,40 @@ public class PlayerController : MonoBehaviour
 
         dashTime = startDashTime;
 
+        currentSpeed = baseSpeed;
     }
 
+    public string GetPowersText()
+    {
+        string text = "Powers: ";
+        foreach (Powers power in playerPowers)
+        {
+            text += power.ToString() + ", ";
+        }
+        return text;
+    }
+
+    public string GetStatusEffectsText()
+    {
+        string text = "Status EFfects: ";
+        foreach (StatusEffect effect in statusEffects)
+        {
+            text += effect.type + ", ";
+        }
+        Debug.Log("Num of effects: " + statusEffects.Count);
+        return text;
+        
+    }
     // Update is called once per frame
     void Update()
     {
         //get input from user
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
-        //Vector2 move = new Vector2(moveInput.x, moveInput.y);
 
-        //Check if mouse button is pressed. If so, execute power one.
-        /*if (Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("Do power one");
-        }
-        */
-        //Check if you need to switch to the moving state
-        //if (moveInput != Vector2.zero)
-        //{
-        //    m_animator.SetTrigger("PlayerMove");
-        //}
-        //if (Input.GetKeyDown(KeyCode.L))
-        //{
-        //    AddPower(Powers.ShootWeb);
-        //}
-        //if (Input.GetKeyDown(KeyCode.K))
-        //{
-        //    AddPower(Powers.SlashBig);
-        //}
         if (moveInput != Vector2.zero)
         {
-            CreatureActions.Move(rigidbody2d, moveInput, speed);
+            CreatureActions.Move(rigidbody2d, moveInput, currentSpeed);
         }
 
         //set look direction of sprite
@@ -135,7 +140,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //check if Dash is in th Powers queue
-        if (HasPower(Powers.Dash))
+        if (HasPower(Powers.Dash) && !HasStatusEffect(StatusEffectTypes.Slowed))
         {
             //If player is not currently dashing
             if (direction == 0)
@@ -218,6 +223,19 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    private void OnDrawGizmos()
+    {
+        DisplayPowers();
+    }
+
+    
+    public void DisplayPowers()
+    {
+        UnityEditor.Handles.color = Color.green;
+        Handles.Label(new Vector3(transform.position.x, transform.position.y + 1f, 0), powersText + "\n" + GetStatusEffectsText());
+    }
+
+   
     public void ChangeHealth(int amount)
     {
         if (amount < 0)
@@ -260,12 +278,12 @@ public class PlayerController : MonoBehaviour
                 break;
             case Powers.ShootWeb:
                 //Shoot web
-                GameObject web = Instantiate(webPrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
+                GameObject webObject = Instantiate(webPrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
 
-                ShootWeb shootWeb = web.GetComponent<ShootWeb>();
+                Web web = webObject.GetComponent<Web>();
                 
                 //shoot web in direction player is facing
-                shootWeb.Launch(lookDirection, webForce);
+                web.Launch(lookDirection, webForce);
                 break;
             case Powers.Explode:
                 //Slash big
@@ -277,5 +295,73 @@ public class PlayerController : MonoBehaviour
                 dropBomb.Launch();
                 break;
         }
+    }
+
+    public void AddStatusEffect(StatusEffect effect)
+    {
+        if (HasStatusEffect(effect.type))
+        {
+            Debug.Log("Player already has status effect: " + effect.type);
+        }
+        else
+        {
+            Debug.Log("Effect added: " + effect.type);
+            statusEffects.Add(effect);
+            ProcessStatusEffect(effect);
+        }
+    }
+
+    public void RemoveStatusEffect(StatusEffect effect)
+    {
+        foreach (StatusEffect statusEffect in statusEffects)
+        {
+            if (statusEffect.type == effect.type) {
+                switch (effect.type)
+                {
+                    case StatusEffectTypes.Slowed:
+                        //If the slowdown effect is being removed, reset the currentSpeed to the baseSpeed value
+                        ProcessStatusEffect(effect, true);
+                        break;
+                }
+            }
+        }
+        statusEffects.RemoveWhere((item) => item.type == effect.type);
+    }
+
+    public void ProcessStatusEffect(StatusEffect effect, bool isBeingRemoved=false)
+    {
+        if (effect.hasDuration)
+        {
+
+        }
+        switch (effect.type)
+        {
+            case StatusEffectTypes.Slowed:
+                if (isBeingRemoved) { currentSpeed += baseSpeed * (effect.value / 100); }
+                else { currentSpeed -= baseSpeed * (effect.value / 100); };
+                break;
+            case StatusEffectTypes.Speedup:
+                if (isBeingRemoved) { currentSpeed -= baseSpeed * (effect.value / 100); }
+                else { currentSpeed += baseSpeed * (effect.value / 100); };
+                break;
+        }
+    }
+
+    public bool HasStatusEffect(StatusEffectTypes type)
+    {
+        foreach (StatusEffect effect in statusEffects)
+        {
+            if (effect.type == type) { return true; }
+        }
+        return false;
+    }
+
+    public StatusEffect GetStatusEffect(StatusEffectTypes type)
+    {
+        foreach (StatusEffect effect in statusEffects)
+        {
+            if(effect.type == type) { return effect; }
+        }
+        return null;
     }
 }

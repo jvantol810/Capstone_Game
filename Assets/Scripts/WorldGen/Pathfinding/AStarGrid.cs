@@ -137,6 +137,8 @@ public class AStarGrid : MonoBehaviour
         //Return the tile at the cell position
         return (Vector2Int)cellPosition;
     }
+
+
     public List<WorldTile> SetWalkableTiles()
     {
         //Iterate through each tile in the world map and collect the ones that are walkable into a list.
@@ -428,7 +430,7 @@ public class AStarGrid : MonoBehaviour
 
         return new WorldTile[] { };
     }
-    public Vector2[] FindPath(Vector2 worldStartPosition, Vector2 worldEndPosition)
+    public Vector2[] FindPath(Vector2 worldStartPosition, Vector2 worldEndPosition, bool ignoreWalkableTiles=true)
     {
         RemoveAllMarkers();
         Vector2Int startPosition = ConvertWorldPositionToTilePosition(worldStartPosition);
@@ -468,7 +470,7 @@ public class AStarGrid : MonoBehaviour
 
             foreach (WorldTile neighbour in currentNode.neighborTiles)
             {
-                if (!neighbour.walkable || neighbour.occupied || closedSet.Contains(neighbour)) continue;
+                if (!neighbour.walkable && ignoreWalkableTiles || neighbour.occupied || closedSet.Contains(neighbour)) continue;
                 //PlaceMarker(neighbour.centerWorldPosition, Color.cyan);
                 float newMovementCostToNeighbour = currentNode.gCost + Vector2.Distance(currentNode.centerWorldPosition, neighbour.centerWorldPosition);
                 if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))

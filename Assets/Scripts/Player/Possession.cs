@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Diagnostics;
 public class Possession : MonoBehaviour
 {
     Rigidbody2D rigidbody2d;
@@ -24,42 +24,39 @@ public class Possession : MonoBehaviour
         }
     }
 
+    
     void OnCollisionEnter2D(Collision2D other)
     {
-        //SampleEnemy e = other.collider.GetComponent<SampleEnemy>();
-
-
-        //if (e != null)
-        //{
-        //    SampleEnemy.isPossessed = true;
-        //}
 
         //Get the PlayerController script from the player in the scene
         PlayerController Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        Animator PlayerStateMachine = Player.GetComponent<Animator>();
-        CreatureController Creature = other.collider.gameObject.GetComponent<CreatureController>();
-
+        if (!other.collider.gameObject.TryGetComponent(out CreatureController Creature))
+        {
+            Destroy(gameObject);
+            return;
+        }
+        //CreatureController Creature = GetComponent<CreatureController>();
         //Get the type of the creature that the player hit
         switch (Creature.CreatureType)
         {
             case CreatureTypes.Minotaur:
-                //Player.chargingEnabled = true;
                 //add dash power to the queue
                 Player.AddPower(Powers.Dash);
                 Debug.Log("Charging enabled");
-                //PlayerStateMachine.SetTrigger("PossessMinotaur");
                 break;
             case CreatureTypes.Spider:
                 Player.AddPower(Powers.ShootWeb);
-                Debug.Log(Powers.ShootWeb);
+                Debug.Log("Shoot web enabled!"/*Powers.ShootWeb*/);
                 break;
             case CreatureTypes.Bomb:
-                //PlayerStateMachine.SetTrigger("PossessOgre");
                 Player.AddPower(Powers.Explode);
-                Debug.Log(Powers.Explode);
+                Debug.Log("Explosion enabled!"/*Powers.Explode*/);
+                break;
+            default:
+                Destroy(gameObject);
                 break;
         }
-
         Destroy(gameObject);
+
     }
 }

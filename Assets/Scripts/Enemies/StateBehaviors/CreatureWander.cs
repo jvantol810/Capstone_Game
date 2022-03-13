@@ -16,6 +16,8 @@ public class CreatureWander : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //Teleport the creature to a walkable tile
+        if (animator.GetComponent<CreatureController>() == null) { return; }
+
         creatureController = animator.GetComponent<CreatureController>();
         currentDestination = GenerateNewDestination();
         AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
