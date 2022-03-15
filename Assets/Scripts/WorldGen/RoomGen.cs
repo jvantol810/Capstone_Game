@@ -119,8 +119,7 @@ public class RoomGen : MonoBehaviour
         }
         InitMap();
         DrunkenWalkGen();
-        //GeneratePrefabs();
-        //Instantiate(new GameObject(), new Vector3(0, 0, 0), Quaternion.identity);
+        GeneratePrefabs();
         //Add enemies
         for (int i = 0; i < 3; i++)
         {

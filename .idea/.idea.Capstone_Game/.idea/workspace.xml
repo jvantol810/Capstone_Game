@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="e2855985-2c7a-414b-8d5a-eab741c63575" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/FileParse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/FileParse.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/ProcGenTesting.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/ProcGenTesting.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomGen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomGen.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/Pathfinding/AStarGrid.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/Pathfinding/AStarGrid.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +96,8 @@
       <workItem from="1646814101845" duration="1751000" />
       <workItem from="1646928345360" duration="1272000" />
       <workItem from="1647158912432" duration="622000" />
-      <workItem from="1647197435809" duration="15209000" />
+      <workItem from="1647197435809" duration="15898000" />
+      <workItem from="1647382926095" duration="1826000" />
     </task>
     <servers />
   </component>

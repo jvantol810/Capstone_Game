@@ -405,9 +405,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3dfc287ff5ee9764fa1316c86acb53bc, type: 2}
   - {fileID: 11400000, guid: b70d1fa8056903143a77d3ea981bbda6, type: 2}
   enemyPrefab: {fileID: 0}
+  playerPrefab: {fileID: 0}
   roomCenters: []
   testing: 0
-  floorMax: 1500
+  floorMax: 2500
   seeded: 0
   seed: 0
 --- !u!4 &1379462477
