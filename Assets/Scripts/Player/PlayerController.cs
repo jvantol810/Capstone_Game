@@ -113,10 +113,7 @@ public class PlayerController : MonoBehaviour
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
 
-        if (moveInput != Vector2.zero)
-        {
-            CreatureActions.Move(rigidbody2d, moveInput, currentSpeed);
-        }
+        
 
         //set look direction of sprite
         if (!Mathf.Approximately(moveInput.x, 0.0f) || !Mathf.Approximately(moveInput.y, 0.0f))
@@ -220,7 +217,10 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        
+        if (moveInput != Vector2.zero)
+        {
+            CreatureActions.Move(rigidbody2d, moveInput, currentSpeed);
+        }
     }
 
     private void OnDrawGizmos()

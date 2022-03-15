@@ -423,7 +423,7 @@ public class RoomGen : MonoBehaviour
                 prevTile = new Vector2(targetX,roomCenters[0].y);
                 if (i != 0)
                 {
-                    prevTile = new Vector2(targetX, i-1);
+                    prevTile = new Vector2(targetX, i - 1);
                 }
                 
                 newTile = prevTile + Vector2.up;

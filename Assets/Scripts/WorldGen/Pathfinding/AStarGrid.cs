@@ -492,7 +492,6 @@ public class AStarGrid : MonoBehaviour
 
             foreach (WorldTile neighbour in currentNode.neighborTiles)
             {
-                if (!neighbour.walkable && ignoreWalkableTiles || neighbour.occupied || closedSet.Contains(neighbour)) continue;
                 if (!neighbour.walkable && ignoreWalkableTile|| neighbour.occupied || closedSet.Contains(neighbour)) continue;
                 PlaceMarker(neighbour.centerWorldPosition, Color.cyan);
                 float newMovementCostToNeighbour = currentNode.gCost + Vector2.Distance(currentNode.centerWorldPosition, neighbour.centerWorldPosition);
