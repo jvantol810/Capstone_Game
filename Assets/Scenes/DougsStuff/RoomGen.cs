@@ -208,7 +208,7 @@ public class RoomGen : MonoBehaviour
     private void GeneratePrefabs()
     {
         ConvertToPrefab();
-        FindPrefabSpace();
+        roomCenters.Add(FindPrefabSpace());
         PlacePrefab();
         ConnectPrefab();
     }
@@ -275,12 +275,13 @@ public class RoomGen : MonoBehaviour
     }
 
     //Finds space for prefab to fit
-    private void FindPrefabSpace()
+    private Vector2Int FindPrefabSpace()
     {
+       // Debug.Log("Called FindPrefabSpace");
         prefabPoints.Clear();
         int pWidth = allRooms[0].prefabTiles[0].Count;
         int pHeight = allRooms[0].prefabTiles.Count;
-        Debug.Log("wid:" + pWidth + "Hei:"+ pHeight);
+        //Debug.Log("wid:" + pWidth + "Hei:"+ pHeight);
         //Grab the center ish coordinate of the prefab for room connections
         
         
@@ -300,16 +301,18 @@ public class RoomGen : MonoBehaviour
         int upperX = randomPoint.x + pWidth;
         int upperY = randomPoint.y + pHeight;
         
-        int xCenter = upperX-(pWidth / 2);
-        int yCenter = upperY-(pHeight / 2);
-        roomCenters.Add(new Vector2Int(xCenter,yCenter));
+        int xCenter = randomPoint.x + (pWidth / 2);
+        int yCenter = randomPoint.y + (pHeight / 2);
+
+       // Debug.Log("Random X:" + randomPoint.x + "Random Y:" + randomPoint.y);
+        //Debug.Log("upperX:" + upperX + "UpperY:" + upperY);
 
         if (!GetPrefabPoints(randomPoint, upperY, upperX))
         {
-            FindPrefabSpace();
+            //Debug.Log("Points not valid.");
+            return FindPrefabSpace();
         }
-        Debug.Log("X:" + randomPoint.x + "Y:" + randomPoint.y);
-        Debug.Log("upperX:" + upperX + "UpperY:" + upperY);
+        return new Vector2Int(xCenter, yCenter);
     }
     
     //Checks the space to make sure the points are valid
@@ -342,18 +345,93 @@ public class RoomGen : MonoBehaviour
         return true;
     }
 
-    private void ConnectPrefab()
+    //Bug with find path makes this not currently working
+    private void ConnectPrefabDepreciated()
     {
         WorldTile closestTile = aStarGrid.GetNearestWalkableTile(roomCenters[0], prefabPoints);
-        Debug.Log(closestTile.gridPosition);
-        Debug.Log(roomCenters[0]);
-        WorldTile[] closestPath = aStarGrid.FindPath(closestTile.gridPosition, roomCenters[0], false);
+        Debug.Log("closettile: " + closestTile.gridPosition);
+        Debug.Log("room center: " + roomCenters[0]);
+        WorldTile[] closestPath = aStarGrid.FindPathNoCost(roomCenters[0], closestTile.gridPosition, false);
+        //Vector2[] closestPath = aStarGrid.FindPath(aStarGrid.ConvertFromGridToWorldPosition(roomCenters[0]), closestTile.centerWorldPosition, false);
         Debug.Log(closestPath.Length);
         foreach (var tile in closestPath)
         {
             AddTileToMap(tile, tiles[2]);
-            Debug.Log("placed tile");
+            //Debug.Log("placed tile");
         }
+    }
+
+    //I don't like doing it this way
+    private void ConnectPrefab()
+    {
+        WorldTile closestTile = aStarGrid.GetNearestWalkableTile(roomCenters[0], prefabPoints);
+        int targetX = closestTile.gridX;
+        int targetY = closestTile.gridY;
+        Vector2 prevTile;
+        Vector2 newTile;
+
+        if (roomCenters[0].x < targetX)
+        {
+            for (int i = roomCenters[0].x; i < targetX; i++)
+            {
+                prevTile = roomCenters[0];
+                if (i != 0)
+                {
+                    prevTile = new Vector2(i-1, roomCenters[0].y);
+                }
+                
+                newTile = prevTile + Vector2.right;
+
+                AddTileToMap(true, Vector2Int.RoundToInt(newTile), tiles[1]);
+            }
+        }
+        else
+        {
+            for (int i = roomCenters[0].x; i > targetX; i--)
+            {
+                prevTile = roomCenters[0];
+                if (i != 0)
+                {
+                    prevTile = new Vector2(i-1, roomCenters[0].y);
+                }
+                
+                newTile = prevTile + Vector2.left;
+
+                AddTileToMap(true, Vector2Int.RoundToInt(newTile), tiles[1]);
+            }
+        }
+
+        if (roomCenters[0].y < targetY)
+        {
+            for (int i = roomCenters[0].y; i < targetY; i++)
+            {
+                prevTile = new Vector2(targetX,roomCenters[0].y);
+                if (i != 0)
+                {
+                    prevTile = new Vector2(targetX, i-1);
+                }
+                
+                newTile = prevTile + Vector2.up;
+
+                AddTileToMap(true, Vector2Int.RoundToInt(newTile), tiles[1]);
+            }
+        }
+        else
+        {
+            for (int i = roomCenters[0].y; i > targetY; i--)
+            {
+                prevTile = new Vector2(targetX,roomCenters[0].y);
+                if (i != 0)
+                {
+                    prevTile = new Vector2(targetX, i-1);
+                }
+                
+                newTile = prevTile + Vector2.up;
+
+                AddTileToMap(true, Vector2Int.RoundToInt(newTile), tiles[1]);
+            }
+        }
+        
     }
     
 }

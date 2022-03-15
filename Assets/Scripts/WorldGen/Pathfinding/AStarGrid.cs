@@ -404,9 +404,9 @@ public class AStarGrid : MonoBehaviour
     {
         RemoveAllMarkers();
         WorldTile startNode = GetTileAt(startPosition);
-        //PlaceMarker(startPosition, startColor);
+        PlaceMarker(startPosition, startColor);
         WorldTile targetNode = GetTileAt(endPosition);
-        //PlaceMarker(endPosition, endColor);
+        PlaceMarker(endPosition, endColor);
         List<WorldTile> openSet = new List<WorldTile>();
         HashSet<WorldTile> closedSet = new HashSet<WorldTile>();
         openSet.Add(startNode);
@@ -445,7 +445,7 @@ public class AStarGrid : MonoBehaviour
                     if (!openSet.Contains(neighbour))
                         //Add the neighbor to the open list because we want to explore it
                         openSet.Add(neighbour);
-                        //PlaceMarker(neighbour.worldPosition, Color.cyan);
+                    PlaceMarker(neighbour.worldPosition, Color.cyan);
                 }
             }
         }
@@ -510,5 +510,62 @@ public class AStarGrid : MonoBehaviour
             }
         }
         return new Vector2[] { };
+    }
+
+    public Vector2 ConvertFromGridToWorldPosition(Vector2Int gridPosition)
+    {
+        return map.GetCellCenterWorld((Vector3Int)gridPosition);
+    }
+    
+    public WorldTile[] FindPathNoCost(Vector2Int startPosition, Vector2Int endPosition, bool ignoreWalkableTiles=true)
+    {
+        RemoveAllMarkers();
+        WorldTile startNode = GetTileAt(startPosition);
+        PlaceMarker(startPosition, startColor);
+        WorldTile targetNode = GetTileAt(endPosition);
+        PlaceMarker(endPosition, endColor);
+        List<WorldTile> openSet = new List<WorldTile>();
+        HashSet<WorldTile> closedSet = new HashSet<WorldTile>();
+        openSet.Add(startNode);
+
+        while (openSet.Count > 0)
+        {
+            WorldTile currentNode = openSet[0];
+            for (int i = 1; i < openSet.Count; i++)
+            {
+                if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
+                {
+                    currentNode = openSet[i];
+                }
+            }
+
+            openSet.Remove(currentNode);
+            closedSet.Add(currentNode);
+
+            if (currentNode == targetNode)
+            {
+                WorldTile[] finalPath = RetracePath(startNode, targetNode);
+                return finalPath;
+            }
+
+            foreach (WorldTile neighbour in currentNode.neighborTiles)
+            {
+                if (!neighbour.walkable && ignoreWalkableTiles || closedSet.Contains(neighbour)) continue;
+
+                float newMovementCostToNeighbour = currentNode.gCost + Vector2.Distance(currentNode.centerWorldPosition, neighbour.centerWorldPosition);
+                if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
+                {
+                    neighbour.gCost = newMovementCostToNeighbour;
+                    neighbour.hCost = GetDistance(neighbour, targetNode);
+                    neighbour.parent = currentNode;
+
+                    if (!openSet.Contains(neighbour))
+                        //Add the neighbor to the open list because we want to explore it
+                        openSet.Add(neighbour);
+                    PlaceMarker(neighbour.worldPosition, Color.cyan);
+                }
+            }
+        }
+        return new WorldTile[] { };
     }
 }
