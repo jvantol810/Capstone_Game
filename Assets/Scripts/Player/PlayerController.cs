@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     float invincibleTimer;
 
     Rigidbody2D rigidbody2d;
+    Animator animator;
 
     private Vector2 moveInput;
     float horizontal;
@@ -83,6 +84,9 @@ public class PlayerController : MonoBehaviour
         dashTime = startDashTime;
 
         currentSpeed = baseSpeed;
+
+        animator = GetComponent<Animator>();
+
     }
 
     public string GetPowersText()
@@ -121,6 +125,9 @@ public class PlayerController : MonoBehaviour
             lookDirection.Set(moveInput.x, moveInput.y);
             lookDirection.Normalize();
         }
+
+        animator.SetFloat("Look X", lookDirection.x);
+        animator.SetFloat("Look Y", lookDirection.y);
 
         //set invincible timer after hit
         if (isInvincible)
