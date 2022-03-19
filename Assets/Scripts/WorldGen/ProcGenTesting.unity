@@ -408,7 +408,7 @@ MonoBehaviour:
   playerPrefab: {fileID: 0}
   roomCenters: []
   testing: 0
-  floorMax: 2500
+  floorMax: 1500
   seeded: 0
   seed: 0
 --- !u!4 &1379462477

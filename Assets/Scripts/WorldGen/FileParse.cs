@@ -1,64 +1,58 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 
 public static class FileParse 
 {
-    private static String path;
+    private static String textPath = Application.persistentDataPath + "/Prefabs";
+
     private static String jsonString;
-    public static int listDepth = 0;
     
-    //This is a bigger area than rooms should need
-    private static string[,] lines = new String[20, 20];
+    
+    public static List<String[,]> allTextPrefabs = new List<string[,]>();
 
     //Reads in text file splits into a String 2d array
-    public static String[,] ParseTextFile()
+    private static String[,] ParseTextFile(String file)
     {
         //IMPORTANT
         //The formatting of a room prefab has to be in a square shape see TestPrefab.txt for reference
-        String textPath = Application.persistentDataPath + "/TestPrefab2.txt";
-        String input = File.ReadAllText(textPath);
-
         
+        //Reads each prefab file
+        String input = File.ReadAllText(file);
+        Debug.Log(input);
+        
+        //This is a bigger area than rooms should need
+        String[,] inputLines = new String[15, 15];
+          
         int i = 0, j = 0;
         
+        //Reads each line of file and splits accordingly
         foreach (string row in input.Split('\n'))
         {
             j = 0;
             foreach (string col in row.Trim().Split(','))
             {
-                lines[j, i] = col.Trim();
+                inputLines[j, i] = col.Trim();
                 j++;
-                listDepth = j;
             }
 
             i++;
         }
+        Debug.Log(inputLines[1,1]);
+        
+        return inputLines;
+    }
 
-        return lines;
+    public static void ParseWholeFolder()
+    {
+        //Reads each file in the folder */Prefabs
+        foreach (var file in Directory.GetFiles(textPath))
+        {
+            allTextPrefabs.Add(ParseTextFile(file));
+        }
     }
     
-    //Reads in from JSON -- Doesn't Work -.-
-    private static void ParseJSON()
-    {
-        path = Application.persistentDataPath + "/TestPrefab.json";
-        
-        if (File.Exists(path))
-        {
-            Debug.Log("Should've worked");
-            jsonString = File.ReadAllText(path);
-            PrefabArray prefab = JsonUtility.FromJson<PrefabArray>(jsonString);
-            Debug.Log(prefab.jsonTiles[0,1]);
-        }
-        else
-        {
-            Debug.Log("Didn't work");
-        }
-    }
 
-    private class PrefabArray
-    {
-        public String[,] jsonTiles = {{"one","two"}};
-}
 }

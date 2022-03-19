@@ -21,7 +21,7 @@ public class RoomGen : MonoBehaviour
     private List<RoomPrefab> allRooms = new List<RoomPrefab>();
     public List<Vector2Int> roomCenters = new List<Vector2Int>();
     
-    private List<Vector2Int> prefabPoints = new List<Vector2Int>();
+    private List<List<Vector2Int>> prefabPoints = new List<List<Vector2Int>>();
     
     private int mapHeight;
     private int mapWidth;
@@ -50,6 +50,11 @@ public class RoomGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Do I need this I forgot heh
+        List<Vector2Int> newlist = new List<Vector2Int>();
+        prefabPoints.Add(newlist);
+        prefabPoints.Add(new List<Vector2Int>());
+
         pathStart = new Vector2Int(Random.Range(0, LevelSettings.MapData.width - 1), Random.Range(0, LevelSettings.MapData.height - 1));
         pathEnd = new Vector2Int( Random.Range(0, LevelSettings.MapData.width - 1), Random.Range(0, LevelSettings.MapData.height - 1));
         //Set the map size according to the values put in the inspector -- NOT DOING THIS CURRENTLY, BUT YOU CAN IF YOU WANT TO SET MAP SIZE IN INSPECTOR FOR CONVENINECE
@@ -64,7 +69,9 @@ public class RoomGen : MonoBehaviour
 
         //Set the aStarGrid in LevelSettings to be the aStarGrid assigned in inspector (this way any class can now reference the aStarGrid from LevelSettings)
         LevelSettings.MapData.SetAStarGrid(aStarGrid);
-
+        
+        FileParse.ParseWholeFolder();
+        
         //Generate the world map
         GenerateWorld();
 
@@ -206,8 +213,13 @@ public class RoomGen : MonoBehaviour
 
     private void GeneratePrefabs()
     {
+        int count = 0;
         ConvertToPrefab();
-        roomCenters.Add(FindPrefabSpace());
+        foreach (var room in allRooms)
+        {
+            roomCenters.Add(FindPrefabSpace(room, count));
+            count++;
+        }
         PlacePrefab();
         ConnectPrefab();
     }
@@ -215,75 +227,92 @@ public class RoomGen : MonoBehaviour
     //Converts String array into a Tilemap prefab
     private void ConvertToPrefab()
     {
-        String[,] stringArray = FileParse.ParseTextFile();
-        RoomPrefab roomTiles = new RoomPrefab();
-        roomTiles.InitInnerLists(FileParse.listDepth);
-        
-        //Loops through 2d string array and converts it into a 'RoomPrefab'
-        for (int i = 0; i < stringArray.GetLength(0); i++)
+        var stringArrays = FileParse.allTextPrefabs;
+        Debug.Log(stringArrays.Count);
+
+        foreach (var stringArray in stringArrays)
         {
-            for (int j = 0; j < stringArray.GetLength(1); j++)
+            RoomPrefab roomTiles = new RoomPrefab();
+            roomTiles.InitInnerLists(9);
+            //Loops through 2d string array and converts it into a 'RoomPrefab'
+            for (int i = 0; i < stringArray.GetLength(0); i++)
             {
-                //This trims the 2d array down to just the parts that represent tiles
-                if (stringArray[j, i] != null)
+                for (int j = 0; j < stringArray.GetLength(1); j++)
                 {
-                    //A "1" is a wall, "0" for floors 
-                    if (stringArray[j, i] == "1")
+                    //Debug.Log(roomTiles.prefabTiles.Count);
+                    //Debug.Log(stringArray[j, i] +"J:" + j + "I:" + i);
+                    //This trims the 2d array down to just the parts that represent tiles
+                    if (stringArray[j, i] != null)
                     {
-                        roomTiles.prefabTiles[j].Insert(i , new WorldTile(false, 0, 0, aStarGrid));
-                    }
-                    else
-                    {
-                        roomTiles.prefabTiles[j].Insert(i , new WorldTile(true, 0, 0, aStarGrid));
+                        
+                        //A "1" is a wall, "0" for floors 
+                        if (stringArray[j, i] == "1")
+                        {
+                            roomTiles.prefabTiles[j].Insert(i , new WorldTile(false, 0, 0, aStarGrid));
+                        }
+                        else
+                        {
+                            roomTiles.prefabTiles[j].Insert(i , new WorldTile(true, 0, 0, aStarGrid));
+                        }
                     }
                 }
             }
+            
+            Debug.Log("Room added");
+            //Add to prefab list
+            allRooms.Add(roomTiles);
         }
-        //Add to prefab list
-        allRooms.Add(roomTiles);
+       
+        
     }
 
     //Adds prefab to map and astar grid
     private void PlacePrefab()
     {
-        List<Vector2Int> usablePoints = prefabPoints;
         int totalTiles = 0;
+        int pointCount = 0;
         
         //Do this loop for every prefab in the list
-        //Loops through the allRooms tiles setting their positions to an empty area 
-        for (int i = 0; i < allRooms[0].prefabTiles.Count; i++)
+        foreach (var room in allRooms)
         {
-            for (int j = 0; j < allRooms[0].prefabTiles[i].Count; j++)
+            totalTiles = 0;
+            List<Vector2Int> usablePoints = prefabPoints[pointCount];
+            //Loops through the allRooms tiles setting their positions to an empty area 
+            for (int i = 0; i < room.prefabTiles.Count; i++)
             {
-                allRooms[0].prefabTiles[j][i].gridX = usablePoints[totalTiles].x;
-                allRooms[0].prefabTiles[j][i].gridY = usablePoints[totalTiles].y;
-                totalTiles++;
+                for (int j = 0; j < room.prefabTiles[i].Count; j++)
+                {
+                    
+                    room.prefabTiles[j][i].gridX = usablePoints[totalTiles].x;
+                    room.prefabTiles[j][i].gridY = usablePoints[totalTiles].y;
+                    totalTiles++;
                 
                 
-                //If walkable set the map to floor if not walls and add to map and astar grid
-                if (allRooms[0].prefabTiles[j][i].walkable)
-                {
-                    AddTileToMap(allRooms[0].prefabTiles[j][i], tiles[1]);
-                }
-                else
-                {
-                    AddTileToMap(allRooms[0].prefabTiles[j][i], tiles[0]);
+                    //If walkable set the map to floor if not walls and add to map and astar grid
+                    if (room.prefabTiles[j][i].walkable)
+                    {
+                        AddTileToMap(room.prefabTiles[j][i], tiles[1]);
+                    }
+                    else
+                    {
+                        AddTileToMap(room.prefabTiles[j][i], tiles[0]);
+                    }
                 }
             }
+
+            pointCount++;
         }
+  
     }
 
     //Finds space for prefab to fit
-    private Vector2Int FindPrefabSpace()
+    private Vector2Int FindPrefabSpace(RoomPrefab room, int count)
     {
-       // Debug.Log("Called FindPrefabSpace");
-        prefabPoints.Clear();
-        int pWidth = allRooms[0].prefabTiles[0].Count;
-        int pHeight = allRooms[0].prefabTiles.Count;
+        // Debug.Log("Called FindPrefabSpace");
+        int pWidth = room.prefabTiles[0].Count;
+        int pHeight = room.prefabTiles.Count;
         //Debug.Log("wid:" + pWidth + "Hei:"+ pHeight);
-        //Grab the center ish coordinate of the prefab for room connections
-        
-        
+
         List<Vector2Int> unwalkableLocations = aStarGrid.GetUnwalkableTileLocations();
         
         //Get random point 
@@ -304,18 +333,20 @@ public class RoomGen : MonoBehaviour
         int yCenter = randomPoint.y + (pHeight / 2);
 
        // Debug.Log("Random X:" + randomPoint.x + "Random Y:" + randomPoint.y);
-        //Debug.Log("upperX:" + upperX + "UpperY:" + upperY);
+       Debug.Log("upperX:" + upperX + "UpperY:" + upperY);
 
-        if (!GetPrefabPoints(randomPoint, upperY, upperX))
+        if (!GetPrefabPoints(randomPoint, upperY, upperX, count))
         {
             //Debug.Log("Points not valid.");
-            return FindPrefabSpace();
+            return FindPrefabSpace(room, count);
         }
+        
+        //Returns center ish of the room
         return new Vector2Int(xCenter, yCenter);
     }
     
     //Checks the space to make sure the points are valid
-    private bool GetPrefabPoints(Vector2Int randomPoint, int upperY, int upperX)
+    private bool GetPrefabPoints(Vector2Int randomPoint, int upperY, int upperX, int count)
     {
         //Loop through all the points to make sure their valid for placing 
         for (int i = randomPoint.y; i < upperY; i++)
@@ -330,27 +361,31 @@ public class RoomGen : MonoBehaviour
                 }
                 
                 //If the tile is valid add it to the list of points
-                if (aStarGrid.GetTileAt(new Vector2Int(j,i)).walkable == false)
+                if (aStarGrid.GetTileAt(new Vector2Int(j, i)).walkable == false)
                 {
+                    Debug.Log("J:" + j + "I"+ i);
                     //aStarGrid.PlaceMarker(new Vector2Int(j, i), Color.red);
-                    prefabPoints.Add(new Vector2Int(j, i));
+                    prefabPoints[count].Add(new Vector2Int(j, i));
+                    //Debug.Log("HIT2");
                 }
                 else
                 {
                     return false;
                 }
+                
             }
         }
+        
         return true;
     }
 
     //Bug with find path makes this not currently working
     private void ConnectPrefabDepreciated()
     {
-        WorldTile closestTile = aStarGrid.GetNearestWalkableTile(roomCenters[0], prefabPoints);
+        WorldTile closestTile = aStarGrid.GetNearestWalkableTile(roomCenters[0], prefabPoints[0]);
         Debug.Log("closettile: " + closestTile.gridPosition);
         Debug.Log("room center: " + roomCenters[0]);
-        WorldTile[] closestPath = aStarGrid.FindPathNoCost(roomCenters[0], closestTile.gridPosition, false);
+        WorldTile[] closestPath = aStarGrid.FindPath(roomCenters[0], closestTile.gridPosition, false);
         //Vector2[] closestPath = aStarGrid.FindPath(aStarGrid.ConvertFromGridToWorldPosition(roomCenters[0]), closestTile.centerWorldPosition, false);
         Debug.Log(closestPath.Length);
         foreach (var tile in closestPath)
@@ -363,72 +398,79 @@ public class RoomGen : MonoBehaviour
     //I don't like doing it this way
     private void ConnectPrefab()
     {
-        WorldTile closestTile = aStarGrid.GetNearestWalkableTile(roomCenters[0], prefabPoints);
-        int targetX = closestTile.gridX;
-        int targetY = closestTile.gridY;
         Vector2 prevTile;
         Vector2 newTile;
-
-        if (roomCenters[0].x < targetX)
+        int pointCounter = 0;
+        
+        foreach(var center in roomCenters)
         {
-            for (int i = roomCenters[0].x; i < targetX; i++)
+            WorldTile closestTile = aStarGrid.GetNearestWalkableTile(center, prefabPoints[pointCounter]);
+            int targetX = closestTile.gridX;
+            int targetY = closestTile.gridY;
+            
+            if (center.x < targetX)
             {
-                prevTile = roomCenters[0];
-                if (i != 0)
+                for (int i = center.x; i < targetX; i++)
                 {
-                    prevTile = new Vector2(i-1, roomCenters[0].y);
-                }
+                    prevTile = center;
+                    if (i != 0)
+                    {
+                        prevTile = new Vector2(i-1, center.y);
+                    }
                 
-                newTile = prevTile + Vector2.right;
+                    newTile = prevTile + Vector2.right;
 
-                AddTileToMap(true, Vector2Int.RoundToInt(newTile), tiles[1]);
+                    AddTileToMap(true, Vector2Int.RoundToInt(newTile), tiles[1]);
+                }
             }
-        }
-        else
-        {
-            for (int i = roomCenters[0].x; i > targetX; i--)
+            else
             {
-                prevTile = roomCenters[0];
-                if (i != 0)
+                for (int i = center.x; i > targetX; i--)
                 {
-                    prevTile = new Vector2(i-1, roomCenters[0].y);
-                }
+                    prevTile = center;
+                    if (i != 0)
+                    {
+                        prevTile = new Vector2(i-1, center.y);
+                    }
                 
-                newTile = prevTile + Vector2.left;
+                    newTile = prevTile + Vector2.left;
 
-                AddTileToMap(true, Vector2Int.RoundToInt(newTile), tiles[1]);
+                    AddTileToMap(true, Vector2Int.RoundToInt(newTile), tiles[1]);
+                }
             }
-        }
 
-        if (roomCenters[0].y < targetY)
-        {
-            for (int i = roomCenters[0].y; i < targetY; i++)
+            if (center.y < targetY)
             {
-                prevTile = new Vector2(targetX,roomCenters[0].y);
-                if (i != 0)
+                for (int i = center.y; i < targetY; i++)
                 {
-                    prevTile = new Vector2(targetX, i-1);
-                }
+                    prevTile = new Vector2(targetX,center.y);
+                    if (i != 0)
+                    {
+                        prevTile = new Vector2(targetX, i-1);
+                    }
                 
-                newTile = prevTile + Vector2.up;
+                    newTile = prevTile + Vector2.up;
 
-                AddTileToMap(true, Vector2Int.RoundToInt(newTile), tiles[1]);
+                    AddTileToMap(true, Vector2Int.RoundToInt(newTile), tiles[1]);
+                }
             }
-        }
-        else
-        {
-            for (int i = roomCenters[0].y; i > targetY; i--)
+            else
             {
-                prevTile = new Vector2(targetX,roomCenters[0].y);
-                if (i != 0)
+                for (int i = center.y; i > targetY; i--)
                 {
-                    prevTile = new Vector2(targetX, i - 1);
-                }
+                    prevTile = new Vector2(targetX,center.y);
+                    if (i != 0)
+                    {
+                        prevTile = new Vector2(targetX, i - 1);
+                    }
                 
-                newTile = prevTile + Vector2.up;
+                    newTile = prevTile + Vector2.up;
 
-                AddTileToMap(true, Vector2Int.RoundToInt(newTile), tiles[1]);
+                    AddTileToMap(true, Vector2Int.RoundToInt(newTile), tiles[1]);
+                }
             }
+
+            pointCounter++;
         }
         
     }

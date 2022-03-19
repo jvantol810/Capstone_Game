@@ -3,9 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="e2855985-2c7a-414b-8d5a-eab741c63575" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/FileParse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/FileParse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/ProcGenTesting.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/ProcGenTesting.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomGen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomGen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/DougsStuff.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/FileParse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/FileParse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/Pathfinding/AStarGrid.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/Pathfinding/AStarGrid.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/ProcGenTesting.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/ProcGenTesting.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomPrefab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomPrefab.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,18 +26,17 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomGen.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomPrefab.cs" root0="FORCE_HIGHLIGHTING" />
-  </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
       <option value="$PROJECT_DIR$/Assets/Scenes/DougsStuff/JSONParse.cs" />
       <option value="$PROJECT_DIR$/Assets/Scenes/JasonsStuff/astar/AStarGrid.cs" />
       <option value="$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomPrefab.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/Pathfinding/AStarGrid.cs" />
       <option value="$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomGen.cs" />
       <option value="$PROJECT_DIR$/Assets/Scenes/DougsStuff/FileParse.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomPrefab.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/Pathfinding/AStarGrid.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/FileParse.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="24FdoDSxPgi2ic6heCscIGVHFaI" />
@@ -97,7 +99,8 @@
       <workItem from="1646928345360" duration="1272000" />
       <workItem from="1647158912432" duration="622000" />
       <workItem from="1647197435809" duration="15898000" />
-      <workItem from="1647382926095" duration="1826000" />
+      <workItem from="1647382926095" duration="13674000" />
+      <workItem from="1647495601283" duration="20455000" />
     </task>
     <servers />
   </component>

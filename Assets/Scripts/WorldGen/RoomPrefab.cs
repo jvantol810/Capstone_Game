@@ -12,7 +12,8 @@ public class RoomPrefab
     {
         for (int i = 0; i < roomHeight ; i++)
         {
-            prefabTiles.Add(new List<WorldTile>());
+            List<WorldTile> newList = new List<WorldTile>();
+            prefabTiles.Add(newList);
         }
     }
 }
