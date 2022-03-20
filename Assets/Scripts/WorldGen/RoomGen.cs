@@ -5,6 +5,7 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEditor.Experimental;
+using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -21,7 +22,7 @@ public class RoomGen : MonoBehaviour
     private List<RoomPrefab> allRooms = new List<RoomPrefab>();
     public List<Vector2Int> roomCenters = new List<Vector2Int>();
     
-    private List<List<Vector2Int>> prefabPoints = new List<List<Vector2Int>>();
+    public List<Vector2Int> prefabPoints = new List<Vector2Int>();
     
     private int mapHeight;
     private int mapWidth;
@@ -50,11 +51,6 @@ public class RoomGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Do I need this I forgot heh
-        List<Vector2Int> newlist = new List<Vector2Int>();
-        prefabPoints.Add(newlist);
-        prefabPoints.Add(new List<Vector2Int>());
-
         pathStart = new Vector2Int(Random.Range(0, LevelSettings.MapData.width - 1), Random.Range(0, LevelSettings.MapData.height - 1));
         pathEnd = new Vector2Int( Random.Range(0, LevelSettings.MapData.width - 1), Random.Range(0, LevelSettings.MapData.height - 1));
         //Set the map size according to the values put in the inspector -- NOT DOING THIS CURRENTLY, BUT YOU CAN IF YOU WANT TO SET MAP SIZE IN INSPECTOR FOR CONVENINECE
@@ -126,7 +122,9 @@ public class RoomGen : MonoBehaviour
         }
         InitMap();
         DrunkenWalkGen();
-        GeneratePrefabs();
+        //GeneratePrefabs();
+        MultiPrefabGeneration();
+        
         //Add enemies
         for (int i = 0; i < 3; i++)
         {
@@ -209,44 +207,28 @@ public class RoomGen : MonoBehaviour
         
         
     }
-
-
-    private void GeneratePrefabs()
-    {
-        int count = 0;
-        ConvertToPrefab();
-        foreach (var room in allRooms)
-        {
-            roomCenters.Add(FindPrefabSpace(room, count));
-            count++;
-        }
-        PlacePrefab();
-        ConnectPrefab();
-    }
     
     //Converts String array into a Tilemap prefab
-    private void ConvertToPrefab()
+    private void ConvertToPrefab()//Works for multi
     {
         var stringArrays = FileParse.allTextPrefabs;
-        Debug.Log(stringArrays.Count);
 
-        foreach (var stringArray in stringArrays)
+        for(int k = 0; k < stringArrays.Count; k++)
         {
             RoomPrefab roomTiles = new RoomPrefab();
-            roomTiles.InitInnerLists(9);
+            roomTiles.InitInnerLists(FileParse.listDepth[k]);
             //Loops through 2d string array and converts it into a 'RoomPrefab'
-            for (int i = 0; i < stringArray.GetLength(0); i++)
+            for (int i = 0; i < stringArrays[k].GetLength(0); i++)
             {
-                for (int j = 0; j < stringArray.GetLength(1); j++)
+                for (int j = 0; j < stringArrays[k].GetLength(1); j++)
                 {
                     //Debug.Log(roomTiles.prefabTiles.Count);
                     //Debug.Log(stringArray[j, i] +"J:" + j + "I:" + i);
                     //This trims the 2d array down to just the parts that represent tiles
-                    if (stringArray[j, i] != null)
+                    if (stringArrays[k][j, i] != null)
                     {
-                        
                         //A "1" is a wall, "0" for floors 
-                        if (stringArray[j, i] == "1")
+                        if (stringArrays[k][j, i] == "1")
                         {
                             roomTiles.prefabTiles[j].Insert(i , new WorldTile(false, 0, 0, aStarGrid));
                         }
@@ -258,153 +240,21 @@ public class RoomGen : MonoBehaviour
                 }
             }
             
-            Debug.Log("Room added");
+            //Debug.Log("Room added");
             //Add to prefab list
             allRooms.Add(roomTiles);
-        }
-       
-        
-    }
-
-    //Adds prefab to map and astar grid
-    private void PlacePrefab()
-    {
-        int totalTiles = 0;
-        int pointCount = 0;
-        
-        //Do this loop for every prefab in the list
-        foreach (var room in allRooms)
-        {
-            totalTiles = 0;
-            List<Vector2Int> usablePoints = prefabPoints[pointCount];
-            //Loops through the allRooms tiles setting their positions to an empty area 
-            for (int i = 0; i < room.prefabTiles.Count; i++)
-            {
-                for (int j = 0; j < room.prefabTiles[i].Count; j++)
-                {
-                    
-                    room.prefabTiles[j][i].gridX = usablePoints[totalTiles].x;
-                    room.prefabTiles[j][i].gridY = usablePoints[totalTiles].y;
-                    totalTiles++;
-                
-                
-                    //If walkable set the map to floor if not walls and add to map and astar grid
-                    if (room.prefabTiles[j][i].walkable)
-                    {
-                        AddTileToMap(room.prefabTiles[j][i], tiles[1]);
-                    }
-                    else
-                    {
-                        AddTileToMap(room.prefabTiles[j][i], tiles[0]);
-                    }
-                }
-            }
-
-            pointCount++;
-        }
-  
-    }
-
-    //Finds space for prefab to fit
-    private Vector2Int FindPrefabSpace(RoomPrefab room, int count)
-    {
-        // Debug.Log("Called FindPrefabSpace");
-        int pWidth = room.prefabTiles[0].Count;
-        int pHeight = room.prefabTiles.Count;
-        //Debug.Log("wid:" + pWidth + "Hei:"+ pHeight);
-
-        List<Vector2Int> unwalkableLocations = aStarGrid.GetUnwalkableTileLocations();
-        
-        //Get random point 
-        int randIndex = Random.Range(0, unwalkableLocations.Count - 1);
-        Vector2Int randomPoint = unwalkableLocations[randIndex];
-
-        while (randomPoint.x + pWidth > LevelSettings.MapData.width - 2 && randomPoint.y + pHeight > LevelSettings.MapData.height - 2)
-        {
-            //Debug.Log("point out of bounds");
-            randIndex = Random.Range(0, unwalkableLocations.Count - 1);
-            randomPoint = unwalkableLocations[randIndex];
-        }
-
-        int upperX = randomPoint.x + pWidth;
-        int upperY = randomPoint.y + pHeight;
-        
-        int xCenter = randomPoint.x + (pWidth / 2);
-        int yCenter = randomPoint.y + (pHeight / 2);
-
-       // Debug.Log("Random X:" + randomPoint.x + "Random Y:" + randomPoint.y);
-       Debug.Log("upperX:" + upperX + "UpperY:" + upperY);
-
-        if (!GetPrefabPoints(randomPoint, upperY, upperX, count))
-        {
-            //Debug.Log("Points not valid.");
-            return FindPrefabSpace(room, count);
-        }
-        
-        //Returns center ish of the room
-        return new Vector2Int(xCenter, yCenter);
-    }
-    
-    //Checks the space to make sure the points are valid
-    private bool GetPrefabPoints(Vector2Int randomPoint, int upperY, int upperX, int count)
-    {
-        //Loop through all the points to make sure their valid for placing 
-        for (int i = randomPoint.y; i < upperY; i++)
-        {
-            for (int j = randomPoint.x; j < upperX; j++)
-            {
-                //There is already an out of bounds catch in PlacePrefab but for some reason it doesn't catch everything?
-                if (i >= LevelSettings.MapData.height - 2 || j >= LevelSettings.MapData.width - 2)
-                {
-                    //Debug.Log("OOB GPP");
-                    return false;
-                }
-                
-                //If the tile is valid add it to the list of points
-                if (aStarGrid.GetTileAt(new Vector2Int(j, i)).walkable == false)
-                {
-                    Debug.Log("J:" + j + "I"+ i);
-                    //aStarGrid.PlaceMarker(new Vector2Int(j, i), Color.red);
-                    prefabPoints[count].Add(new Vector2Int(j, i));
-                    //Debug.Log("HIT2");
-                }
-                else
-                {
-                    return false;
-                }
-                
-            }
-        }
-        
-        return true;
-    }
-
-    //Bug with find path makes this not currently working
-    private void ConnectPrefabDepreciated()
-    {
-        WorldTile closestTile = aStarGrid.GetNearestWalkableTile(roomCenters[0], prefabPoints[0]);
-        Debug.Log("closettile: " + closestTile.gridPosition);
-        Debug.Log("room center: " + roomCenters[0]);
-        WorldTile[] closestPath = aStarGrid.FindPath(roomCenters[0], closestTile.gridPosition, false);
-        //Vector2[] closestPath = aStarGrid.FindPath(aStarGrid.ConvertFromGridToWorldPosition(roomCenters[0]), closestTile.centerWorldPosition, false);
-        Debug.Log(closestPath.Length);
-        foreach (var tile in closestPath)
-        {
-            AddTileToMap(tile, tiles[2]);
-            //Debug.Log("placed tile");
         }
     }
 
     //I don't like doing it this way
-    private void ConnectPrefab()
+    private void ConnectPrefab(List<Vector2Int> prefabPlacePoints)
     {
         Vector2 prevTile;
         Vector2 newTile;
-        int pointCounter = 0;
-        
+
         foreach(var center in roomCenters)
         {
-            WorldTile closestTile = aStarGrid.GetNearestWalkableTile(center, prefabPoints[pointCounter]);
+            WorldTile closestTile = aStarGrid.GetNearestWalkableTile(center, prefabPlacePoints);
             int targetX = closestTile.gridX;
             int targetY = closestTile.gridY;
             
@@ -469,10 +319,257 @@ public class RoomGen : MonoBehaviour
                     AddTileToMap(true, Vector2Int.RoundToInt(newTile), tiles[1]);
                 }
             }
-
-            pointCounter++;
         }
         
+    }//Works multi
+
+    //Functions for multiprefab generation below
+    private void MultiPrefabGeneration()
+    {
+        ConvertToPrefab();
+        List<Vector2Int> prefabPlacePoints = new List<Vector2Int>();
+        
+        foreach (var room in allRooms)
+        {
+            prefabPlacePoints = MultiFindPrefabSpace(room);
+            MultiPlacePrefab(room, prefabPlacePoints);
+            ConnectPrefab(prefabPlacePoints);
+        }
+    }
+
+    private List<Vector2Int> MultiFindPrefabSpace(RoomPrefab room)
+    {
+        List<Vector2Int> multiPrefabPoints = new List<Vector2Int>();
+        
+        int pWidth = room.prefabTiles[0].Count;
+        int pHeight = room.prefabTiles.Count;
+
+        List<Vector2Int> unwalkableLocations = aStarGrid.GetUnwalkableTileLocations(new Vector2((float)pWidth, (float)pHeight));
+        
+        //Get random point
+        int randIndex = Random.Range(0, unwalkableLocations.Count - 1);
+        Vector2Int randomPoint = unwalkableLocations[randIndex];
+        while (randomPoint.x + pWidth > LevelSettings.MapData.width - 2 && randomPoint.y + pHeight > LevelSettings.MapData.height - 2)
+        {
+            //Debug.Log("point out of bounds");
+            randIndex = Random.Range(0, unwalkableLocations.Count - 1);
+            randomPoint = unwalkableLocations[randIndex];
+        }
+        
+        int upperX = randomPoint.x + pWidth;
+        int upperY = randomPoint.y + pHeight;
+        
+        while (!GetMultiPrefabPoints(multiPrefabPoints, randomPoint, upperY, upperX))
+        {
+            randIndex = Random.Range(0, unwalkableLocations.Count - 1);
+            randomPoint = unwalkableLocations[randIndex];
+            while (randomPoint.x + pWidth > LevelSettings.MapData.width - 2 && randomPoint.y + pHeight > LevelSettings.MapData.height - 2)
+            {
+                //Debug.Log("point out of bounds");
+                randIndex = Random.Range(0, unwalkableLocations.Count - 1);
+                randomPoint = unwalkableLocations[randIndex];
+            }
+        
+            upperX = randomPoint.x + pWidth;
+            upperY = randomPoint.y + pHeight;
+            
+        }
+        
+        //Grab room center
+        //Calculate these in a different way
+        int xCenter = (randomPoint.x + upperX)/2;
+        int yCenter = (randomPoint.y + upperY) / 2;
+        roomCenters.Add(new Vector2Int(xCenter,yCenter));
+
+        return multiPrefabPoints;
+
     }
     
+    private bool GetMultiPrefabPoints(List<Vector2Int> multiPrefabPoints, Vector2Int randomPoint, int upperY, int upperX)
+    {
+        //Loop through all the points to make sure their valid for placing 
+        for (int i = randomPoint.y; i < upperY; i++)
+        {
+            for (int j = randomPoint.x; j < upperX; j++)
+            {
+                //There is already an out of bounds catch in PlacePrefab but for some reason it doesn't catch everything?
+                if (i >= LevelSettings.MapData.height - 2 || j >= LevelSettings.MapData.width - 2)
+                {
+                    //Debug.Log("OOB GPP");
+                    return false;
+                }
+                
+                //If the tile is valid add it to the list of points
+                if (aStarGrid.GetTileAt(new Vector2Int(j, i)).walkable == false)
+                {
+                    //Debug.Log("J:" + j + "I"+ i);
+                    //aStarGrid.PlaceMarker(new Vector2Int(j, i), Color.red);
+                    multiPrefabPoints.Add(new Vector2Int(j, i));
+                    //Debug.Log("HIT2");
+                }
+                else
+                {
+                    multiPrefabPoints.Clear();
+                    return false;
+                }
+                
+            }
+        }
+        
+        return true;
+    }
+    
+    private void MultiPlacePrefab(RoomPrefab room, List<Vector2Int> prefabPlacePoints)
+    {
+        int totalTiles = 0;
+        
+        //Loops through the allRooms tiles setting their positions to a valid area 
+        for (int i = 0; i < room.prefabTiles.Count; i++)
+        {
+            for (int j = 0; j < room.prefabTiles[i].Count; j++)
+            {
+                room.prefabTiles[j][i].gridX = prefabPlacePoints[totalTiles].x;
+                room.prefabTiles[j][i].gridY = prefabPlacePoints[totalTiles].y;
+                totalTiles++;
+                
+                
+                //If walkable set the map to floor if not walls and add to map and astar grid
+                if (room.prefabTiles[j][i].walkable)
+                {
+                    AddTileToMap(room.prefabTiles[j][i], tiles[1]);
+                }
+                else
+                {
+                    AddTileToMap(room.prefabTiles[j][i], tiles[0]);
+                }
+            }
+        }
+    }
+    
+    //You are now entering the depreciated zone
+    //Tread with caution
+    
+    //**Depreciated functions**
+    
+    [Obsolete(" GeneratePrefabs is deprecated, please use MultiPrefabGeneration instead.", true )]
+    private void GeneratePrefabs()
+    {
+        //int count = 0;
+        ConvertToPrefab();
+        
+        //Single prefab functions
+       
+        //roomCenters.Add(FindPrefabSpace(room, count));
+        //PlacePrefab();
+        //ConnectPrefab();
+    }
+    
+    //Adds prefab to map and astar grid
+    [Obsolete(" PlacePrefab is deprecated, please use MultiPlacePrefab instead.")]
+    private void PlacePrefab()
+    {
+        List<Vector2Int> usablePoints = prefabPoints;
+        int totalTiles = 0;
+        
+        //Do this loop for every prefab in the list
+        //Loops through the allRooms tiles setting their positions to an empty area 
+        for (int i = 0; i < allRooms[0].prefabTiles.Count; i++)
+        {
+            for (int j = 0; j < allRooms[0].prefabTiles[i].Count; j++)
+            {
+                allRooms[0].prefabTiles[j][i].gridX = usablePoints[totalTiles].x;
+                allRooms[0].prefabTiles[j][i].gridY = usablePoints[totalTiles].y;
+                totalTiles++;
+                
+                
+                //If walkable set the map to floor if not walls and add to map and astar grid
+                if (allRooms[0].prefabTiles[j][i].walkable)
+                {
+                    AddTileToMap(allRooms[0].prefabTiles[j][i], tiles[1]);
+                }
+                else
+                {
+                    AddTileToMap(allRooms[0].prefabTiles[j][i], tiles[0]);
+                }
+            }
+        }
+    }
+
+    //Finds space for prefab to fit
+    [Obsolete(" FindPrefabSpace is deprecated, please use MultiFindPrefabSpace instead.")]
+    private Vector2Int FindPrefabSpace(RoomPrefab room)
+    {
+        // Debug.Log("Called FindPrefabSpace");
+        int pWidth = room.prefabTiles[0].Count;
+        int pHeight = room.prefabTiles.Count;
+        //Debug.Log("wid:" + pWidth + "Hei:"+ pHeight);
+
+        List<Vector2Int> unwalkableLocations = aStarGrid.GetUnwalkableTileLocations();
+        
+        //Get random point 
+        int randIndex = Random.Range(0, unwalkableLocations.Count - 1);
+        Vector2Int randomPoint = unwalkableLocations[randIndex];
+
+        while (randomPoint.x + pWidth > LevelSettings.MapData.width - 2 && randomPoint.y + pHeight > LevelSettings.MapData.height - 2)
+        {
+            //Debug.Log("point out of bounds");
+            randIndex = Random.Range(0, unwalkableLocations.Count - 1);
+            randomPoint = unwalkableLocations[randIndex];
+        }
+
+        int upperX = randomPoint.x + pWidth;
+        int upperY = randomPoint.y + pHeight;
+        
+        int xCenter = randomPoint.x + (pWidth / 2);
+        int yCenter = randomPoint.y + (pHeight / 2);
+
+       // Debug.Log("Random X:" + randomPoint.x + "Random Y:" + randomPoint.y);
+       Debug.Log("upperX:" + upperX + "UpperY:" + upperY);
+
+        if (!GetPrefabPoints(randomPoint, upperY, upperX))
+        {
+            //Debug.Log("Points not valid.");
+            return FindPrefabSpace(room);
+        }
+        
+        //Returns center ish of the room
+        return new Vector2Int(xCenter, yCenter);
+    }
+    
+    //Checks the space to make sure the points are valid
+    [Obsolete(" GetPrefabPoints is deprecated, please use GetMultiPrefabPoints instead.")]
+    private bool GetPrefabPoints(Vector2Int randomPoint, int upperY, int upperX)
+    {
+        //Loop through all the points to make sure their valid for placing 
+        for (int i = randomPoint.y; i < upperY; i++)
+        {
+            for (int j = randomPoint.x; j < upperX; j++)
+            {
+                //There is already an out of bounds catch in PlacePrefab but for some reason it doesn't catch everything?
+                if (i >= LevelSettings.MapData.height - 2 || j >= LevelSettings.MapData.width - 2)
+                {
+                    //Debug.Log("OOB GPP");
+                    return false;
+                }
+                
+                //If the tile is valid add it to the list of points
+                if (aStarGrid.GetTileAt(new Vector2Int(j, i)).walkable == false)
+                {
+                    //Debug.Log("J:" + j + "I"+ i);
+                    //aStarGrid.PlaceMarker(new Vector2Int(j, i), Color.red);
+                    prefabPoints.Add(new Vector2Int(j, i));
+                    //Debug.Log("HIT2");
+                }
+                else
+                {
+                    return false;
+                }
+                
+            }
+        }
+        
+        return true;
+    }
+
 }
+
