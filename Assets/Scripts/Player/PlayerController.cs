@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
 using UnityEditor;
+using TMPro;
 public class PlayerController : MonoBehaviour
 {
     public float baseSpeed = 7f;
@@ -38,18 +39,20 @@ public class PlayerController : MonoBehaviour
 
     public CreatureTypes CreatureState;
 
-    public bool chargingEnabled;
     public float dashSpeed;
-    private float dashTime;
-    public float startDashTime;
-    private int direction;
+    public float dashLength, dashCooldown;
+    private float dashCounter;
+    private float dashCoolCounter;
+    public bool isDashing;
+    private Vector2 direction;
 
     [SerializeField]
     public Queue<Powers> playerPowers = new Queue<Powers>();
-    
+    public TextMeshProUGUI powersDisplay;
     private int maxNumberOfPowers = 2;
     public HashSet<StatusEffect> statusEffects = new HashSet<StatusEffect>();
     public string powersText { get { return GetPowersText(); } }
+    public Transform firePoint;
     public void AddPower(Powers power)
     {
         //Add the power if it isn't already in the power list
@@ -60,6 +63,7 @@ public class PlayerController : MonoBehaviour
                 playerPowers.Dequeue();
             }
             playerPowers.Enqueue(power);
+            powersDisplay.text = powersText;
         }
     }
 
@@ -81,12 +85,12 @@ public class PlayerController : MonoBehaviour
         //Set the creature state to be Ghost on start
         CreatureState = CreatureTypes.Ghost;
 
-        dashTime = startDashTime;
-
         currentSpeed = baseSpeed;
 
         animator = GetComponent<Animator>();
 
+        AddPower(Powers.Dash);
+        AddPower(Powers.Explode);
     }
 
     public string GetPowersText()
@@ -113,23 +117,28 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Update the aim
+        UpdateAim();
+
         //get input from user
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
 
-        
 
-        //set look direction of sprite
+        //Update the look direction but only if the player is not dashing
         if (!Mathf.Approximately(moveInput.x, 0.0f) || !Mathf.Approximately(moveInput.y, 0.0f))
         {
-            lookDirection.Set(moveInput.x, moveInput.y);
-            lookDirection.Normalize();
+            if (!isDashing && dashCoolCounter <= 0)
+            {
+                lookDirection.Set(moveInput.x, moveInput.y);
+                lookDirection.Normalize();
+
+                animator.SetFloat("Look X", lookDirection.x);
+                animator.SetFloat("Look Y", lookDirection.y);
+            }
         }
 
-        animator.SetFloat("Look X", lookDirection.x);
-        animator.SetFloat("Look Y", lookDirection.y);
-
-        //set invincible timer after hit
+        //Set invincible timer after hit
         if (isInvincible)
         {
             invincibleTimer -= Time.deltaTime;
@@ -140,77 +149,38 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown("space"))
         {
             //Fire a projectile at the enemy, possessing them on contact
-            Launch();
+            FirePossession();
         }
 
-        //check if Dash is in th Powers queue
-        if (HasPower(Powers.Dash) && !HasStatusEffect(StatusEffectTypes.Slowed))
+        if (dashCounter > 0)
         {
-            //If player is not currently dashing
-            if (direction == 0)
+            CreatureActions.Move(rigidbody2d, lookDirection, dashSpeed);
+            dashCounter -= Time.deltaTime;
+            if(dashCounter <= 0)
             {
-                //set direction based on where the player is facing
-                if (Input.GetKeyDown(KeyCode.C) && lookDirection.x == -1)
-                {
-                    direction = 1;
-                }
-                else if (Input.GetKeyDown(KeyCode.C) && lookDirection.x == 1)
-                {
-                    direction = 2;
-                }
-                else if (Input.GetKeyDown(KeyCode.C) && lookDirection.y == 1)
-                {
-                    direction = 3;
-                }
-                else if (Input.GetKeyDown(KeyCode.C) && lookDirection.y == -1)
-                {
-                    direction = 4;
-                }
+                dashCoolCounter = dashCooldown;
+                isDashing = false;
             }
-            else
-            {
-                //set everything back to normal when the player finishes dashing
-                if (dashTime <= 0)
-                {
-                    direction = 0;
-                    Debug.Log(direction);
-                    dashTime = startDashTime;
-                    rigidbody2d.velocity = Vector2.zero;
-                }
-                else
-                {
-                    //decrement the dash timer
-                    dashTime -= Time.deltaTime;
-
-                    //make player dash in direction they're facing
-                    if (direction == 1)
-                    {
-                        rigidbody2d.velocity = Vector2.left * dashSpeed;
-                    }
-                    else if (direction == 2)
-                    {
-                        rigidbody2d.velocity = Vector2.right * dashSpeed;
-                    }
-                    else if (direction == 3)
-                    {
-                        rigidbody2d.velocity = Vector2.up * dashSpeed;
-                    }
-                    else if (direction == 4)
-                    {
-                        rigidbody2d.velocity = Vector2.down * dashSpeed;
-                    }
-                }
-            }
-
         }
-        else if (HasPower(Powers.ShootWeb))
+        if(dashCoolCounter > 0)
+        {
+            dashCoolCounter -= Time.deltaTime;
+        }
+        if (HasPower(Powers.Dash))
+        {
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                ActivatePower(Powers.Dash);
+            }
+        }
+        if (HasPower(Powers.ShootWeb))
         {
             if (Input.GetMouseButtonDown(0))
             {
                 ActivatePower(Powers.ShootWeb);
             }
         }
-        else if (HasPower(Powers.Explode))
+        if (HasPower(Powers.Explode))
         {
             if (Input.GetKeyDown(KeyCode.J))
             {
@@ -218,13 +188,13 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Throwing bomb");
             }
         }
-
+        Debug.Log("Dash counter: " + dashCounter);
 
     }
 
     void FixedUpdate()
     {
-        if (moveInput != Vector2.zero)
+        if (moveInput != Vector2.zero && isDashing == false && dashCoolCounter <= 0)
         {
             CreatureActions.Move(rigidbody2d, moveInput, currentSpeed);
         }
@@ -262,15 +232,15 @@ public class PlayerController : MonoBehaviour
         //UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
     }
 
-    void Launch()
+    void FirePossession()
     {
-        GameObject possessionObject = Instantiate(projectilePrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
+        GameObject possessionObject = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
 
         Possession possession = possessionObject.GetComponent<Possession>();
 
         //throw projectile in direction player is facing
 
-        possession.Launch(lookDirection, launchForce);
+        possession.Launch(firePoint.right, launchForce);
 
         //animator.SetTrigger("Launch");
         //PlaySound(throwingClip);
@@ -282,15 +252,20 @@ public class PlayerController : MonoBehaviour
         {
             case Powers.Dash:
                 //Do the dash
+                if(dashCoolCounter <= 0 && dashCounter <= 0)
+                {
+                    dashCounter = dashLength;
+                    isDashing = true;
+                }
                 break;
             case Powers.ShootWeb:
                 //Shoot web
-                GameObject webObject = Instantiate(webPrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
+                GameObject webObject = Instantiate(webPrefab, transform.position, Quaternion.identity);
 
                 Web web = webObject.GetComponent<Web>();
                 
                 //shoot web in direction player is facing
-                web.Launch(lookDirection, webForce);
+                web.Launch(aimDirection, webForce);
                 break;
             case Powers.Explode:
                 //Slash big
@@ -300,6 +275,7 @@ public class PlayerController : MonoBehaviour
 
                 //throw bomb in direction player is facing
                 dropBomb.Launch();
+
                 break;
         }
     }
@@ -370,5 +346,26 @@ public class PlayerController : MonoBehaviour
             if(effect.type == type) { return effect; }
         }
         return null;
+    }
+
+    float aimAngle;
+    Vector2 mousePosition;
+    Vector2 aimDirection;
+    public void UpdateAim()
+    {
+        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        aimDirection = (mousePosition - (Vector2)transform.position).normalized;
+        aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+        firePoint.rotation = Quaternion.Euler(0, 0, aimAngle);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (isDashing)
+        {
+            dashCounter = 0;
+            dashCoolCounter = dashCooldown;
+            isDashing = false;
+        }
     }
 }

@@ -28,7 +28,7 @@ public class MinotaurChasePlayer : StateMachineBehaviour
         playerPos = minotaurController.player.position;
 
         //Move towards player
-        minotaurController.MoveTowards(playerPos, minotaurController.speed);
+        minotaurController.MoveTowards(playerPos, minotaurController.currentSpeed);
 
         //Check if the player is in the melee attack range. If so, switch the state to attacking.
         if (minotaurController.isPlayerInMeleeAttackRange())

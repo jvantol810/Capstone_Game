@@ -35,7 +35,6 @@ public class Possession : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        //CreatureController Creature = GetComponent<CreatureController>();
         //Get the type of the creature that the player hit
         switch (Creature.CreatureType)
         {
@@ -57,6 +56,38 @@ public class Possession : MonoBehaviour
                 break;
         }
         Destroy(gameObject);
+    }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+
+        //Get the PlayerController script from the player in the scene
+        PlayerController Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        if (!other.gameObject.TryGetComponent(out CreatureController Creature))
+        {
+            Destroy(gameObject);
+            return;
+        }
+        //Get the type of the creature that the player hit
+        switch (Creature.CreatureType)
+        {
+            case CreatureTypes.Minotaur:
+                //add dash power to the queue
+                Player.AddPower(Powers.Dash);
+                Debug.Log("Charging enabled");
+                break;
+            case CreatureTypes.Spider:
+                Player.AddPower(Powers.ShootWeb);
+                Debug.Log("Shoot web enabled!");
+                break;
+            case CreatureTypes.Bomb:
+                Player.AddPower(Powers.Explode);
+                Debug.Log("Explosion enabled!");
+                break;
+            default:
+                Destroy(gameObject);
+                break;
+        }
+        Destroy(gameObject);
     }
 }

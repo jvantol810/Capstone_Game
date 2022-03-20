@@ -422,9 +422,9 @@ public class AStarGrid : MonoBehaviour
     {
         RemoveAllMarkers();
         WorldTile startNode = GetTileAt(startPosition);
-        PlaceMarker(startPosition, startColor);
+        //PlaceMarker(startPosition, startColor);
         WorldTile targetNode = GetTileAt(endPosition);
-        PlaceMarker(endPosition, endColor);
+        //PlaceMarker(endPosition, endColor);
         List<WorldTile> openSet = new List<WorldTile>();
         HashSet<WorldTile> closedSet = new HashSet<WorldTile>();
         openSet.Add(startNode);
@@ -463,7 +463,7 @@ public class AStarGrid : MonoBehaviour
                     if (!openSet.Contains(neighbour))
                         //Add the neighbor to the open list because we want to explore it
                         openSet.Add(neighbour);
-                    PlaceMarker(neighbour.worldPosition, Color.cyan);
+                    //PlaceMarker(neighbour.worldPosition, Color.cyan);
                 }
             }
         }
@@ -476,9 +476,9 @@ public class AStarGrid : MonoBehaviour
         Vector2Int startPosition = ConvertWorldPositionToTilePosition(worldStartPosition);
         WorldTile startNode = GetTileAt(startPosition);
         Debug.Log("Starting at: " + startPosition);
-        PlaceMarker(startPosition, startColor);
+        //PlaceMarker(startPosition, startColor);
         WorldTile targetNode = GetTileAt(ConvertWorldPositionToTilePosition(worldEndPosition));
-        PlaceMarker(worldEndPosition, endColor);
+        //PlaceMarker(worldEndPosition, endColor);
         List<WorldTile> openSet = new List<WorldTile>();
         HashSet<WorldTile> closedSet = new HashSet<WorldTile>();
         openSet.Add(startNode);
@@ -511,7 +511,7 @@ public class AStarGrid : MonoBehaviour
             foreach (WorldTile neighbour in currentNode.neighborTiles)
             {
                 if (!neighbour.walkable && ignoreWalkableTile|| neighbour.occupied || closedSet.Contains(neighbour)) continue;
-                PlaceMarker(neighbour.centerWorldPosition, Color.cyan);
+                //PlaceMarker(neighbour.centerWorldPosition, Color.cyan);
                 float newMovementCostToNeighbour = currentNode.gCost + Vector2.Distance(currentNode.centerWorldPosition, neighbour.centerWorldPosition);
                 if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
                 {

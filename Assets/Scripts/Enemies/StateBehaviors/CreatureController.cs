@@ -24,8 +24,10 @@ public class CreatureController : MonoBehaviour
     //public List<UnityEvent> wanderEvents;
     //Attributes/enemy stats
     [Header("Attributes")]
-    public int health;
-    public float speed;
+    public float health;
+    public float baseSpeed;
+    [HideInInspector]
+    public float currentSpeed;
     public float damage;
     [Header("Detection")]
     public float detectionRange;
@@ -53,10 +55,13 @@ public class CreatureController : MonoBehaviour
     [Header("State")]
     public TextMeshProUGUI stateText;
 
+    public Vector2 knockbackForce = Vector2.zero;
+    public bool isBeingKnockedBack = false;
     //[Header("Possession")]
     //public bool possessed = false;
 
 
+    public HashSet<StatusEffect> statusEffects = new HashSet<StatusEffect>();
 
 
     // Start is called before the first frame update
@@ -64,9 +69,11 @@ public class CreatureController : MonoBehaviour
     {
         //Set references
         m_rigidbody = GetComponent<Rigidbody2D>();
+
         //weaponAnimator = weapon.GetComponent<Animator>();
         m_animator = GetComponent<Animator>();
 
+        currentSpeed = baseSpeed;
         //Go through each event assigned in the inspector window and add listeners 
         //foreach (UnityEvent attackEvent in attackEvents)
         //{
@@ -83,6 +90,12 @@ public class CreatureController : MonoBehaviour
             
 
         }
+
+        if (isBeingKnockedBack)
+        {
+            m_rigidbody.MovePosition(transform.position + (Vector3)knockbackForce);
+        }
+
         //stateText.text = GetCurrentState();
        
         //stateText.transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, 0);
@@ -308,5 +321,114 @@ public class CreatureController : MonoBehaviour
 
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
+    }
+
+
+    public void AddStatusEffect(StatusEffect effect)
+    {
+        if (HasStatusEffect(effect.type))
+        {
+            Debug.Log("Player already has status effect: " + effect.type);
+        }
+        else
+        {
+            Debug.Log("Effect added: " + effect.type);
+            statusEffects.Add(effect);
+            ProcessStatusEffect(effect);
+        }
+    }
+
+    public void RemoveStatusEffect(StatusEffect effect)
+    {
+        foreach (StatusEffect statusEffect in statusEffects)
+        {
+            if (statusEffect.type == effect.type)
+            {
+                ProcessStatusEffect(effect, true);
+            }
+        }
+        statusEffects.RemoveWhere((item) => item.type == effect.type);
+    }
+
+    public void ProcessStatusEffect(StatusEffect effect, bool isBeingRemoved = false)
+    {
+        if (effect.hasDuration)
+        {
+
+        }
+        switch (effect.type)
+        {
+            case StatusEffectTypes.Slowed:
+                if (isBeingRemoved) {
+                    Debug.Log("Slowed status effect being removed from enemy!");
+                    currentSpeed += baseSpeed * (effect.value / 100); 
+                }
+                else { currentSpeed -= baseSpeed * (effect.value / 100); };
+                break;
+            case StatusEffectTypes.Speedup:
+                if (isBeingRemoved) { currentSpeed -= baseSpeed * (effect.value / 100); }
+                else { currentSpeed += baseSpeed * (effect.value / 100); };
+                break;
+            case StatusEffectTypes.Knockback:
+                if (isBeingRemoved) {
+                    //Reenable the animator
+                    GetComponent<Animator>().enabled = true;
+                    //Disable knockback effect
+                    isBeingKnockedBack = false;
+                    //Destroy the bomb gameObject associated with the knockback effect
+                    Destroy(effect.source);
+                }
+                else
+                {
+                    //Temporarily enable the BoxCollider so that the creature collides with walls
+                    //GetComponent<Collider2D>().isTrigger = false;
+                    //Disable the animator temporarily 
+                    GetComponent<Animator>().enabled = false;
+                    //Set the knockback force
+                    knockbackForce = effect.vectorValue;
+                    //Set isBeingKnockedBack to true
+                    isBeingKnockedBack = true;
+                    //Remove the effect
+                    StartCoroutine(RemoveStatusEffectAfterDelay(effect, effect.duration));
+                }
+                break;
+        }
+    }
+
+    public void ChangeHealth(float amount)
+    {
+        health += amount;
+        Debug.Log("Creature " + gameObject.name + " has taken " + amount + " damage!");
+        if (health <= 0)
+        {
+            Debug.Log("Creature " + gameObject.name + " has died!");
+            Destroy(gameObject);
+        }
+    }
+
+    public IEnumerator RemoveStatusEffectAfterDelay(StatusEffect effect, float delay)
+    {
+        //Wait for the passed in time (in seconds)
+        yield return new WaitForSeconds(delay);
+        //Remove the effect
+        RemoveStatusEffect(effect);
+    }
+
+    public bool HasStatusEffect(StatusEffectTypes type)
+    {
+        foreach (StatusEffect effect in statusEffects)
+        {
+            if (effect.type == type) { return true; }
+        }
+        return false;
+    }
+
+    public StatusEffect GetStatusEffect(StatusEffectTypes type)
+    {
+        foreach (StatusEffect effect in statusEffects)
+        {
+            if (effect.type == type) { return effect; }
+        }
+        return null;
     }
 }

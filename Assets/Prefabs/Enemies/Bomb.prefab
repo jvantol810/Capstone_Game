@@ -167,7 +167,7 @@ MonoBehaviour:
   CreatureType: 3
   player: {fileID: 0}
   health: 0
-  speed: 0
+  speed: 5
   damage: 0
   detectionRange: 0
   meleeAttackRange: 0

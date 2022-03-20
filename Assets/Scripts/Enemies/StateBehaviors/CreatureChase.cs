@@ -30,7 +30,7 @@ public class CreatureChase : StateMachineBehaviour
         if(currentPath.Length > 0)
         {
             //Move towards the current tile on the path. If you've reached the current tile already, then increment the tile index.
-            creatureController.MoveTowards(currentPath[nextTileIndex], creatureController.speed);
+            creatureController.MoveTowards(currentPath[nextTileIndex], creatureController.currentSpeed);
             if(nextTileIndex + 1 < currentPath.Length) { nextTileIndex++; }
         }
         //nextTileIndex = 1;

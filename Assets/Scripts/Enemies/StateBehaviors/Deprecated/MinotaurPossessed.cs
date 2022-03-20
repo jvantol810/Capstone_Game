@@ -22,7 +22,7 @@ public class MinotaurPossessed : StateMachineBehaviour
         Vector2 moveDirection = new Vector2(horizontal, vertical);
 
         //Move in direction of input
-        minotaurController.Move(moveDirection, minotaurController.speed);
+        minotaurController.Move(moveDirection, minotaurController.currentSpeed);
 
         //If the player presses the melee attack key, execute a melee attack
 

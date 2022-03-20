@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8821750546496874711}
   - component: {fileID: 8821750546496874710}
-  - component: {fileID: 8821750546496874713}
   - component: {fileID: 8821750546496874712}
   - component: {fileID: 8821750546496874715}
   - component: {fileID: 8821750546496874714}
+  - component: {fileID: -4934051896262446424}
+  - component: {fileID: 3435593077008138066}
   m_Layer: 9
   m_Name: Spider
   m_TagString: Enemy
@@ -29,8 +30,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8821750546496874717}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.81, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 4.4125, y: -0.3975, z: 0}
+  m_LocalScale: {x: 0.7392, y: 0.7392, z: 0.7392}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -86,32 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &8821750546496874713
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8821750546496874717}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.043611526, y: -0.41430664}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.0487804, y: 3.0487804}
-    newSize: {x: 3.0487804, y: 3.0487804}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.9148884, y: 2.2201672}
-  m_EdgeRadius: 0
 --- !u!50 &8821750546496874712
 Rigidbody2D:
   serializedVersion: 4
@@ -124,7 +99,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 5000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -166,10 +141,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CreatureType: 2
   player: {fileID: 0}
-  health: 0
-  speed: 0
+  health: 10
+  baseSpeed: 5
+  currentSpeed: 0
   damage: 0
-  detectionRange: 0
+  detectionRange: 2.48
   meleeAttackRange: 0
   whatCanBeHitByMelee:
     serializedVersion: 2
@@ -186,3 +162,47 @@ MonoBehaviour:
   chargeSpeed: 0
   swingAttacking: 0
   stateText: {fileID: 0}
+  knockbackForce: {x: 0, y: 0}
+  isBeingKnockedBack: 0
+--- !u!58 &-4934051896262446424
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8821750546496874717}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.3274991
+--- !u!61 &3435593077008138066
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8821750546496874717}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.0070844293}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 3.0487804, y: 3.0487804}
+    newSize: {x: 3.0487804, y: 3.0487804}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.0487804, y: 3.0629492}
+  m_EdgeRadius: 0

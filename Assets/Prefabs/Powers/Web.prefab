@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd73d6c5bbed3d4e8d6b2c1040bd6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacleSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  explodedWebSprite: {fileID: 21300000, guid: 261276e778ce42f4b90be62defe4e382, type: 3}
   travelDistance: 50
   speedReduction: 50
   webRadius: 0.5

@@ -4,7 +4,7 @@ using UnityEngine;
 public class Web : MonoBehaviour
 {
     [Header("Sprites")]
-    public Sprite obstacleSprite;
+    public Sprite explodedWebSprite;
     Rigidbody2D rigidbody2d;
     Collider2D collider;
     SpriteRenderer renderer;
@@ -67,17 +67,15 @@ public class Web : MonoBehaviour
     //Transform the web from a projectile into a static obstacle in the scene
     void ExplodeWeb()
     {
-        //Make sure the web can no longer move by disabling its rigidbody
-        //rigidbody2d.isKinematic = true;
         //Set the sprite to be the exploded version of the web, rather than the projectile version
-        renderer.sprite = obstacleSprite;
-        renderer.color = Color.red;
+        renderer.sprite = explodedWebSprite;
         //Make it so the sprite slows the player when they walk over it
         slowdown = true;
         move = false;
         collider.isTrigger = true;
     }
     bool isTouchingPlayer = false;
+    List<GameObject> lastTouchedObjects = new List<GameObject>();
     PlayerController player;
     public void CheckContacts()
     {
@@ -98,6 +96,20 @@ public class Web : MonoBehaviour
                 player.RemoveStatusEffect(slowEffect);
                 isTouchingPlayer = false;
             }
+            if (obj.CompareTag("Enemy"))
+            {
+                Debug.Log("Enemy touched the web!");
+                CreatureController enemy = obj.GetComponent<CreatureController>();
+                enemy.AddStatusEffect(slowEffect);
+                lastTouchedObjects.Add(obj);
+                break;
+            }
+            //If the enemy is not in contact with the web, but the Web was previously touching the enemy, then remove the slowdown status effect from the enemy.
+            else if (lastTouchedObjects.Contains(obj))
+            {
+                obj.GetComponent<CreatureController>().RemoveStatusEffect(slowEffect);
+                lastTouchedObjects.Remove(obj);
+            }
         }
     }
 
@@ -107,20 +119,50 @@ public class Web : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, webRadius);
     }
 
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (slowdown)
-    //    {
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+       
+        if (collision.CompareTag("Player"))
+        {
+            isTouchingPlayer = true;
+            //Debug.Log("Player touched the web!");
+            player = collision.GetComponent<PlayerController>();
+            player.AddStatusEffect(slowEffect);
+        }
+        else if (collision.CompareTag("Enemy"))
+        {
+            CreatureController enemy = collision.GetComponent<CreatureController>();
+            enemy.AddStatusEffect(slowEffect);
+        }
+        //if (slowdown)
+        //{
 
-    //        GameObject obj = collision.gameObject;
-    //        switch (obj.tag)
-    //        {
-    //            case "Player":
-    //                //Debug.Log("Player touched the web!");
-    //                obj.GetComponent<PlayerController>().AddStatusEffect(slowEffect);
-    //                break;
-    //        }
-    //    }
-    //}
+        //    GameObject obj = collision.gameObject;
+        //    switch (obj.tag)
+        //    {
+        //        case "Player":
+        //            //Debug.Log("Player touched the web!");
+        //            obj.GetComponent<PlayerController>().AddStatusEffect(slowEffect);
+        //            break;
+        //    }
+        //}
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+
+        if (collision.CompareTag("Player"))
+        {
+            isTouchingPlayer = true;
+            //Debug.Log("Player touched the web!");
+            player = collision.GetComponent<PlayerController>();
+            player.RemoveStatusEffect(slowEffect);
+        }
+        else if (collision.CompareTag("Enemy"))
+        {
+            CreatureController enemy = collision.GetComponent<CreatureController>();
+            enemy.RemoveStatusEffect(slowEffect);
+        }
+    }
 
 }

@@ -5,7 +5,8 @@ using UnityEngine;
 public enum StatusEffectTypes
 {
     Slowed,
-    Speedup
+    Speedup,
+    Knockback
 }
 public enum StatusEffectSources
 {
@@ -21,6 +22,7 @@ public class StatusEffect
     public GameObject source;
     [Header("Effectiveness value as a percentage")]
     public float value;
+    public Vector2 vectorValue;
     public float duration;
     [HideInInspector]
     public bool stackable;
@@ -31,6 +33,15 @@ public class StatusEffect
         this.source = source;
         this.type = type;
         this.value = value;
+        this.stackable = stackable;
+        this.duration = duration;
+    }
+
+    public StatusEffect(StatusEffectTypes type, /*StatusEffectSources source,*/ GameObject source, Vector2 vectorValue, bool stackable, float duration = -1f)
+    {
+        this.source = source;
+        this.type = type;
+        this.vectorValue = vectorValue;
         this.stackable = stackable;
         this.duration = duration;
     }

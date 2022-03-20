@@ -34,7 +34,7 @@ public class CreatureWander : StateMachineBehaviour
         {
             //if(nextTileIndex >= currentPath.Length) { return; }
             //Move towards the next tile in the path that you have generated
-            creatureController.MoveTowards(currentPath[nextTileIndex], creatureController.speed);
+            creatureController.MoveTowards(currentPath[nextTileIndex], creatureController.currentSpeed);
             if (hasReached(currentPath[nextTileIndex]))
             {
                 nextTileIndex++;
