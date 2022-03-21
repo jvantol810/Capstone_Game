@@ -63,7 +63,6 @@ public class CreatureController : MonoBehaviour
 
     public HashSet<StatusEffect> statusEffects = new HashSet<StatusEffect>();
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -74,6 +73,8 @@ public class CreatureController : MonoBehaviour
         m_animator = GetComponent<Animator>();
 
         currentSpeed = baseSpeed;
+
+
         //Go through each event assigned in the inspector window and add listeners 
         //foreach (UnityEvent attackEvent in attackEvents)
         //{
@@ -85,6 +86,13 @@ public class CreatureController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //set look positions for animator
+        Vector2 position = m_rigidbody.position;
+
+        m_animator.SetFloat("Look X", position.x);
+        m_animator.SetFloat("Look Y", position.y);
+
+
         if (Input.GetKey("space"))
         {
             
