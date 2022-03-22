@@ -9,6 +9,8 @@ using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 
 public class RoomGen : MonoBehaviour
@@ -37,7 +39,7 @@ public class RoomGen : MonoBehaviour
     public int floorMax;
     public bool seeded = false;
     public int seed;
-    
+
     private int walkX;
     private int walkY;
     private List<Vector3Int> tilesWalked = new List<Vector3Int>();
@@ -92,9 +94,77 @@ public class RoomGen : MonoBehaviour
                 aStarGrid.GetWalkableTileWithinRange(path[0], 1, 5);
                 
             }
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                SaveGame();
+            }
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                LoadGame();
+                aStarGrid.InitGrid();
+
+                //Set the aStarGrid in LevelSettings to be the aStarGrid assigned in inspector (this way any class can now reference the aStarGrid from LevelSettings)
+                LevelSettings.MapData.SetAStarGrid(aStarGrid);
+
+                FileParse.ParseWholeFolder();
+                GenerateWorld();
+            }
+            if(Input.GetKeyDown(KeyCode.P))
+            {
+                ResetData();
+            }
         }
     }
 
+    void SaveGame()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath
+                     + "/MySaveData.dat");
+        SaveData data = new SaveData();
+        data.savedSeed = seed;
+        //data.savedFloat = floatToSave;
+        data.savedBool = true;
+        bf.Serialize(file, data);
+        file.Close();
+        Debug.Log("Game data saved!");
+        Debug.Log("Saved Seed: " + seed);
+    }
+    void LoadGame()
+    {
+        if (File.Exists(Application.persistentDataPath
+                       + "/MySaveData.dat"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file =
+                       File.Open(Application.persistentDataPath
+                       + "/MySaveData.dat", FileMode.Open);
+            SaveData data = (SaveData)bf.Deserialize(file);
+            file.Close();
+            seed = data.savedSeed;
+            //floatToSave = data.savedFloat;
+            seeded = data.savedBool;
+            Debug.Log("Game data loaded!");
+            Debug.Log("Loaded seed: " + seed);
+        }
+        else
+            Debug.LogError("There is no save data!");
+    }
+    void ResetData()
+    {
+        if (File.Exists(Application.persistentDataPath
+                  + "/MySaveData.dat"))
+        {
+            File.Delete(Application.persistentDataPath
+                              + "/MySaveData.dat");
+            seed = 0;
+            //floatToSave = 0.0f;
+            seeded = false;
+            Debug.Log("Data reset complete!");
+        }
+        else
+            Debug.LogError("No save data to delete.");
+    }
     private void InitMap()
     {
         for (int i = 0; i < mapHeight; i++)
@@ -122,7 +192,6 @@ public class RoomGen : MonoBehaviour
         }
         InitMap();
         DrunkenWalkGen();
-        //GeneratePrefabs();
         MultiPrefabGeneration();
         
         //Add enemies
@@ -133,7 +202,6 @@ public class RoomGen : MonoBehaviour
         }
         Vector2 spawnPoint2 = aStarGrid.GetRandomWalkableTile().centerWorldPosition;
         Instantiate(playerPrefab, new Vector3(spawnPoint2.x, spawnPoint2.y, 0), Quaternion.identity);
-        //LevelSettings.MapData.activeAStarGrid.MarkNeighbors(); 
     }
     
     //Randomly 'Walks' to create walkable area for player
@@ -571,5 +639,12 @@ public class RoomGen : MonoBehaviour
         return true;
     }
 
+}
+[Serializable]
+class SaveData
+{
+    public int savedSeed;
+    //public float savedFloat;
+    public bool savedBool;
 }
 
