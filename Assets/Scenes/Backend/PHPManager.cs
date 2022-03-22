@@ -41,6 +41,33 @@ public class PHPManager : MonoBehaviour
             yield return "True\t" + leaderboardGET.downloadHandler.text;
         }
     }
+
+    public IEnumerator GetShopItems(string itemType)
+    {
+        string preparedURL = "";
+        if (itemType == "Hat" || itemType == "Bandana")
+        {
+            preparedURL = "http://localhost/capstone/shopItems/" + itemType + ".php";
+        }
+        else
+        {
+            yield return "Invalid ItemType";
+        }
+        UnityWebRequest shopGET = UnityWebRequest.Get(preparedURL);
+        yield return shopGET.SendWebRequest();
+
+        if(shopGET.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Shop Request Error: " + shopGET.result);
+            yield return "False";
+        }
+        else
+        {
+            Debug.Log("Fetched Shop Items");
+            yield return "True\t" + shopGET.downloadHandler.text;
+        }
+
+    }
     
     public IEnumerator LoadGlobal()
     {

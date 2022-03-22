@@ -5,6 +5,7 @@ using UnityEngine;
 public class TitleScreenManager : MonoBehaviour
 {
     public GameObject Leaderboard;
+    public GameObject currentScreen;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,5 +28,12 @@ public class TitleScreenManager : MonoBehaviour
     {
         Leaderboard.SetActive(false);
         gameObject.SetActive(true);
+    }
+
+    public void SwitchScreen(GameObject newScreen)
+    {
+        currentScreen.SetActive(false);
+        newScreen.SetActive(true);
+        currentScreen = newScreen;
     }
 }

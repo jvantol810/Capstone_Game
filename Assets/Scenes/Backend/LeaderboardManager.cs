@@ -116,6 +116,22 @@ public class LeaderboardManager : MonoBehaviour
         {
             Instantiate(failedConnectionPrefab, viewportContent.transform);
         }
+        else
+        {
+            int addedEntries = 0;
+            for(int i = 4; i < sortedEntries.Length; i += 2)
+            {
+                GameObject newEntry = Instantiate(scoreEntryPrefab, viewportContent.transform);
+                Text[] newEntryTexts = newEntry.GetComponentsInChildren<Text>();
+                newEntryTexts[0].text = sortedEntries[i - 1];
+                newEntryTexts[1].text = sortedEntries[i];
+                addedEntries++;
+            }
+            if (addedEntries < displayCount)
+            {
+                Instantiate(lastEntryPrefab, viewportContent.transform);
+            }
+        }
     }
 
     //CURRENTLY A TEST!
