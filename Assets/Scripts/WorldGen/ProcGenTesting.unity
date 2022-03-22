@@ -407,7 +407,8 @@ MonoBehaviour:
   enemyPrefab: {fileID: 0}
   playerPrefab: {fileID: 0}
   roomCenters: []
-  testing: 0
+  prefabPoints: []
+  testing: 1
   floorMax: 1500
   seeded: 0
   seed: 0
