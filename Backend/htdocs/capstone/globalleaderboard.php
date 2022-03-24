@@ -8,12 +8,11 @@
         exit();
     }
     //Connection was established.
-   
     $leaderboardquery = "SELECT username, time FROM leaderboard;";
 
     $leaderboardresults = mysqli_query($con, $leaderboardquery) or die("2: Failed to query."); //Error code 2 = name check query failed.
 
-    echo("0" . "\t" . mysqli_num_rows($leaderboardresults) . "\t"); //0 = Success.
+    //echo("0" . "\t" . mysqli_num_rows($leaderboardresults) . "\t"); //0 = Success.
     while($row = mysqli_fetch_array($leaderboardresults))
     {
         //$output = $output . "/t" . $row['username'] . "/t" . $row['time'];
