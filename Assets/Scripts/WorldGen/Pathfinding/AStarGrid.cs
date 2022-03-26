@@ -54,6 +54,8 @@ public class AStarGrid : MonoBehaviour
         List<Vector2Int> enemyGridPositions = new List<Vector2Int>();
         foreach (CreatureController enemy in enemiesOnGrid)
         {
+            //Check if the CreatureController is null, meaning the enemy has been removed from the scene. If it has, remove it from the list.
+            if(enemy == null) { enemiesOnGrid.Remove(enemy); return; }
             //Get tile at enemy position
             enemyGridPositions.Add(ConvertWorldPositionToTilePosition(enemy.transform.position));
         }

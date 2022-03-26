@@ -31,10 +31,10 @@ public class CreatureController : MonoBehaviour
     public float damage;
     [Header("Detection")]
     public float detectionRange;
+    [Header("Fire Point")]
+    public Transform firePoint;
     [Header("Melee Attacks")]
-    //public Transform meleeAttackPoint;
-    public float meleeAttackRange;
-    public LayerMask whatCanBeHitByMelee;
+    public GameObject meleePrefab;
     [Header("Swing Attacks")]
     public Transform weapon;
     public float swingSpeed;
@@ -72,6 +72,9 @@ public class CreatureController : MonoBehaviour
         //weaponAnimator = weapon.GetComponent<Animator>();
         m_animator = GetComponent<Animator>();
 
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        //Set current speed to the base speed on start
         currentSpeed = baseSpeed;
 
 
@@ -92,6 +95,7 @@ public class CreatureController : MonoBehaviour
         m_animator.SetFloat("Look X", position.x);
         m_animator.SetFloat("Look Y", position.y);
 
+        UpdateAim();
 
         if (Input.GetKey("space"))
         {
@@ -206,23 +210,6 @@ public class CreatureController : MonoBehaviour
         }
     }
 
-    public void MeleeAttack()
-    {
-        //Create a circle at the attack position with the range given for melee attacks, and store the hit colliders in an array called hits
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, meleeAttackRange, whatCanBeHitByMelee);
-
-
-        //Iterate through hits and check if any of them were the player
-        for (int i = 0; i < hits.Length; i++)
-        {
-            switch (hits[i].gameObject.tag)
-            {
-                case "Player":/* Debug.Log("Player hit!");*/ break;
-                default: Debug.Log("Something hit!"); break;
-            }
-        }
-    }
-
     public Vector3 SwingAttack()
     {
         //Rotate weapon
@@ -272,10 +259,18 @@ public class CreatureController : MonoBehaviour
         m_animator.SetBool("isChasing", false);
     }
 
+    public void MeleeAttack()
+    {
+        //Enable the melee attack prefab
+        meleePrefab.SetActive(true);
+        //Set its position to the firepoint (which is updated based on the player's position)
+        meleePrefab.transform.position = transform.position + firePoint.right;
+    }
+
     public bool isPlayerInMeleeAttackRange()
     {
         //Create an array of colliders of all gameObjects in this enemies detection range
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, meleeAttackRange);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, meleePrefab.GetComponent<MeleeAttack>().attackRadius);
 
         //Iterate through hits and check if any of them were the player
         for (int i = 0; i < hits.Length; i++)
@@ -315,7 +310,26 @@ public class CreatureController : MonoBehaviour
         //If the player was not detected, return false
         return false;
     }
+    public void ChangeHealth(float amount)
+    {
+        health += amount;
+        Debug.Log("Creature " + gameObject.name + " has taken " + amount + " damage!");
+        if (health <= 0)
+        {
+            Debug.Log("Creature " + gameObject.name + " has died!");
+            Destroy(gameObject);
+        }
+    }
 
+    float aimAngle;
+    Vector2 aimDirection;
+    public void UpdateAim()
+    {
+        aimDirection = (player.position - transform.position).normalized;
+        aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+        firePoint.rotation = Quaternion.Euler(0, 0, aimAngle);
+    }
+    
     public void OnCollisionEnter2D(Collision2D collision)
     {
         //Stop charging if you collide with an object
@@ -324,14 +338,16 @@ public class CreatureController : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
-
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
     }
 
 
+
+
+
+
+    //BEGIN STATUS EFFECT SECTION
     public void AddStatusEffect(StatusEffect effect)
     {
         if (HasStatusEffect(effect.type))
@@ -389,7 +405,6 @@ public class CreatureController : MonoBehaviour
                 else
                 {
                     //Temporarily enable the BoxCollider so that the creature collides with walls
-                    //GetComponent<Collider2D>().isTrigger = false;
                     //Disable the animator temporarily 
                     GetComponent<Animator>().enabled = false;
                     //Set the knockback force
@@ -403,16 +418,7 @@ public class CreatureController : MonoBehaviour
         }
     }
 
-    public void ChangeHealth(float amount)
-    {
-        health += amount;
-        Debug.Log("Creature " + gameObject.name + " has taken " + amount + " damage!");
-        if (health <= 0)
-        {
-            Debug.Log("Creature " + gameObject.name + " has died!");
-            Destroy(gameObject);
-        }
-    }
+
 
     public IEnumerator RemoveStatusEffectAfterDelay(StatusEffect effect, float delay)
     {

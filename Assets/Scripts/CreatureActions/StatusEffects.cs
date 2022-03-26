@@ -46,6 +46,14 @@ public class StatusEffect
         this.duration = duration;
     }
 
+    public StatusEffect(StatusEffectTypes type, Vector2 vectorValue, bool stackable, float duration = -1f)
+    {
+        this.type = type;
+        this.vectorValue = vectorValue;
+        this.stackable = stackable;
+        this.duration = duration;
+    }
+
     //Effects are considered to be identical if they are of the same type and derived from the same source
     public bool EffectEquals(StatusEffect effect)
     {

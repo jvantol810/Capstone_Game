@@ -27,6 +27,11 @@ public class CreatureWander : StateMachineBehaviour
     //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        //Check if the creatureController has been destroyed. If it has, destroy yourself.
+        if(creatureController == null)
+        {
+            Destroy(animator);
+        }
         ////Calculate the path to the destination
         //Debug.Log("Reached destination: " + hasReached(currentDestination));
         //While you haven't reached the current destination, continue moving towards it along the path

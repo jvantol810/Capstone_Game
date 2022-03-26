@@ -76,7 +76,7 @@ public class Web : MonoBehaviour
     }
     bool isTouchingPlayer = false;
     List<GameObject> lastTouchedObjects = new List<GameObject>();
-    PlayerController player;
+    PlayerStatusEffectHandler player;
     public void CheckContacts()
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, webRadius);
@@ -87,7 +87,7 @@ public class Web : MonoBehaviour
             {
                 isTouchingPlayer = true;
                 //Debug.Log("Player touched the web!");
-                player = obj.GetComponent<PlayerController>();
+                player = obj.GetComponent<PlayerStatusEffectHandler>();
                 player.AddStatusEffect(slowEffect);
                 break;
             }
@@ -126,7 +126,7 @@ public class Web : MonoBehaviour
         {
             isTouchingPlayer = true;
             //Debug.Log("Player touched the web!");
-            player = collision.GetComponent<PlayerController>();
+            player = collision.GetComponent<PlayerStatusEffectHandler>();
             player.AddStatusEffect(slowEffect);
         }
         else if (collision.CompareTag("Enemy"))
@@ -155,7 +155,7 @@ public class Web : MonoBehaviour
         {
             isTouchingPlayer = true;
             //Debug.Log("Player touched the web!");
-            player = collision.GetComponent<PlayerController>();
+            player = collision.GetComponent<PlayerStatusEffectHandler>();
             player.RemoveStatusEffect(slowEffect);
         }
         else if (collision.CompareTag("Enemy"))

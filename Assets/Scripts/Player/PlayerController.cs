@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
     public GameObject bombPrefab;
     public float bombForce;
 
+    public GameObject meleePrefab;
+
     public GameObject player;
     private Animator m_animator;
 
@@ -50,9 +52,15 @@ public class PlayerController : MonoBehaviour
     public Queue<Powers> playerPowers = new Queue<Powers>();
     public TextMeshProUGUI powersDisplay;
     private int maxNumberOfPowers = 2;
-    public HashSet<StatusEffect> statusEffects = new HashSet<StatusEffect>();
     public string powersText { get { return GetPowersText(); } }
     public Transform firePoint;
+    public ObjectPool bombPool;
+
+    //Knockback settings
+    //[HideInInspector]
+    public bool isBeingKnockedBack;
+    [HideInInspector]
+    public Vector2 knockbackForce;
     public void AddPower(Powers power)
     {
         //Add the power if it isn't already in the power list
@@ -89,7 +97,8 @@ public class PlayerController : MonoBehaviour
 
         animator = GetComponent<Animator>();
 
-        AddPower(Powers.Dash);
+        //AddPower(Powers.Dash);
+        AddPower(Powers.ShootWeb);
         AddPower(Powers.Explode);
     }
 
@@ -103,17 +112,7 @@ public class PlayerController : MonoBehaviour
         return text;
     }
 
-    public string GetStatusEffectsText()
-    {
-        string text = "Status EFfects: ";
-        foreach (StatusEffect effect in statusEffects)
-        {
-            text += effect.type + ", ";
-        }
-        Debug.Log("Num of effects: " + statusEffects.Count);
-        return text;
-        
-    }
+  
     // Update is called once per frame
     void Update()
     {
@@ -124,6 +123,11 @@ public class PlayerController : MonoBehaviour
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
 
+
+        if (isBeingKnockedBack)
+        {
+            rigidbody2d.MovePosition(transform.position + (Vector3)knockbackForce);
+        }
 
         //Update the look direction but only if the player is not dashing
         if (!Mathf.Approximately(moveInput.x, 0.0f) || !Mathf.Approximately(moveInput.y, 0.0f))
@@ -166,6 +170,11 @@ public class PlayerController : MonoBehaviour
         {
             dashCoolCounter -= Time.deltaTime;
         }
+        if (Input.GetMouseButtonDown(0))
+        {
+            meleePrefab.SetActive(true);
+            meleePrefab.transform.position = transform.position + firePoint.right;
+        }
         if (HasPower(Powers.Dash))
         {
             if (Input.GetKeyDown(KeyCode.C))
@@ -173,22 +182,22 @@ public class PlayerController : MonoBehaviour
                 ActivatePower(Powers.Dash);
             }
         }
-        if (HasPower(Powers.ShootWeb))
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                ActivatePower(Powers.ShootWeb);
-            }
-        }
+        //if (HasPower(Powers.ShootWeb))
+        //{
+        //    if (Input.GetMouseButtonDown(0))
+        //    {
+        //        ActivatePower(Powers.ShootWeb);
+        //    }
+        //}
         if (HasPower(Powers.Explode))
         {
             if (Input.GetKeyDown(KeyCode.J))
             {
                 ActivatePower(Powers.Explode);
-                Debug.Log("Throwing bomb");
+                //Debug.Log("Throwing bomb");
             }
         }
-        Debug.Log("Dash counter: " + dashCounter);
+        //Debug.Log("Dash counter: " + dashCounter);
 
     }
 
@@ -202,17 +211,24 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        DisplayPowers();
+        //DisplayPowers();
     }
 
     
     public void DisplayPowers()
     {
         UnityEditor.Handles.color = Color.green;
-        Handles.Label(new Vector3(transform.position.x, transform.position.y + 1f, 0), powersText + "\n" + GetStatusEffectsText());
+        Handles.Label(new Vector3(transform.position.x, transform.position.y + 1f, 0), powersText);
     }
 
-   
+    public void Hit(int damage, StatusEffect knockback)
+    {
+        //Apply knockback in the direction of the hit
+        GetComponent<PlayerStatusEffectHandler>().AddStatusEffect(knockback);
+        //Update your health amount
+        ChangeHealth(-damage);
+    }
+
     public void ChangeHealth(int amount)
     {
         if (amount < 0)
@@ -261,91 +277,20 @@ public class PlayerController : MonoBehaviour
             case Powers.ShootWeb:
                 //Shoot web
                 GameObject webObject = Instantiate(webPrefab, transform.position, Quaternion.identity);
-
                 Web web = webObject.GetComponent<Web>();
-                
                 //shoot web in direction player is facing
                 web.Launch(aimDirection, webForce);
                 break;
             case Powers.Explode:
                 //Slash big
-                GameObject bomb = Instantiate(bombPrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
-
+                GameObject bomb = bombPool.GetPooledObject();
+                bomb.transform.position = new Vector3(firePoint.position.x + 0.25f, firePoint.position.y, 0);
                 Explosion dropBomb = bomb.GetComponent<Explosion>();
 
                 //throw bomb in direction player is facing
                 dropBomb.Launch();
-
                 break;
         }
-    }
-
-    public void AddStatusEffect(StatusEffect effect)
-    {
-        if (HasStatusEffect(effect.type))
-        {
-            Debug.Log("Player already has status effect: " + effect.type);
-        }
-        else
-        {
-            Debug.Log("Effect added: " + effect.type);
-            statusEffects.Add(effect);
-            ProcessStatusEffect(effect);
-        }
-    }
-
-    public void RemoveStatusEffect(StatusEffect effect)
-    {
-        foreach (StatusEffect statusEffect in statusEffects)
-        {
-            if (statusEffect.type == effect.type) {
-                switch (effect.type)
-                {
-                    case StatusEffectTypes.Slowed:
-                        //If the slowdown effect is being removed, reset the currentSpeed to the baseSpeed value
-                        ProcessStatusEffect(effect, true);
-                        break;
-                }
-            }
-        }
-        statusEffects.RemoveWhere((item) => item.type == effect.type);
-    }
-
-    public void ProcessStatusEffect(StatusEffect effect, bool isBeingRemoved=false)
-    {
-        if (effect.hasDuration)
-        {
-
-        }
-        switch (effect.type)
-        {
-            case StatusEffectTypes.Slowed:
-                if (isBeingRemoved) { currentSpeed += baseSpeed * (effect.value / 100); }
-                else { currentSpeed -= baseSpeed * (effect.value / 100); };
-                break;
-            case StatusEffectTypes.Speedup:
-                if (isBeingRemoved) { currentSpeed -= baseSpeed * (effect.value / 100); }
-                else { currentSpeed += baseSpeed * (effect.value / 100); };
-                break;
-        }
-    }
-
-    public bool HasStatusEffect(StatusEffectTypes type)
-    {
-        foreach (StatusEffect effect in statusEffects)
-        {
-            if (effect.type == type) { return true; }
-        }
-        return false;
-    }
-
-    public StatusEffect GetStatusEffect(StatusEffectTypes type)
-    {
-        foreach (StatusEffect effect in statusEffects)
-        {
-            if(effect.type == type) { return effect; }
-        }
-        return null;
     }
 
     float aimAngle;

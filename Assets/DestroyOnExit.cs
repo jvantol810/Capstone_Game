@@ -2,33 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMinotaurCharge : StateMachineBehaviour
+public class DestroyOnExit : StateMachineBehaviour
 {
-    //Reference to the player's PlayerController script
-    public PlayerController player;
-
-    public Vector2 chargeDirection;
-
-    public Rigidbody2D m_rigidobdy;
-    public Vector2 destination;
+    public float currentTime;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        //Set the reference by getting the PlayerController component from the Animator gameobject (AKA the player)
-        player = animator.GetComponent<PlayerController>();
-        m_rigidobdy = animator.GetComponent<Rigidbody2D>();
-        chargeDirection = player.lookDirection.normalized;
-        destination = (Vector2)animator.transform.position + (chargeDirection * 10f);
+        //animator.gameObject.SetActive(false, stateInfo.length);
+        //Destroy(animator.gameObject, stateInfo.length);
     }
 
+    //public IEnumerator DeactivateObjectAfterDelay(float delay, GameObject obj)
+    //{
+    //    yield return new WaitForSeconds(delay);
+    //    obj.SetActive(false);
+    //}
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        float distanceToDestination = CreatureActions.MoveTowards(m_rigidobdy, destination, 20f);
-        if(distanceToDestination <= 0.2f)
+        currentTime += Time.deltaTime;
+        if (currentTime >= stateInfo.length)
         {
-            Debug.Log("Reached destination!");
-            animator.SetBool("isCharging", false);
+            animator.gameObject.SetActive(false);
         }
     }
 

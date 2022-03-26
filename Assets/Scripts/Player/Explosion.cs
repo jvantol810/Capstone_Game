@@ -15,8 +15,6 @@ public class Explosion : MonoBehaviour
     void Awake()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
-
-        //waitTime = startWaitTime;
     }
 
     public void Launch()
@@ -48,7 +46,7 @@ public class Explosion : MonoBehaviour
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<Collider2D>().enabled = false;
 
-        //disable the bomb
+        //Disable the bomb
         //gameObject.SetActive(false);
 
     }

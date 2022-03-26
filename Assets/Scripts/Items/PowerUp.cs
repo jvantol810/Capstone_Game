@@ -22,7 +22,7 @@ public class PowerUp : MonoBehaviour
     IEnumerator Pickup(Collider2D playerCollider)
     {
         //get player script reference
-        PlayerController player = playerCollider.GetComponent<PlayerController>();
+        PlayerStatusEffectHandler player = playerCollider.GetComponent<PlayerStatusEffectHandler>();
 
         player.AddStatusEffect(powerupEffect);
         //if else statements check which kind of powerup the player has collided with by the tag
