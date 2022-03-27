@@ -7,6 +7,7 @@ public class ShopManager : MonoBehaviour
 {
     public GameObject viewportContent;
     public PHPManager phpManager;
+    public Button[] TabButtons;
     [Header("Prefabs")]
     public GameObject ShopItemPrefab;
 
@@ -25,14 +26,18 @@ public class ShopManager : MonoBehaviour
 
     public void DisplayItems(string item)
     {
+        StopAllCoroutines(); // Hopefully doesn't cause issues, but keep watch!
         ClearViewportContent();
-        switch(item)
+        ResetTabButtons();
+        switch (item)
         {
             case "Hat":
+                TabButtons[0].interactable = false;
                 StartCoroutine(RefreshShopItems("Hat"));
                 break;
             case "Bandana":
-
+                TabButtons[1].interactable = false;
+                StartCoroutine(RefreshShopItems("Bandana"));
                 break;
             default:
 
@@ -44,11 +49,20 @@ public class ShopManager : MonoBehaviour
     {
         Transform[] currentVC;
         currentVC = viewportContent.GetComponentsInChildren<Transform>();
-        Debug.Log("Currently have: " + currentVC.Length + " entries.");
+        //Debug.Log("Currently have: " + currentVC.Length + " entries.");
         for (int i = 1; i < currentVC.Length; i++)
         {
             Destroy(currentVC[i].gameObject);
         }
+    }
+
+    private void ResetTabButtons()
+    {
+        for(int i = 0; i < TabButtons.Length; i++)
+        {
+            TabButtons[i].interactable = true;
+        }
+
     }
 
     private IEnumerator RefreshShopItems(string item)

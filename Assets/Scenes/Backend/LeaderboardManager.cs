@@ -134,12 +134,21 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
-    //CURRENTLY A TEST!
+    //Needs to: Get local scores from database if logged in, or check savedata on machine.
     private void RefreshLocalLeaderboard()
     {
+        /* // Debug test
         for(int i = 1; i < 10; i++)
         {
             Instantiate(scoreEntryPrefab, viewportContent.transform);
+        }*/
+        if(DatabaseManager.username != null)
+        {
+            //Player is logged in
+        }
+        else
+        {
+            
         }
     }
 

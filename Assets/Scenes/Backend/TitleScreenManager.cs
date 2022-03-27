@@ -10,6 +10,9 @@ public class TitleScreenManager : MonoBehaviour
     public GameObject currentScreen;
     public Button signinButton;
     public Text userInfo;
+    public GameObject GBPurchaseScreen;
+    public Text GBDisplayText;
+    public Button GBPurchaseButton;
 
     // Start is called before the first frame update
     void Start()
@@ -56,5 +59,15 @@ public class TitleScreenManager : MonoBehaviour
         {
             userInfo.text = DatabaseManager.username;
         }
+    }
+
+    public void SetGBPurchaseScreenEnabled(bool enabledval)
+    {
+        GBPurchaseScreen.SetActive(enabledval && DatabaseManager.username != null);
+    }
+
+    public void UpdateGhostBucksDisplay(int amt)
+    {
+        GBDisplayText.text = amt.ToString("n0") + " GB";
     }
 }
