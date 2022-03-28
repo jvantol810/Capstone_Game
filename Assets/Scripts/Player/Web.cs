@@ -4,6 +4,7 @@ using UnityEngine;
 public class Web : MonoBehaviour
 {
     [Header("Sprites")]
+    public Sprite projectileWebSprite;
     public Sprite explodedWebSprite;
     Rigidbody2D rigidbody2d;
     Collider2D collider;
@@ -19,19 +20,34 @@ public class Web : MonoBehaviour
     public float webRadius = 0.5f;
     StatusEffect slowEffect;
     bool slowdown;
+    enum WebStates
+    {
+        Projectile,
+        Web
+    }
+    private WebStates state;
     void Awake()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
         renderer = GetComponent<SpriteRenderer>();
         collider = GetComponent<Collider2D>();
-        startingPosition = transform.position;
         slowEffect = new StatusEffect(StatusEffectTypes.Slowed, gameObject, speedReduction, false);
+        state = WebStates.Projectile;
     }
 
     public void Launch(Vector2 direction)
     {
+        //Set the state to projectile
+        state = WebStates.Projectile;
+        //Set the sprite to be the projectile sprite
+        renderer.sprite = projectileWebSprite;
+        //Reset the distance traveled
+        distanceTraveled = 0f;
+        //Set slowdown to false
+        slowdown = false;
         move = true;
         moveDirection = direction;
+        startingPosition = transform.position;
     }
 
     
@@ -49,7 +65,7 @@ public class Web : MonoBehaviour
 
             if (distanceTraveled >= travelDistance)
             {
-                //Debug.Log("MAX DISTANCE REACHED!");
+                Debug.Log("MAX DISTANCE REACHED!");
                 rigidbody2d.angularVelocity = 0;
                 ExplodeWeb();
             }
@@ -66,6 +82,7 @@ public class Web : MonoBehaviour
     //Transform the web from a projectile into a static obstacle in the scene
     void ExplodeWeb()
     {
+        state = WebStates.Web;
         //Set the sprite to be the exploded version of the web, rather than the projectile version
         renderer.sprite = explodedWebSprite;
         //Make it so the sprite slows the player when they walk over it
@@ -73,6 +90,7 @@ public class Web : MonoBehaviour
         move = false;
         collider.isTrigger = true;
     }
+    
     bool isTouchingPlayer = false;
     List<GameObject> lastTouchedObjects = new List<GameObject>();
     PlayerStatusEffectHandler player;
@@ -120,7 +138,6 @@ public class Web : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-       
         if (collision.CompareTag("Player"))
         {
             isTouchingPlayer = true;
@@ -133,18 +150,6 @@ public class Web : MonoBehaviour
             CreatureStatusEffectHandler enemy = collision.GetComponent<CreatureStatusEffectHandler>();
             enemy.AddStatusEffect(slowEffect);
         }
-        //if (slowdown)
-        //{
-
-        //    GameObject obj = collision.gameObject;
-        //    switch (obj.tag)
-        //    {
-        //        case "Player":
-        //            //Debug.Log("Player touched the web!");
-        //            obj.GetComponent<PlayerController>().AddStatusEffect(slowEffect);
-        //            break;
-        //    }
-        //}
     }
 
     private void OnTriggerExit2D(Collider2D collision)

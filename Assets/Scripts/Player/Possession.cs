@@ -30,13 +30,13 @@ public class Possession : MonoBehaviour
 
         //Get the PlayerController script from the player in the scene
         PlayerController Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        if (!other.collider.gameObject.TryGetComponent(out CreatureController Creature))
+        if (!other.collider.gameObject.TryGetComponent(out CreatureStats Creature))
         {
             Destroy(gameObject);
             return;
         }
         //Get the type of the creature that the player hit
-        switch (Creature.CreatureType)
+        switch (Creature.creatureType)
         {
             case CreatureTypes.Minotaur:
                 //add dash power to the queue
@@ -63,13 +63,13 @@ public class Possession : MonoBehaviour
 
         //Get the PlayerController script from the player in the scene
         PlayerController Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        if (!other.gameObject.TryGetComponent(out CreatureController Creature))
+        if (!other.gameObject.TryGetComponent(out CreatureStats Creature))
         {
             Destroy(gameObject);
             return;
         }
         //Get the type of the creature that the player hit
-        switch (Creature.CreatureType)
+        switch (Creature.creatureType)
         {
             case CreatureTypes.Minotaur:
                 //add dash power to the queue

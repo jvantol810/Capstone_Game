@@ -39,8 +39,6 @@ public class PlayerController : MonoBehaviour
     public GameObject player;
     private Animator m_animator;
 
-    public CreatureTypes CreatureState;
-
     public float dashSpeed;
     public float dashLength, dashCooldown;
     private float dashCounter;
@@ -90,15 +88,12 @@ public class PlayerController : MonoBehaviour
         //Create a reference to the player's animator controller
         m_animator = GetComponent<Animator>();
 
-        //Set the creature state to be Ghost on start
-        CreatureState = CreatureTypes.Ghost;
-
         currentSpeed = baseSpeed;
 
         animator = GetComponent<Animator>();
 
         //AddPower(Powers.Dash);
-        AddPower(Powers.ShootWeb);
+        //AddPower(Powers.ShootWeb);
         AddPower(Powers.Explode);
     }
 

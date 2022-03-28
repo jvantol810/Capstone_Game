@@ -4,7 +4,6 @@ using UnityEngine;
 
 public enum CreatureTypes
 {
-    Ghost,
     Minotaur,
     Spider,
     Bomb

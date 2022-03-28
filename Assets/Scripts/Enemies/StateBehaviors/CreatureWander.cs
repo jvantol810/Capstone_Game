@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CreatureWander : StateMachineBehaviour
 {
-    public CreatureController creatureController;
+    public CreatureStats creature;
+    private Rigidbody2D m_rb;
     public Vector2 creatureColliderPosition;
     
     public CooldownTimer wanderCooldown;
@@ -16,9 +17,10 @@ public class CreatureWander : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //Teleport the creature to a walkable tile
-        if (animator.GetComponent<CreatureController>() == null) { return; }
+        if (animator.GetComponent<CreatureStats>() == null) { return; }
 
-        creatureController = animator.GetComponent<CreatureController>();
+        creature = animator.GetComponent<CreatureStats>();
+        m_rb = animator.GetComponent<Rigidbody2D>();
         currentDestination = GenerateNewDestination();
         AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
         currentPath = grid.FindPath(animator.transform.position, currentDestination);
@@ -28,7 +30,7 @@ public class CreatureWander : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //Check if the creatureController has been destroyed. If it has, destroy yourself.
-        if(creatureController == null)
+        if(creature == null)
         {
             Destroy(animator);
         }
@@ -39,7 +41,7 @@ public class CreatureWander : StateMachineBehaviour
         {
             //if(nextTileIndex >= currentPath.Length) { return; }
             //Move towards the next tile in the path that you have generated
-            creatureController.MoveTowards(currentPath[nextTileIndex], creatureController.currentSpeed);
+            CreatureActions.MoveTowards(m_rb, currentPath[nextTileIndex], creature.currentSpeed);
             if (hasReached(currentPath[nextTileIndex]))
             {
                 nextTileIndex++;
@@ -62,9 +64,10 @@ public class CreatureWander : StateMachineBehaviour
             UpdatePath();
         }
         //If the creature has detected the player, switch the state to chase
-        if (creatureController.isPlayerDetected())
+        if (creature.isPlayerDetected() == true)
         {
-            SetStateToChase(animator);
+            animator.SetBool("isChasing", true);
+            animator.SetBool("isWandering", false);
         }
     }
 
@@ -72,7 +75,7 @@ public class CreatureWander : StateMachineBehaviour
     public Vector2 GenerateNewDestination()
     {
         AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
-        Vector2Int tilePosition = grid.ConvertWorldPositionToTilePosition(creatureController.transform.position);
+        Vector2Int tilePosition = grid.ConvertWorldPositionToTilePosition(creature.transform.position);
         //Debug.Log("Starting tile position: " + tilePosition);
         //Get a random nearby walkable tile in the aStarGrid
         WorldTile newDestination = grid.GetWalkableTileWithinRange(tilePosition, 10f, 20f);
@@ -89,34 +92,34 @@ public class CreatureWander : StateMachineBehaviour
     {
         currentDestination = GenerateNewDestination();
         AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
-        currentPath = grid.FindPath(creatureController.transform.position, currentDestination);
+        currentPath = grid.FindPath(creature.transform.position, currentDestination);
         nextTileIndex = 1;
     }
    
 
     public bool hasReached(Vector2Int position)
     {
-        return Vector2.Distance(creatureController.transform.position, position) <= 0.1f;
+        return Vector2.Distance(creature.transform.position, position) <= 0.1f;
     }
 
     public bool hasReached(Vector2 position)
     {
-        return Vector2.Distance(creatureController.transform.position, position) <= 0.1f;
+        return Vector2.Distance(creature.transform.position, position) <= 0.1f;
     }
 
 
     public void SetStateToChase(Animator anim)
     {
-        Debug.Log("Switching to chase state!");
+        //Debug.Log("Switching to chase state!");
         anim.SetBool("isChasing", true);
-        anim.SetBool("isAttacking", false);
+        anim.SetBool("isWandering", false);
     }
 
     void OnDrawGizmosSelected()
     {
         // Draw a yellow sphere at the transform's position
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(creatureController.transform.position, 10);
+        Gizmos.DrawWireSphere(creature.transform.position, 10);
     }
 
 

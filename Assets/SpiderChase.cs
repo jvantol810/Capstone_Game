@@ -73,18 +73,15 @@ public class SpiderChase : StateMachineBehaviour
 
         UpdatePath();
 
-        //Check if the spider is too close to the player to generate a path accurately
-        //if (!hasReached(player.position))
-        //{
-        //    spider.MoveTowards(player.position, spider.currentSpeed);
-        //}
+        //If the player is outside the spider's detection range, return to wander
+        if(spiderStats.isPlayerDetected() == false)
+        {
+            animator.SetBool("isWandering", true);
+            animator.SetBool("isChasing", false);
+        }
 
     }
 
-    public void UpdateStateToAttack()
-    {
-
-    }
     public void UpdatePath()
     {
         AStarGrid grid = LevelSettings.MapData.activeAStarGrid;

@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.Events;
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Animator))]
-public class SpiderController : MonoBehaviour
+
+public class BombController : MonoBehaviour
 {
+    [Header("CreatureType")]
+    [SerializeField]
+    public CreatureTypes CreatureType;
     //References to components or other gameobjects
     [Header("References")]
     private Rigidbody2D m_rigidbody;
@@ -19,12 +19,14 @@ public class SpiderController : MonoBehaviour
     [HideInInspector]
     public float currentSpeed;
     public float damage;
+    [Header("Detection")]
+    public float detectionRange;
     [Header("Fire Point")]
     public Transform firePoint;
     [Header("Melee Attacks")]
     public GameObject meleePrefab;
     [Header("Web Attacks")]
-    public ObjectPool webPool;
+    public GameObject webPrefab;
     public float webShootSpeed;
     public float webRadius;
     public float webSpeedReduction;
@@ -132,10 +134,8 @@ public class SpiderController : MonoBehaviour
     public void WebAttack(Vector2 direction)
     {
         //Create a web prefab at the firepoint position
-        //GameObject webShot = Instantiate(webPrefab, firePoint.right, Quaternion.identity);
-
-        GameObject webObj = webPool.GetPooledObject(transform.position + firePoint.right);
-        Web web = webObj.GetComponent<Web>();
+        GameObject webShot = Instantiate(webPrefab, firePoint.right, Quaternion.identity);
+        Web web = webShot.GetComponent<Web>();
 
         //Set the web's settings based on the SpiderController's insepctor values
         web.webRadius = webRadius;
@@ -149,9 +149,8 @@ public class SpiderController : MonoBehaviour
     public void WebAttack()
     {
         //Create a web prefab at the firepoint position
-        //GameObject webShot = Instantiate(webPrefab, transform.position + firePoint.right, Quaternion.identity);
-        GameObject webObj = webPool.GetPooledObject(transform.position + firePoint.right * 1.4f);
-        Web web = webObj.GetComponent<Web>();
+        GameObject webShot = Instantiate(webPrefab, transform.position + firePoint.right, Quaternion.identity);
+        Web web = webShot.GetComponent<Web>();
 
         //Set the web's settings based on the SpiderController's insepctor values
         web.webRadius = webRadius;
@@ -207,6 +206,27 @@ public class SpiderController : MonoBehaviour
         return false;
     }
 
+    public bool isPlayerDetected()
+    {
+        //Create an array of colliders of all gameObjects in this enemies detection range
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, detectionRange);
+
+        //Iterate through hits and check if any of them were the player
+        for (int i = 0; i < hits.Length; i++)
+        {
+            //If one of the hits was the player, assign the player variable and return true
+            if (hits[i].gameObject.CompareTag("Player"))
+            {
+                player = hits[i].transform;
+                //Since the player was detected, return true
+                return true;
+            }
+        }
+
+        //If the player was not detected, return false
+        return false;
+    }
+
 
     float aimAngle;
     Vector2 aimDirection;
@@ -215,5 +235,11 @@ public class SpiderController : MonoBehaviour
         aimDirection = (player.position - transform.position).normalized;
         aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
         firePoint.rotation = Quaternion.Euler(0, 0, aimAngle);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
     }
 }

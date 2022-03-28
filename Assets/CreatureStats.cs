@@ -9,7 +9,9 @@ public class CreatureStats : MonoBehaviour
     [HideInInspector]
     public float currentSpeed;
     public float attackDamage;
-
+    public CreatureTypes creatureType;
+    [Header("Detection")]
+    public float detectionRange;
     private void Start()
     {
         currentSpeed = baseSpeed;
@@ -25,5 +27,33 @@ public class CreatureStats : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public bool isPlayerDetected()
+    {
+        //Create an array of colliders of all gameObjects in this enemies detection range
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, detectionRange);
+
+        //Iterate through hits and check if any of them were the player
+        for (int i = 0; i < hits.Length; i++)
+        {
+            //If one of the hits was the player, assign the player variable and return true
+            if (hits[i].gameObject.CompareTag("Player"))
+            {
+                //Since the player was detected, return true
+                return true;
+            }
+        }
+
+        //If the player was not detected, return false
+        return false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+    }
+
+
 
 }

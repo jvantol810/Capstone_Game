@@ -134,7 +134,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd73d6c5bbed3d4e8d6b2c1040bd6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectileWebSprite: {fileID: -2413806693520163455, guid: d53c3f62ed6c7604cb28274ca62d9481, type: 3}
   explodedWebSprite: {fileID: 21300000, guid: 261276e778ce42f4b90be62defe4e382, type: 3}
+  speed: 0
   travelDistance: 50
   speedReduction: 50
   webRadius: 0.5
