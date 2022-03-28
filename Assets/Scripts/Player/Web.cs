@@ -12,7 +12,7 @@ public class Web : MonoBehaviour
     float distanceTraveled = 0f;
     bool move = false;
     Vector2 moveDirection;
-    float speed;
+    public float speed;
     [Header("Settings")]
     public float travelDistance;
     public float speedReduction;
@@ -28,11 +28,10 @@ public class Web : MonoBehaviour
         slowEffect = new StatusEffect(StatusEffectTypes.Slowed, gameObject, speedReduction, false);
     }
 
-    public void Launch(Vector2 direction, float speed)
+    public void Launch(Vector2 direction)
     {
         move = true;
         moveDirection = direction;
-        this.speed = speed;
     }
 
     
@@ -99,7 +98,7 @@ public class Web : MonoBehaviour
             if (obj.CompareTag("Enemy"))
             {
                 Debug.Log("Enemy touched the web!");
-                CreatureController enemy = obj.GetComponent<CreatureController>();
+                CreatureStatusEffectHandler enemy = obj.GetComponent<CreatureStatusEffectHandler>();
                 enemy.AddStatusEffect(slowEffect);
                 lastTouchedObjects.Add(obj);
                 break;
@@ -107,7 +106,7 @@ public class Web : MonoBehaviour
             //If the enemy is not in contact with the web, but the Web was previously touching the enemy, then remove the slowdown status effect from the enemy.
             else if (lastTouchedObjects.Contains(obj))
             {
-                obj.GetComponent<CreatureController>().RemoveStatusEffect(slowEffect);
+                obj.GetComponent<CreatureStatusEffectHandler>().RemoveStatusEffect(slowEffect);
                 lastTouchedObjects.Remove(obj);
             }
         }
@@ -131,7 +130,7 @@ public class Web : MonoBehaviour
         }
         else if (collision.CompareTag("Enemy"))
         {
-            CreatureController enemy = collision.GetComponent<CreatureController>();
+            CreatureStatusEffectHandler enemy = collision.GetComponent<CreatureStatusEffectHandler>();
             enemy.AddStatusEffect(slowEffect);
         }
         //if (slowdown)
@@ -160,7 +159,7 @@ public class Web : MonoBehaviour
         }
         else if (collision.CompareTag("Enemy"))
         {
-            CreatureController enemy = collision.GetComponent<CreatureController>();
+            CreatureStatusEffectHandler enemy = collision.GetComponent<CreatureStatusEffectHandler>();
             enemy.RemoveStatusEffect(slowEffect);
         }
     }

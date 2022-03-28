@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 3
   knockbackForce: 1
-  attackRadius: 1
+  attackRadius: 0.2
   whatCanBeHit:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256

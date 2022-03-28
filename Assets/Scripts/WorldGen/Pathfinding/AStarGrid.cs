@@ -13,7 +13,7 @@ public class AStarGrid : MonoBehaviour
     [SerializeField]
     public WorldTileRow[] tileRow;
     //Contains the locations for all tiles occupied by entities
-    public List<CreatureController> enemiesOnGrid = new List<CreatureController>();
+    public List<Transform> enemiesOnGrid = new List<Transform>();
     public List<WorldTile> walkableTiles = new List<WorldTile>();
     [System.Serializable]
     public struct WorldTileRow
@@ -44,7 +44,7 @@ public class AStarGrid : MonoBehaviour
         GameObject[] enemyObjs = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (GameObject enemyObj in enemyObjs)
         {
-            enemiesOnGrid.Add(enemyObj.GetComponent<CreatureController>());
+            enemiesOnGrid.Add(enemyObj.transform);
         }
     }
     public void UpdateOccupiedTile(Vector2Int tilePosition)
@@ -52,12 +52,12 @@ public class AStarGrid : MonoBehaviour
         if(enemiesOnGrid.Count == 0) { FindEnemiesOnGrid(); }
         //List<WorldTile> walkableTiles = GetWalkableTiles();
         List<Vector2Int> enemyGridPositions = new List<Vector2Int>();
-        foreach (CreatureController enemy in enemiesOnGrid)
+        foreach (Transform enemy in enemiesOnGrid)
         {
             //Check if the CreatureController is null, meaning the enemy has been removed from the scene. If it has, remove it from the list.
             if(enemy == null) { enemiesOnGrid.Remove(enemy); return; }
             //Get tile at enemy position
-            enemyGridPositions.Add(ConvertWorldPositionToTilePosition(enemy.transform.position));
+            enemyGridPositions.Add(ConvertWorldPositionToTilePosition(enemy.position));
         }
         foreach (WorldTile tile in walkableTiles)
         {
@@ -512,7 +512,7 @@ public class AStarGrid : MonoBehaviour
 
             foreach (WorldTile neighbour in currentNode.neighborTiles)
             {
-                if (!neighbour.walkable && ignoreWalkableTile|| neighbour.occupied || closedSet.Contains(neighbour)) continue;
+                if (!neighbour.walkable && ignoreWalkableTile || neighbour.occupied || closedSet.Contains(neighbour)) continue;
                 //PlaceMarker(neighbour.centerWorldPosition, Color.cyan);
                 float newMovementCostToNeighbour = currentNode.gCost + Vector2.Distance(currentNode.centerWorldPosition, neighbour.centerWorldPosition);
                 if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))

@@ -159,8 +159,10 @@ MonoBehaviour:
   detectionRange: 5
   firePoint: {fileID: 2582587053687302335}
   meleePrefab: {fileID: 1156711393799963212}
-  weapon: {fileID: 0}
-  swingSpeed: 0
+  dashSpeed: 6
+  dashLength: 8
+  dashCooldown: 1
+  isDashing: 0
   projectilePrefab: {fileID: 0}
   rangedAttackPoint: {fileID: 0}
   rangedAttackSpeed: 0
@@ -204,10 +206,10 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.030254602, y: -0.045381933}
+  m_Offset: {x: -0.030254602, y: -0.043812394}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -218,7 +220,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.60823584, y: 0.90069836}
+  m_Size: {x: 0.60823584, y: 0.8975593}
   m_EdgeRadius: 0
 --- !u!114 &2906317390548976908
 MonoBehaviour:

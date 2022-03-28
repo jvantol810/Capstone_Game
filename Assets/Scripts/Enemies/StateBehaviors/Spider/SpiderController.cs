@@ -5,27 +5,21 @@ using TMPro;
 using UnityEngine.Events;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
-public class CreatureController : MonoBehaviour
+public class SpiderController : MonoBehaviour
 {
-   
+
     [Header("CreatureType")]
     [SerializeField]
     public CreatureTypes CreatureType;
     //References to components or other gameobjects
     [Header("References")]
     private Rigidbody2D m_rigidbody;
-    //[Header("AI")]
     private Animator m_animator;
     public Transform player;
-    ////Transition to attacking whenever these events fire off
-    //[Header("State Transitions")]
-    //public List<UnityEvent> attackEvents;
-    ////Transition to wandering whenever these events fire off
-    //public List<UnityEvent> wanderEvents;
-    //Attributes/enemy stats
-    [Header("Attributes")]
-    public float health;
-    public float baseSpeed;
+    //[Header("Attributes")]
+    //public float health;
+    //public float baseSpeed;
+    private CreatureStats stats;
     [HideInInspector]
     public float currentSpeed;
     public float damage;
@@ -35,28 +29,11 @@ public class CreatureController : MonoBehaviour
     public Transform firePoint;
     [Header("Melee Attacks")]
     public GameObject meleePrefab;
-    [Header("Dash Settings")]
-    public float dashSpeed;
-    public float dashLength, dashCooldown;
-    private float dashCounter;
-    private float dashCoolCounter;
-    public bool isDashing;
-    [Header("Ranged Attacks")]
-    public GameObject projectilePrefab;
-    public Transform rangedAttackPoint;
-    public float rangedAttackSpeed;
-    public LayerMask whatCanBeHitByRanged;
-    [Header("Charge")]
-    //Special movements
-    public bool charging = false;
-    public float chargeSpeed;
-    private Vector2 chargeDestination;
-    //Attacks
-    public bool swingAttacking = false;
-
-    [Header("State")]
-    public TextMeshProUGUI stateText;
-
+    [Header("Web Attacks")]
+    public GameObject webPrefab;
+    public float webShootSpeed;
+    public float webRadius;
+    public float webSpeedReduction;
     [HideInInspector]
     public Vector2 knockbackForce = Vector2.zero;
     [HideInInspector]
@@ -71,13 +48,13 @@ public class CreatureController : MonoBehaviour
         //Set references
         m_rigidbody = GetComponent<Rigidbody2D>();
 
-        //weaponAnimator = weapon.GetComponent<Animator>();
         m_animator = GetComponent<Animator>();
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
         //Set current speed to the base speed on start
-        currentSpeed = baseSpeed;
+        //currentSpeed = baseSpeed;
+        stats = GetComponent<CreatureStats>();
     }
 
     // Update is called once per frame
@@ -86,8 +63,8 @@ public class CreatureController : MonoBehaviour
         //set look positions for animator
         Vector2 position = m_rigidbody.position;
 
-        m_animator.SetFloat("Look X", position.x);
-        m_animator.SetFloat("Look Y", position.y);
+        //m_animator.SetFloat("Look X", position.x);
+        //m_animator.SetFloat("Look Y", position.y);
 
         //Update the aim of the firepoint to target the player
         UpdateAim();
@@ -97,38 +74,10 @@ public class CreatureController : MonoBehaviour
         {
             m_rigidbody.MovePosition(transform.position + (Vector3)knockbackForce);
         }
-
-        if (dashCounter > 0)
-        {
-            CreatureActions.Move(m_rigidbody, firePoint.right, dashSpeed);
-            dashCounter -= Time.deltaTime;
-            if (dashCounter <= 0)
-            {
-                m_animator.enabled = true;
-                dashCoolCounter = dashCooldown;
-                isDashing = false;
-            }
-        }
-        if (dashCoolCounter > 0)
-        {
-            dashCoolCounter -= Time.deltaTime;
-        }
-
-        //stateText.text = GetCurrentState();
-
-        //stateText.transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, 0);
     }
 
     private void FixedUpdate()
     {
-        if (charging)
-        {
-            float distance = MoveTowards(chargeDestination, chargeSpeed);
-            if(distance <= 0.5)
-            {
-                charging = false;
-            }
-        }
     }
 
     /// <summary>This method changes the gameobject's location by
@@ -171,7 +120,7 @@ public class CreatureController : MonoBehaviour
         //Calculate distance between creature and destination
         float distance = Vector2.Distance(m_rigidbody.position, destination);
         //If the distance is extremely small, return distance and don't move.
-        if(distance <= 0.1) { return distance;  }
+        if (distance <= 0) { return distance; }
         //Otherwise, the creature is a good distance from the destination. Call the move function.
         Move(direction, speed);
         //Return the distance
@@ -183,66 +132,53 @@ public class CreatureController : MonoBehaviour
         //Apply knockback in the direction of the hit
         GetComponent<CreatureStatusEffectHandler>().AddStatusEffect(knockback);
         //Update your health amount
-        ChangeHealth(-damage);
+        stats.ChangeHealth(-damage);
     }
 
-    public void Charge(Vector2 destination)
+    public void WebAttack(Vector2 direction)
     {
-        //Debug.Log("Charging!");
-        if(!charging)
-        {
-            chargeDestination = destination;
-            charging = true;
-        }
+        //Create a web prefab at the firepoint position
+        GameObject webShot = Instantiate(webPrefab, firePoint.right, Quaternion.identity);
+        Web web = webShot.GetComponent<Web>();
+
+        //Set the web's settings based on the SpiderController's insepctor values
+        web.webRadius = webRadius;
+        web.speedReduction = webSpeedReduction;
+        web.speed = webShootSpeed;
+
+        //Send a web outwards
+        web.Launch(direction);
     }
 
-    public void Dash()
+    public void WebAttack()
     {
-        if (dashCoolCounter <= 0 && dashCounter <= 0)
-        {
-            dashCounter = dashLength;
-            isDashing = true;
-            m_animator.enabled = false;
-        }
+        //Create a web prefab at the firepoint position
+        GameObject webShot = Instantiate(webPrefab, transform.position + firePoint.right, Quaternion.identity);
+        Web web = webShot.GetComponent<Web>();
+
+        //Set the web's settings based on the SpiderController's insepctor values
+        web.webRadius = webRadius;
+        web.speedReduction = webSpeedReduction;
+        web.speed = webShootSpeed;
+
+        //Send a web outwards
+        web.Launch(firePoint.right);
     }
 
-    public void RangedAttack(GameObject projectilePrefab, Vector2 direction)
+    public void SetStateToWander()
     {
-        //Create a projectile prefab at the ranged attack position
-        Projectile projectile = Instantiate(projectilePrefab, rangedAttackPoint).GetComponent<Projectile>();
-
-        //Set the projectile's canBeHit layermask to be equal to the layermask for ranged attacks
-        projectile.whatCanBeHit = whatCanBeHitByRanged;
-
-        //Send a projectile outwards
-        projectile.Shoot(direction);
-    }
-
-    public void SetAnimatorStateToAttack()
-    {
-        //Debug.Log("Transitioning to the attack state!");
-        if (m_animator.GetBool("isAttacking") == false)
-        {
-            m_animator.SetBool("isAttacking", true);
-            m_animator.SetBool("isChasing", false);
-        }
-        
-    }
-    public void SetAnimatorStateToChase()
-    {
-        //Debug.Log("Transitioning to the chase state!");
-        if (m_animator.GetBool("isChasing") == false)
-        {
-            m_animator.SetBool("isChasing", true);
-            m_animator.SetBool("isAttacking", false);
-        }
-
-    }
-    public void SetAnimatorStateToWander()
-    {
-        //Debug.Log("Transitioning to the wander state!");
-        m_animator.SetBool("isAttacking", false);
+        m_animator.SetBool("isWandering", true);
         m_animator.SetBool("isChasing", false);
+    }
+
+    public void SetStateToChase()
+    {
+        m_animator.SetBool("isWandering", false);
+        m_animator.SetBool("isChasing", true);
+    }
+    public void SetStateToRangedAttack()
+    {
+        m_animator.SetTrigger("RangedAttack");
     }
 
     public void MeleeAttack()
@@ -250,7 +186,7 @@ public class CreatureController : MonoBehaviour
         //Enable the melee attack prefab
         meleePrefab.SetActive(true);
         //Set its position to the firepoint (which is updated based on the player's position)
-        meleePrefab.transform.position = transform.position + firePoint.right;
+        meleePrefab.transform.position = transform.position + firePoint.right * 0.4f;
     }
 
     public bool isPlayerInMeleeAttackRange()
@@ -265,7 +201,6 @@ public class CreatureController : MonoBehaviour
             if (hits[i].gameObject.CompareTag("Player"))
             {
                 player = hits[i].transform;
-                //Debug.Log("Player in melee attack range!");
                 //Since the player is in the melee attack range, return true
                 return true;
             }
@@ -287,7 +222,6 @@ public class CreatureController : MonoBehaviour
             if (hits[i].gameObject.CompareTag("Player"))
             {
                 player = hits[i].transform;
-                //Debug.Log("Player detected!"); 
                 //Since the player was detected, return true
                 return true;
             }
@@ -296,16 +230,7 @@ public class CreatureController : MonoBehaviour
         //If the player was not detected, return false
         return false;
     }
-    public void ChangeHealth(float amount)
-    {
-        health += amount;
-        Debug.Log("Creature " + gameObject.name + " has taken " + amount + " damage!");
-        if (health <= 0)
-        {
-            Debug.Log("Creature " + gameObject.name + " has died!");
-            Destroy(gameObject);
-        }
-    }
+
 
     float aimAngle;
     Vector2 aimDirection;
@@ -315,20 +240,8 @@ public class CreatureController : MonoBehaviour
         aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
         firePoint.rotation = Quaternion.Euler(0, 0, aimAngle);
     }
-    
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        //Stop charging if you collide with an object
-        if (isDashing)
-        {
-            dashCounter = 0;
-            dashCoolCounter = dashCooldown;
-            isDashing = false;
-            m_animator.enabled = true;
-        }
-    }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, detectionRange);

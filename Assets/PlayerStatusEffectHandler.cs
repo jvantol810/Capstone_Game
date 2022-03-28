@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-
+[RequireComponent(typeof(PlayerController))]
 public class PlayerStatusEffectHandler : MonoBehaviour
 {
     private PlayerController player;

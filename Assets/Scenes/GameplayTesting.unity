@@ -123,6 +123,67 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &36990250
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8821750546496874711, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821750546496874711, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 23.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821750546496874711, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 22.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821750546496874711, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821750546496874711, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821750546496874711, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821750546496874711, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821750546496874711, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821750546496874711, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821750546496874711, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821750546496874711, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821750546496874717, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+      propertyPath: m_Name
+      value: Spider
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821750546496874717, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
 --- !u!1 &37109680
 GameObject:
   m_ObjectHideFlags: 0
@@ -700,7 +761,7 @@ MonoBehaviour:
   tiles:
   - {fileID: 11400000, guid: b33c06c5ed7f48a43a7590eead9e9ff8, type: 2}
   - {fileID: 11400000, guid: 3dfc287ff5ee9764fa1316c86acb53bc, type: 2}
-  enemyPrefab: {fileID: 3350636786608551685, guid: 297622065862cf14d92ba3ef460fddd6, type: 3}
+  enemyPrefab: {fileID: 8821750546496874717, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
   playerPrefab: {fileID: 5684243186576125843, guid: 5a70a9b837cdba14181275b9628fe453, type: 3}
   roomCenters: []
   prefabPoints: []

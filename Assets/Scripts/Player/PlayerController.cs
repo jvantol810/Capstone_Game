@@ -278,8 +278,9 @@ public class PlayerController : MonoBehaviour
                 //Shoot web
                 GameObject webObject = Instantiate(webPrefab, transform.position, Quaternion.identity);
                 Web web = webObject.GetComponent<Web>();
+                web.speed = webForce;
                 //shoot web in direction player is facing
-                web.Launch(aimDirection, webForce);
+                web.Launch(aimDirection);
                 break;
             case Powers.Explode:
                 //Slash big

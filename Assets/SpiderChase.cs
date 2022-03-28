@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CreatureChase : StateMachineBehaviour
+public class SpiderChase : StateMachineBehaviour
 {
-    public CreatureController creatureController;
+    public SpiderController spider;
+    public CreatureStats spiderStats;
     public Transform player;
     public float meleeAttackRange = 1f;
-    
+
+    public float webAttackCooldown = 1f;
+    public float webAttackTimer;
+    public bool onCooldown = false;
     //public float timeUntilDash = 0f;
     public Vector2 tempPlayerPosition;
     AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
@@ -15,13 +19,16 @@ public class CreatureChase : StateMachineBehaviour
     int nextTileIndex = 0;
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        creatureController = animator.GetComponent<CreatureController>();
+        spider = animator.GetComponent<SpiderController>();
+        spiderStats = animator.GetComponent<CreatureStats>();
         //Get a reference to the player's transform using Gameobject.Find()
         player = GameObject.FindGameObjectWithTag("Player").transform;
         //Store the player's position in a temporary variable
         tempPlayerPosition = player.position;
         //Find the path from the creature's position to the player and store it in currentPath
-        currentPath = LevelSettings.MapData.activeAStarGrid.FindPath(creatureController.transform.position, tempPlayerPosition);
+        currentPath = LevelSettings.MapData.activeAStarGrid.FindPath(spider.transform.position, tempPlayerPosition);
+
+        webAttackTimer = webAttackCooldown;
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -29,25 +36,49 @@ public class CreatureChase : StateMachineBehaviour
         //Generate a path to the player using the astargrid
         currentPath = LevelSettings.MapData.activeAStarGrid.FindPath(animator.transform.position, player.position);
         nextTileIndex = 0;
-        if(currentPath.Length > 0)
+        if (currentPath.Length > 0)
         {
             //Move towards the current tile on the path. If you've reached the current tile already, then increment the tile index.
-            creatureController.MoveTowards(currentPath[nextTileIndex], creatureController.currentSpeed);
-            if(nextTileIndex + 1 < currentPath.Length) { nextTileIndex++; }
+            spider.MoveTowards(currentPath[nextTileIndex], spiderStats.currentSpeed);
+            if (nextTileIndex + 1 < currentPath.Length) { nextTileIndex++; }
+        }
+
+        else if (!hasReached(player.position))
+        {
+            spider.MoveTowards(player.position, spiderStats.currentSpeed);
+        }
+
+        //If the player is in melee range, do a melee attack
+        if (spider.isPlayerInMeleeAttackRange())
+        {
+            spider.MeleeAttack();
+        }
+
+        else if (!onCooldown)
+        {
+            Debug.Log("Doing a web attack!");
+            spider.WebAttack();
+            onCooldown = true;
+        }
+
+        if (onCooldown)
+        {
+            webAttackTimer -= Time.deltaTime;
+            if(webAttackTimer <= 0f)
+            {
+                webAttackTimer = webAttackCooldown;
+                onCooldown = false;
+            }
         }
 
         UpdatePath();
 
-        if (creatureController.isPlayerInMeleeAttackRange())
-        {
-            animator.SetBool("isAttacking", true);
-            animator.SetBool("isChasing", false);
-        }
+        //Check if the spider is too close to the player to generate a path accurately
+        //if (!hasReached(player.position))
+        //{
+        //    spider.MoveTowards(player.position, spider.currentSpeed);
+        //}
 
-        if(creatureController.isPlayerDetected() == false)
-        {
-            creatureController.SetAnimatorStateToWander();
-        }
     }
 
     public void UpdateStateToAttack()
@@ -57,14 +88,14 @@ public class CreatureChase : StateMachineBehaviour
     public void UpdatePath()
     {
         AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
-        currentPath = grid.FindPath(creatureController.transform.position, player.position);
+        currentPath = grid.FindPath(spider.transform.position, player.position);
         nextTileIndex = 0;
         tempPlayerPosition = player.position;
     }
 
     public bool hasReached(Vector2Int position)
     {
-        return Vector2.Distance(creatureController.transform.position, position) <= 0.1f;
+        return Vector2.Distance(spider.transform.position, position) <= 0.2f;
     }
 
     public bool isInShootingRange(Vector2 currentPosition, Vector2 playerPosition)
@@ -79,6 +110,6 @@ public class CreatureChase : StateMachineBehaviour
 
     public bool hasReached(Vector2 position)
     {
-        return Vector2.Distance(creatureController.transform.position, position) <= 0.1f;
+        return Vector2.Distance(spider.transform.position, position) <= 0.1f;
     }
 }

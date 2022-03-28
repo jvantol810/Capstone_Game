@@ -38,7 +38,7 @@ public class Explosion : MonoBehaviour
             Vector2 direction = (obj.transform.position - transform.position).normalized;
             //Construct knockback status effect based on the explosionForce and direction
             StatusEffect knockback = new StatusEffect(StatusEffectTypes.Knockback, gameObject, direction * (explosionForce / 100), false, 1f);
-            obj.GetComponent<CreatureController>().AddStatusEffect(knockback);
+            obj.GetComponent<CreatureStatusEffectHandler>().AddStatusEffect(knockback);
             obj.GetComponent<CreatureController>().ChangeHealth(-explosionDamage);
         }
 

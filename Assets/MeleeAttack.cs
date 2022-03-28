@@ -55,9 +55,10 @@ public class MeleeAttack : MonoBehaviour
                 obj.GetComponent<PlayerController>().Hit(damage, meleeKnockback);
             }
             //If the hit has a creature controller, hit them.
-            else if (obj.GetComponent<CreatureController>() != null)
+            else if (obj.GetComponent<CreatureStats>() != null)
             {
-                obj.GetComponent<CreatureController>().ChangeHealth(-damage);
+                obj.GetComponent<CreatureStats>().ChangeHealth(-damage);
+                obj.GetComponent<CreatureStatusEffectHandler>().AddStatusEffect(meleeKnockback);
             }
         }
     }
