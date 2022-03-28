@@ -85,6 +85,32 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1102 &-7210120095742135075
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TNTDownWalk
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 65cd590877c69c048a6be8f34b4e9795, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &-5353900533799538376
 AnimatorState:
   serializedVersion: 6
@@ -180,6 +206,32 @@ MonoBehaviour:
   meleeAttackRange: 1
   tempPlayerPosition: {x: 0, y: 0}
   currentPath: []
+--- !u!1102 &-3915031864421886348
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TNTLeftWalk
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 96089ad22385d7e48943c44648b92173, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &-3415125779370906663
 AnimatorState:
   serializedVersion: 6
@@ -335,11 +387,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6c18ad8563c6ad4987074895f0f0e0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  creatureController: {fileID: 0}
+  creature: {fileID: 0}
   creatureColliderPosition: {x: 0, y: 0}
   wanderCooldown:
     cooldownAmount: 0.5
   currentDestination: {x: 0, y: 0}
+--- !u!1102 &2821727828119583195
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TNTRightWalk
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 2b50d14d07f286f4da9d6eaf581accac, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1101 &2869924995708537447
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -472,6 +550,32 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 1
+--- !u!1102 &8253869820222568505
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TNTUpWalk
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 872102bb86dcc9d43b5cc153926b218e, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1107 &8862598431267199729
 AnimatorStateMachine:
   serializedVersion: 6
@@ -502,6 +606,18 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: -5353900533799538376}
     m_Position: {x: 525, y: 495, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 2821727828119583195}
+    m_Position: {x: 560, y: 560, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -3915031864421886348}
+    m_Position: {x: 595, y: 625, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -7210120095742135075}
+    m_Position: {x: 630, y: 690, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 8253869820222568505}
+    m_Position: {x: 665, y: 755, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
