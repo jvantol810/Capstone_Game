@@ -2,9 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e2855985-2c7a-414b-8d5a-eab741c63575" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/SpawnEntity.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/SpawnEntity.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/FileParse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/FileParse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/LevelSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/LevelSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/ProcGenTesting.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/ProcGenTesting.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Logs/shadercompiler-UnityShaderCompiler.exe0.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/shadercompiler-UnityShaderCompiler.exe0.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,9 +35,11 @@
       <option value="$PROJECT_DIR$/Assets/Scenes/DougsStuff/RoomGen.cs" />
       <option value="$PROJECT_DIR$/Assets/Scenes/DougsStuff/FileParse.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomPrefab.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/FileParse.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/SpawnEntity.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/LevelSettings.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/Pathfinding/AStarGrid.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/FileParse.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="24FdoDSxPgi2ic6heCscIGVHFaI" />
@@ -55,7 +62,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor &amp; Play">
     <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
@@ -96,7 +103,10 @@
       <workItem from="1647158912432" duration="622000" />
       <workItem from="1647197435809" duration="15898000" />
       <workItem from="1647382926095" duration="13674000" />
-      <workItem from="1647495601283" duration="45228000" />
+      <workItem from="1647495601283" duration="45823000" />
+      <workItem from="1647852606267" duration="7814000" />
+      <workItem from="1648191759235" duration="15198000" />
+      <workItem from="1648408328382" duration="2720000" />
     </task>
     <servers />
   </component>

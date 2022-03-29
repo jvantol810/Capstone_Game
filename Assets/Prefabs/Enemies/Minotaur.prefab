@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf404bb5ba20a1647b13b526abba2351, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CreatureType: 1
+  CreatureType: 0
   player: {fileID: 0}
   health: 10
   baseSpeed: 3

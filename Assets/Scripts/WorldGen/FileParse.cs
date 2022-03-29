@@ -46,7 +46,7 @@ public static class FileParse
 
             i++;
         }
-        Debug.Log(j);
+        //Debug.Log(j);
         listDepth.Add(j);
         return inputLines;
     }
