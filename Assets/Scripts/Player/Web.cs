@@ -19,6 +19,7 @@ public class Web : MonoBehaviour
     public float speedReduction;
     public float webRadius = 0.5f;
     StatusEffect slowEffect;
+    StatusEffect speedEffect;
     bool slowdown;
     enum WebStates
     {
@@ -32,6 +33,7 @@ public class Web : MonoBehaviour
         renderer = GetComponent<SpriteRenderer>();
         collider = GetComponent<Collider2D>();
         slowEffect = new StatusEffect(StatusEffectTypes.Slowed, gameObject, speedReduction, false);
+        speedEffect = new StatusEffect(StatusEffectTypes.Speedup, gameObject, speedReduction, false);
         state = WebStates.Projectile;
     }
 
@@ -117,7 +119,15 @@ public class Web : MonoBehaviour
             {
                 Debug.Log("Enemy touched the web!");
                 CreatureStatusEffectHandler enemy = obj.GetComponent<CreatureStatusEffectHandler>();
-                enemy.AddStatusEffect(slowEffect);
+                CreatureStats enemyStats = obj.GetComponent<CreatureStats>();
+                if(enemyStats.creatureType == CreatureTypes.Spider)
+                {
+                    enemy.AddStatusEffect(speedEffect);
+                }
+                else
+                {
+                    enemy.AddStatusEffect(slowEffect);
+                }
                 lastTouchedObjects.Add(obj);
                 break;
             }

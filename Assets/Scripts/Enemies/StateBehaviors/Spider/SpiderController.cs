@@ -132,8 +132,6 @@ public class SpiderController : MonoBehaviour
     public void WebAttack(Vector2 direction)
     {
         //Create a web prefab at the firepoint position
-        //GameObject webShot = Instantiate(webPrefab, firePoint.right, Quaternion.identity);
-
         GameObject webObj = webPool.GetPooledObject(transform.position + firePoint.right);
         Web web = webObj.GetComponent<Web>();
 
@@ -149,7 +147,6 @@ public class SpiderController : MonoBehaviour
     public void WebAttack()
     {
         //Create a web prefab at the firepoint position
-        //GameObject webShot = Instantiate(webPrefab, transform.position + firePoint.right, Quaternion.identity);
         GameObject webObj = webPool.GetPooledObject(transform.position + firePoint.right * 1.4f);
         Web web = webObj.GetComponent<Web>();
 

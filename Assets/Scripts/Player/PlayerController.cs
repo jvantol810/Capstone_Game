@@ -92,9 +92,9 @@ public class PlayerController : MonoBehaviour
 
         animator = GetComponent<Animator>();
 
-        //AddPower(Powers.Dash);
+        AddPower(Powers.Dash);
         //AddPower(Powers.ShootWeb);
-        AddPower(Powers.Explode);
+        //AddPower(Powers.Explode);
     }
 
     public string GetPowersText()
@@ -161,10 +161,12 @@ public class PlayerController : MonoBehaviour
                 isDashing = false;
             }
         }
+
         if(dashCoolCounter > 0)
         {
             dashCoolCounter -= Time.deltaTime;
         }
+
         if (Input.GetMouseButtonDown(0))
         {
             meleePrefab.SetActive(true);
@@ -279,12 +281,12 @@ public class PlayerController : MonoBehaviour
                 break;
             case Powers.Explode:
                 //Slash big
-                GameObject bomb = bombPool.GetPooledObject();
-                bomb.transform.position = new Vector3(firePoint.position.x + 0.25f, firePoint.position.y, 0);
-                Explosion dropBomb = bomb.GetComponent<Explosion>();
+                GameObject bombObj = bombPool.GetPooledObject();
+                bombObj.transform.position = new Vector3(firePoint.position.x + 0.25f, firePoint.position.y, 0);
+                Bomb bomb = bombObj.GetComponent<Bomb>();
 
                 //throw bomb in direction player is facing
-                dropBomb.Launch();
+                bomb.Detonate();
                 break;
         }
     }
@@ -300,13 +302,26 @@ public class PlayerController : MonoBehaviour
         firePoint.rotation = Quaternion.Euler(0, 0, aimAngle);
     }
 
+    public void StopDash()
+    {
+        dashCounter = 0;
+        dashCoolCounter = dashCooldown;
+        isDashing = false;
+    }
+
+    public void StartDash()
+    {
+
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (isDashing)
         {
-            dashCounter = 0;
-            dashCoolCounter = dashCooldown;
-            isDashing = false;
+            //dashCounter = 0;
+            //dashCoolCounter = dashCooldown;
+            //isDashing = false;
+            StopDash();
         }
     }
 }

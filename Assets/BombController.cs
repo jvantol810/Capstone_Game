@@ -4,32 +4,24 @@ using UnityEngine;
 
 public class BombController : MonoBehaviour
 {
-    [Header("CreatureType")]
-    [SerializeField]
-    public CreatureTypes CreatureType;
     //References to components or other gameobjects
     [Header("References")]
     private Rigidbody2D m_rigidbody;
     private Animator m_animator;
     public Transform player;
-    //[Header("Attributes")]
-    //public float health;
-    //public float baseSpeed;
     private CreatureStats stats;
     [HideInInspector]
     public float currentSpeed;
     public float damage;
-    [Header("Detection")]
-    public float detectionRange;
     [Header("Fire Point")]
     public Transform firePoint;
     [Header("Melee Attacks")]
     public GameObject meleePrefab;
-    [Header("Web Attacks")]
-    public GameObject webPrefab;
-    public float webShootSpeed;
-    public float webRadius;
-    public float webSpeedReduction;
+    [Header("Bomb Attacks")]
+    public ObjectPool bombPool;
+    public float bombShootSpeed;
+    public float bombExplosionSize;
+    public float bombDamage;
     [HideInInspector]
     public Vector2 knockbackForce = Vector2.zero;
     [HideInInspector]
@@ -131,34 +123,18 @@ public class BombController : MonoBehaviour
         stats.ChangeHealth(-damage);
     }
 
-    public void WebAttack(Vector2 direction)
+
+    public void BombAttack()
     {
-        //Create a web prefab at the firepoint position
-        GameObject webShot = Instantiate(webPrefab, firePoint.right, Quaternion.identity);
-        Web web = webShot.GetComponent<Web>();
+        //Create a bomb prefab at the firepoint position
+        GameObject bombObj = bombPool.GetPooledObject(transform.position + firePoint.right * 1.4f);
+        Bomb bomb = bombObj.GetComponent<Bomb>();
 
-        //Set the web's settings based on the SpiderController's insepctor values
-        web.webRadius = webRadius;
-        web.speedReduction = webSpeedReduction;
-        web.speed = webShootSpeed;
-
-        //Send a web outwards
-        web.Launch(direction);
-    }
-
-    public void WebAttack()
-    {
-        //Create a web prefab at the firepoint position
-        GameObject webShot = Instantiate(webPrefab, transform.position + firePoint.right, Quaternion.identity);
-        Web web = webShot.GetComponent<Web>();
-
-        //Set the web's settings based on the SpiderController's insepctor values
-        web.webRadius = webRadius;
-        web.speedReduction = webSpeedReduction;
-        web.speed = webShootSpeed;
-
-        //Send a web outwards
-        web.Launch(firePoint.right);
+        //Set the bomb's settings based on BombController inspector values
+        bomb.fieldOfImpact = bombExplosionSize;
+        bomb.explosionDamage = bombDamage;
+        bomb.Detonate();
+        bomb.Detonate();
     }
 
     public void SetStateToWander()
@@ -206,27 +182,6 @@ public class BombController : MonoBehaviour
         return false;
     }
 
-    public bool isPlayerDetected()
-    {
-        //Create an array of colliders of all gameObjects in this enemies detection range
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, detectionRange);
-
-        //Iterate through hits and check if any of them were the player
-        for (int i = 0; i < hits.Length; i++)
-        {
-            //If one of the hits was the player, assign the player variable and return true
-            if (hits[i].gameObject.CompareTag("Player"))
-            {
-                player = hits[i].transform;
-                //Since the player was detected, return true
-                return true;
-            }
-        }
-
-        //If the player was not detected, return false
-        return false;
-    }
-
 
     float aimAngle;
     Vector2 aimDirection;
@@ -235,11 +190,5 @@ public class BombController : MonoBehaviour
         aimDirection = (player.position - transform.position).normalized;
         aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
         firePoint.rotation = Quaternion.Euler(0, 0, aimAngle);
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
     }
 }

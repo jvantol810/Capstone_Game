@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Explosion : MonoBehaviour
+public class Bomb : MonoBehaviour
 {
     public float duration = 3f;
     public float explosionDamage = 2f;
@@ -17,7 +17,7 @@ public class Explosion : MonoBehaviour
         rigidbody2d = GetComponent<Rigidbody2D>();
     }
 
-    public void Launch()
+    public void Detonate()
     {
         StartCoroutine(Explode());
     }
@@ -38,8 +38,17 @@ public class Explosion : MonoBehaviour
             Vector2 direction = (obj.transform.position - transform.position).normalized;
             //Construct knockback status effect based on the explosionForce and direction
             StatusEffect knockback = new StatusEffect(StatusEffectTypes.Knockback, gameObject, direction * (explosionForce / 100), false, 1f);
-            obj.GetComponent<CreatureStatusEffectHandler>().AddStatusEffect(knockback);
-            obj.GetComponent<CreatureController>().ChangeHealth(-explosionDamage);
+            if (obj.CompareTag("Player"))
+            {
+                obj.GetComponent<PlayerStatusEffectHandler>().AddStatusEffect(knockback);
+                obj.GetComponent<PlayerController>().ChangeHealth((int)explosionDamage);
+            }
+            else if (obj.CompareTag("Enemy"))
+            {
+                obj.GetComponent<CreatureStatusEffectHandler>().AddStatusEffect(knockback);
+                obj.GetComponent<CreatureStats>().ChangeHealth(-explosionDamage);
+            }
+            
         }
 
         //make the bomb sprite disappear
@@ -47,8 +56,7 @@ public class Explosion : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
 
         //Disable the bomb
-        //gameObject.SetActive(false);
-
+        gameObject.SetActive(false);
     }
 
     private void OnDrawGizmosSelected()

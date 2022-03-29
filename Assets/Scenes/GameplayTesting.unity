@@ -761,7 +761,7 @@ MonoBehaviour:
   tiles:
   - {fileID: 11400000, guid: b33c06c5ed7f48a43a7590eead9e9ff8, type: 2}
   - {fileID: 11400000, guid: 3dfc287ff5ee9764fa1316c86acb53bc, type: 2}
-  enemyPrefab: {fileID: 8821750546496874717, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+  enemyPrefab: {fileID: 1921959048153719105, guid: 2713af5b87e89174f9c2f2ab45958a6f, type: 3}
   playerPrefab: {fileID: 5684243186576125843, guid: 5a70a9b837cdba14181275b9628fe453, type: 3}
   roomCenters: []
   prefabPoints: []
