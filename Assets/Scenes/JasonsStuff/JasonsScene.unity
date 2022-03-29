@@ -704,7 +704,7 @@ MonoBehaviour:
   playerPrefab: {fileID: 5684243186576125843, guid: 5a70a9b837cdba14181275b9628fe453, type: 3}
   roomCenters: []
   prefabPoints: []
-  testing: 1
+  testing: 0
   floorMax: 1500
   seeded: 0
   seed: 50
