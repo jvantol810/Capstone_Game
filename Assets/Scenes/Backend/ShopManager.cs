@@ -8,6 +8,7 @@ public class ShopManager : MonoBehaviour
     public GameObject viewportContent;
     public PHPManager phpManager;
     public Button[] TabButtons;
+    public CashEquipsData CEData;
     [Header("Prefabs")]
     public GameObject ShopItemPrefab;
 
@@ -73,7 +74,12 @@ public class ShopManager : MonoBehaviour
         //Destroy(LoadingEntry);
         //string shopitems = cwd.result.ToString();
         string shopitems = "True\tHat #1\t150\t001\tHat #2\t250\t002\tHat #3\t50\t003\tHat #4\t100\t004";
-        string playeritemspurchased = "True\t002\t003";
+        string playeritemspurchased = "";
+        string[] OwnedHats = CEData.GetOwnedHats();
+        for (int i = 0; i < OwnedHats.Length; i++)
+        {
+            playeritemspurchased += OwnedHats[i] + "\t";
+        }
         //Debug.Log(leaderboardscores);
         yield return new WaitForSeconds(1f);
         string[] sortedEntries = shopitems.Split('\t');
@@ -92,7 +98,15 @@ public class ShopManager : MonoBehaviour
                 newEntryTexts[2].text = sortedEntries[i+1] + " GB";
                 if(playeritemspurchased.Contains(sortedEntries[i+2]))
                 {
-                    newEntryTexts[1].text = "Equip";
+                    Debug.Log(CEData.GetCurrentHat() + "  " + sortedEntries[i + 2]);
+                    if(CEData.GetCurrentHat() == sortedEntries[i+2])
+                    {
+                        newEntryTexts[1].text = "Unequip";
+                    }
+                    else
+                    {
+                        newEntryTexts[1].text = "Equip";
+                    }
                     newEntryTexts[1].transform.parent.GetComponent<Image>().color = new Color(1f, 1f, 1f);
                 }
 

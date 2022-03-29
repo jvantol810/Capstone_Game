@@ -5,18 +5,26 @@ using UnityEngine;
 public class HatItem : MonoBehaviour
 {
     [SerializeField]
-    private bool equipped;
-    public Sprite itemSprite;
+    private string hatID;
+    [SerializeField]
+    private Vector3 offset;
+    public Sprite forwardSprite;
+    public Sprite backwardSprite;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        transform.localPosition = offset;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public string GetHatID()
+    {
+        return hatID;
     }
 }
