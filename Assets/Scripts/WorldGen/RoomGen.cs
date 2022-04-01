@@ -18,7 +18,7 @@ public class RoomGen : MonoBehaviour
     public Tilemap map;
     public AStarGrid aStarGrid;
     public Tile[] tiles;
-    public GameObject enemyPrefab;
+    //public GameObject enemyPrefab; new spawning function should render this obsolete
     public GameObject playerPrefab;
     //List for allRooms and list of their centers for connecting them to main map
     private List<RoomPrefab> allRooms = new List<RoomPrefab>();
@@ -166,6 +166,7 @@ public class RoomGen : MonoBehaviour
         else
             Debug.LogError("No save data to delete.");
     }
+    
     private void InitMap()
     {
         for (int i = 0; i < mapHeight; i++)
@@ -196,7 +197,7 @@ public class RoomGen : MonoBehaviour
         MultiPrefabGeneration();
         SpawnEntity();
         
-        //Add enemies
+        //New spawning function should render this chunk obsolete
         /*for (int i = 0; i < 3; i++)
         {
             Vector2 spawnPoint = aStarGrid.GetRandomWalkableTile().centerWorldPosition;
@@ -517,7 +518,7 @@ public class RoomGen : MonoBehaviour
     }
 
     //This should be in it's own file, but I'm not sure how to port over the grids
-    public void SpawnEntity()
+    private void SpawnEntity()
     {
         List<Vector2Int> walkableLocations = aStarGrid.GetWalkableTileLocations();
         List<Vector2Int> spawnLocations = new List<Vector2Int>();
@@ -532,7 +533,7 @@ public class RoomGen : MonoBehaviour
         {
             int spawnIndex = Random.Range(0, walkableLocations.Count - 1);
             spawnLocations.Add(walkableLocations[spawnIndex]);
-            aStarGrid.PlaceMarker(walkableLocations[spawnIndex], Color.yellow);
+            //aStarGrid.PlaceMarker(walkableLocations[spawnIndex], Color.yellow);
         }
 
         foreach (var spawnCoord in spawnLocations)
@@ -548,26 +549,32 @@ public class RoomGen : MonoBehaviour
                     spawn.x = LevelSettings.MapData.width - 2;
                 if (spawn.y > LevelSettings.MapData.height)
                     spawn.y = LevelSettings.MapData.height - 2;
+                if (spawn.x < 0)
+                    spawn.x = 3;
+                if (spawn.y < 0)
+                    spawn.y = 3;
                 
                 //Debug.Log("X:" +spawn.x + "Y:" + spawn.y);
                 if (aStarGrid.GetTileAt(Vector2Int.RoundToInt(spawn)).walkable)
                 {
                     //aStarGrid.PlaceMarker(spawn, Color.green);
-                    Instantiate(monsterPrefabs[0], new Vector3(spawn.x, spawn.y, 0), Quaternion.identity);
+                    Instantiate(monsterPrefabs[RandomIndex(monsterPrefabs.Length)], new Vector3(spawn.x, spawn.y, 0), Quaternion.identity);
                 }
                 else
                 {
                     //aStarGrid.PlaceMarker(aStarGrid.GetNearestWalkableTile(spawn).centerWorldPosition, Color.green);
                     spawn = aStarGrid.GetNearestWalkableTile(spawn).worldPosition;
                     var tileSpawn = aStarGrid.GetNearestWalkableTile(spawn);
-                    Instantiate(monsterPrefabs[0], new Vector3(tileSpawn.centerWorldPosition.x, tileSpawn.centerWorldPosition.y, 0), Quaternion.identity);
+                    Instantiate(monsterPrefabs[RandomIndex(monsterPrefabs.Length)], new Vector3(tileSpawn.centerWorldPosition.x, tileSpawn.centerWorldPosition.y, 0), Quaternion.identity);
                 }
             }
             
         }
-        
-        
-        
+    }
+
+    private int RandomIndex(int maxIndex)
+    {
+        return Random.Range(0, maxIndex);
     }
     
     //You are now entering the depreciated zone
