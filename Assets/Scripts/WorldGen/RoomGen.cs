@@ -544,10 +544,15 @@ public class RoomGen : MonoBehaviour
 
                 Vector2 spawn = new Vector2(spawnCoord.x + xOffset, spawnCoord.y+yOffset);
                 
+                if (spawn.x > LevelSettings.MapData.width)
+                    spawn.x = LevelSettings.MapData.width - 2;
+                if (spawn.y > LevelSettings.MapData.height)
+                    spawn.y = LevelSettings.MapData.height - 2;
+                
                 //Debug.Log("X:" +spawn.x + "Y:" + spawn.y);
                 if (aStarGrid.GetTileAt(Vector2Int.RoundToInt(spawn)).walkable)
                 {
-                    aStarGrid.PlaceMarker(spawn, Color.green);
+                    //aStarGrid.PlaceMarker(spawn, Color.green);
                     Instantiate(monsterPrefabs[0], new Vector3(spawn.x, spawn.y, 0), Quaternion.identity);
                 }
                 else
@@ -555,7 +560,6 @@ public class RoomGen : MonoBehaviour
                     //aStarGrid.PlaceMarker(aStarGrid.GetNearestWalkableTile(spawn).centerWorldPosition, Color.green);
                     spawn = aStarGrid.GetNearestWalkableTile(spawn).worldPosition;
                     var tileSpawn = aStarGrid.GetNearestWalkableTile(spawn);
-                    //Instantiate(monsterPrefabs[0], new Vector3(spawn.x, spawn.y, 0), Quaternion.identity);
                     Instantiate(monsterPrefabs[0], new Vector3(tileSpawn.centerWorldPosition.x, tileSpawn.centerWorldPosition.y, 0), Quaternion.identity);
                 }
             }
