@@ -552,8 +552,10 @@ public class RoomGen : MonoBehaviour
                 float xOffset = Random.Range(xMin, xMax);
                 float yOffset = Random.Range(yMin, yMax);
 
-                Vector2 spawn = new Vector2(spawnCoord.x + xOffset, spawnCoord.y+yOffset);
-                
+                //Vector2 spawn = new Vector2(spawnCoord.x + xOffset, spawnCoord.y+yOffset);
+                Vector2 spawn = new Vector2(spawnCoord.x, spawnCoord.y);
+                Debug.Log("SPAWNLOCATION:" + spawn);
+
                 if (spawn.x > LevelSettings.MapData.width)
                     spawn.x = LevelSettings.MapData.width - 2;
                 if (spawn.y > LevelSettings.MapData.height)

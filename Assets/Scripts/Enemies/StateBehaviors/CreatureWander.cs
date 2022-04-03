@@ -36,6 +36,7 @@ public class CreatureWander : StateMachineBehaviour
         }
         ////Calculate the path to the destination
         //Debug.Log("Reached destination: " + hasReached(currentDestination));
+        Debug.Log(currentDestination);
         //While you haven't reached the current destination, continue moving towards it along the path
         if (!hasReached(currentDestination) && nextTileIndex < currentPath.Length)
         {

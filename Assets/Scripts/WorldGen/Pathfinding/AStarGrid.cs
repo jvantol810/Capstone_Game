@@ -246,7 +246,8 @@ public class AStarGrid : MonoBehaviour
     //Returns a WorldTile that is walkable within the range
     public WorldTile GetWalkableTileWithinRange(Vector2Int startTilePosition, float minTileDistance, float maxTileDistance)
     {
-        
+        Debug.Log("Start Title Position:" + startTilePosition);
+        Debug.Log("MinDistance: " + minTileDistance + ", MaxDistance: " + maxTileDistance);
         //Create a list of all the tiles you could move, out to the max distance
         List<Vector2Int> nearbyWalkableTiles = new List<Vector2Int>();
         WorldTile start = GetTileAt(startTilePosition);
