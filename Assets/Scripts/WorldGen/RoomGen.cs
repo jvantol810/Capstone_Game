@@ -198,7 +198,8 @@ public class RoomGen : MonoBehaviour
         InitMap();
         DrunkenWalkGen(true);
         MultiPrefabGeneration();
-        SpawnEntity();
+        SpawnMonsters();
+        //SpawnEntity();
         
         //New spawning function should render this chunk obsolete
         /*for (int i = 0; i < 3; i++)
@@ -526,6 +527,18 @@ public class RoomGen : MonoBehaviour
         }
     }
 
+    private void SpawnMonsters()
+    {
+        List<Vector2Int> walkableLocations = aStarGrid.GetWalkableTileLocations();
+
+        for (int i = 0; i < LevelSettings.MapData.MobPerSpawn * 3; i++)
+        {
+            var spawn = walkableLocations[RandomIndex(walkableLocations.Count)];
+            var tilespawn = aStarGrid.GetTileAt(spawn);
+            Instantiate(monsterPrefabs[RandomIndex(monsterPrefabs.Length)], new Vector3(tilespawn.centerWorldPosition.x, tilespawn.centerWorldPosition.y, 0), Quaternion.identity);
+            aStarGrid.PlaceMarker(spawn * 2, Color.yellow);
+        }
+    }
     //This should be in it's own file, but I'm not sure how to port over the grids
     private void SpawnEntity()
     {
