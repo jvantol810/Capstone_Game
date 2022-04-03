@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 3350636786608551694}
   - component: {fileID: 3350636786608551695}
   - component: {fileID: 2906317390548976908}
+  - component: {fileID: 206149462290058053}
   m_Layer: 9
   m_Name: Minotaur
   m_TagString: Enemy
@@ -65,6 +66,7 @@ Transform:
   m_Children:
   - {fileID: 1156711393799963217}
   - {fileID: 2582587053687302335}
+  - {fileID: 7106131995422082963}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -234,6 +236,74 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37f04e3d41155f144839f6e3ae6b4f72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &206149462290058053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3350636786608551685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 659e707767508b74783fe5dfdcd496a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
+  baseSpeed: 0
+  currentSpeed: 0
+  attackDamage: 0
+  creatureType: 0
+  detectionRange: 0
+--- !u!1 &6887990632782824461
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7106131995422082963}
+  - component: {fileID: 1211580580180450488}
+  m_Layer: 0
+  m_Name: Animator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7106131995422082963
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6887990632782824461}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.05113983, y: 0.066554755, z: -0.06429813}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3350636786608551690}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1211580580180450488
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6887990632782824461}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 63d6855128f415f4f91529ec680ac323, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &6216790320706126862
 PrefabInstance:
   m_ObjectHideFlags: 0
