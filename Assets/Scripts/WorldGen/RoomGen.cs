@@ -463,7 +463,7 @@ public class RoomGen : MonoBehaviour
         roomCenters.Add(new Vector2Int(xCenter,yCenter));
 
         return multiPrefabPoints;
-
+        
     }
     
     private bool GetMultiPrefabPoints(List<Vector2Int> multiPrefabPoints, Vector2Int randomPoint, int upperY, int upperX)
@@ -517,7 +517,7 @@ public class RoomGen : MonoBehaviour
                 //If walkable set the map to floor if not walls and add to map and astar grid
                 if (room.prefabTiles[j][i].walkable)
                 {
-                    AddTileToMap(room.prefabTiles[j][i], tiles[1]);
+                    AddTileToMap(true, room.prefabTiles[j][i].gridPosition, tiles[1]);
                 }
                 else
                 {
@@ -536,7 +536,7 @@ public class RoomGen : MonoBehaviour
             var spawn = walkableLocations[RandomIndex(walkableLocations.Count)];
             var tilespawn = aStarGrid.GetTileAt(spawn);
             Instantiate(monsterPrefabs[RandomIndex(monsterPrefabs.Length)], new Vector3(tilespawn.centerWorldPosition.x, tilespawn.centerWorldPosition.y, 0), Quaternion.identity);
-            aStarGrid.PlaceMarker(spawn * 2, Color.yellow);
+            //aStarGrid.PlaceMarker(spawn * 2, Color.yellow);
         }
     }
     //This should be in it's own file, but I'm not sure how to port over the grids

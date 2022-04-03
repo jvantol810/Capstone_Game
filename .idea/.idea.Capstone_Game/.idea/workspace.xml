@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e2855985-2c7a-414b-8d5a-eab741c63575" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,6 +33,7 @@
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/SpawnEntity.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/Pathfinding/AStarGrid.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/LevelSettings.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Enemies/StateBehaviors/CreatureWander.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" />
     </changedPaths>
   </component>
