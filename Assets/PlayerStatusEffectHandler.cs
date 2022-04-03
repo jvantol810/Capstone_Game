@@ -32,7 +32,7 @@ public class PlayerStatusEffectHandler : MonoBehaviour
         {
             text += effect.type + ", ";
         }
-        Debug.Log("Num of effects: " + statusEffects.Count);
+        //Debug.Log("Num of effects: " + statusEffects.Count);
         return text;
 
     }
@@ -40,11 +40,11 @@ public class PlayerStatusEffectHandler : MonoBehaviour
     {
         if (HasStatusEffect(effect.type))
         {
-            Debug.Log("Player already has status effect: " + effect.type);
+           // Debug.Log("Player already has status effect: " + effect.type);
         }
         else
         {
-            Debug.Log("Effect added: " + effect.type);
+            //Debug.Log("Effect added: " + effect.type);
             statusEffects.Add(effect);
             ProcessStatusEffect(effect);
         }

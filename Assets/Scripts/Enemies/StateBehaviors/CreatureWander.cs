@@ -58,8 +58,8 @@ public class CreatureWander : StateMachineBehaviour
             wanderCooldown.StartCooldown();
 
             //Log the current cooldown amount?
-            Debug.Log("Cooldown amount: " + wanderCooldown.cooldownAmount);
-            Debug.Log("Cooldown complete: " + wanderCooldown.cooldownComplete);
+            //Debug.Log("Cooldown amount: " + wanderCooldown.cooldownAmount);
+            //Debug.Log("Cooldown complete: " + wanderCooldown.cooldownComplete);
             //Update the current destination
             UpdatePath();
         }
