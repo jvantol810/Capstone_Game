@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e2855985-2c7a-414b-8d5a-eab741c63575" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/ProcGenTesting.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/ProcGenTesting.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/JasonsStuff/JasonsScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/JasonsStuff/JasonsScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,8 +32,8 @@
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomPrefab.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/FileParse.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/SpawnEntity.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/LevelSettings.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/Pathfinding/AStarGrid.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/LevelSettings.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" />
     </changedPaths>
   </component>
