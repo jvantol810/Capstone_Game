@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e2855985-2c7a-414b-8d5a-eab741c63575" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/SpawnEntity.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/SpawnEntity.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/FileParse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/FileParse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/LevelSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/LevelSettings.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/ProcGenTesting.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/ProcGenTesting.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/shadercompiler-UnityShaderCompiler.exe0.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/shadercompiler-UnityShaderCompiler.exe0.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

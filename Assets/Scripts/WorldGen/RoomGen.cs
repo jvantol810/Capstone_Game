@@ -71,6 +71,9 @@ public class RoomGen : MonoBehaviour
         
         FileParse.ParseWholeFolder();
         
+        //Converts prefab arrays into lists
+        ConvertToPrefab();
+        
         //Generate the world map
         GenerateWorld();
 
@@ -193,7 +196,7 @@ public class RoomGen : MonoBehaviour
             Random.InitState(randSeed);
         }
         InitMap();
-        DrunkenWalkGen();
+        DrunkenWalkGen(true);
         MultiPrefabGeneration();
         SpawnEntity();
         
@@ -208,7 +211,7 @@ public class RoomGen : MonoBehaviour
     }
     
     //Randomly 'Walks' to create walkable area for player
-    private void DrunkenWalkGen()
+    private void DrunkenWalkGen(bool jumpAtEdge)
     {
         tilesWalked.Clear();
         walkX = Mathf.RoundToInt(mapWidth / 2);
@@ -221,10 +224,10 @@ public class RoomGen : MonoBehaviour
         for (int i = 0; i < floorMax; i++)
         {
             //Pick random direction
-            if (PickRandomDirection())
+            if (PickRandomDirection(jumpAtEdge))
             {
                 //turn new tile into floor tile
-                AddTileToMap(true, new Vector2Int(walkX, walkY), tiles[1]);
+                AddTileToMap(true, new Vector2Int(walkX, walkY), tiles[RandomIndex(tiles.Length,1)]);
                 tilesWalked.Add(new Vector3Int(walkX, walkY, 0));
             }
             
@@ -247,7 +250,7 @@ public class RoomGen : MonoBehaviour
         //Add the tile data to the aStarGrid for pathfinding
         aStarGrid.AddTile(worldTile);
     }
-    private bool PickRandomDirection()
+    private bool PickRandomDirection(bool jumpAtEdge=false)
     {
         int lastIndex = tilesWalked.Count - 1;
         int rand = Random.Range(0, 5);
@@ -272,11 +275,18 @@ public class RoomGen : MonoBehaviour
         }
         
         //if you're going to walk out of bounds roll back to previous tile and pick new direction
-        walkX = tilesWalked[lastIndex].x;
-        walkY = tilesWalked[lastIndex].y;
+        if (jumpAtEdge)
+        {
+            walkX = tilesWalked[RandomIndex(tilesWalked.Count)].x;
+            walkY = tilesWalked[RandomIndex(tilesWalked.Count)].y;
+        }
+        else
+        {
+            walkX = tilesWalked[lastIndex].x;
+            walkY = tilesWalked[lastIndex].y;
+        }
+
         return false;
-        
-        
     }
     
     //Converts String array into a Tilemap prefab
@@ -397,7 +407,6 @@ public class RoomGen : MonoBehaviour
     //Functions for multiprefab generation below
     private void MultiPrefabGeneration()
     {
-        ConvertToPrefab();
         List<Vector2Int> prefabPlacePoints = new List<Vector2Int>();
         
         foreach (var room in allRooms)
@@ -572,9 +581,9 @@ public class RoomGen : MonoBehaviour
         }
     }
 
-    private int RandomIndex(int maxIndex)
+    private int RandomIndex(int maxIndex, int minIndex=0)
     {
-        return Random.Range(0, maxIndex);
+        return Random.Range(minIndex, maxIndex);
     }
     
     //You are now entering the depreciated zone
