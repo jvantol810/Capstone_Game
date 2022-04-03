@@ -66,4 +66,30 @@ public class CurrencyData : MonoBehaviour
         }
         TSM.UpdateGhostBucksDisplay(currentGhostBucks);
     }
+
+    public bool SpendCurrency(int amountspent, string itemPurchased, string itemID)
+    {
+        Debug.Log(currentGhostBucks);
+        if(Mathf.Abs(amountspent) > currentGhostBucks)
+        {
+            
+            return false;
+        }
+        else
+        {
+            currentGhostBucks -= Mathf.Abs(amountspent);
+            TSM.UpdateGhostBucksDisplay(currentGhostBucks);
+            //Save data to server!!!
+            //Update owneditems
+            if(itemPurchased == "Hat")
+            {
+
+            }
+
+
+            return true;
+        }
+    }
+
+    
 }

@@ -120,7 +120,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1952396187930590596}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3461824627849299512}
+        m_TargetAssemblyTypeName: ShopItemController, Assembly-CSharp
+        m_MethodName: pressButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1952396188556823121
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,7 +281,7 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 40
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 3
     m_MaxSize: 40
     m_Alignment: 4
@@ -278,9 +290,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Buy
-
-'
+  m_Text: Buy
 --- !u!1 &1952396189038256917
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,7 +302,7 @@ GameObject:
   - component: {fileID: 1952396189038256918}
   - component: {fileID: 1952396189038256912}
   - component: {fileID: 1952396189038256919}
-  - component: {fileID: 3859728770219822482}
+  - component: {fileID: 3461824627849299512}
   m_Layer: 5
   m_Name: ShopItemPrefab
   m_TagString: Untagged
@@ -360,7 +370,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3859728770219822482
+--- !u!114 &3461824627849299512
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -369,9 +379,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1952396189038256917}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b97cb76b2a5280944bfc4add8ac61de6, type: 3}
+  m_Script: {fileID: 11500000, guid: 65ba87eeb1cd3eb4b94da4bf8e4759fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hatItemButton: {fileID: 1952396187930590601}
+  hatItemButtonText: {fileID: 1952396188723943975}
+  priceText: {fileID: 1952396189419955456}
+  buttonMode: Buy
+  hatID: 
+  itemPrice: 150
 --- !u!1 &1952396189419955462
 GameObject:
   m_ObjectHideFlags: 0

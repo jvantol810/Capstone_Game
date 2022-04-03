@@ -11,9 +11,10 @@ public class CashEquipsData : MonoBehaviour
     GameObject currentBandana;
     [Header("Owned")]
     [SerializeField]
-    string[] ownedHats;
+    GameObject[] ownedHats;
     [SerializeField]
     string[] ownedBandanas;
+    public GameObject Player;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,15 +30,29 @@ public class CashEquipsData : MonoBehaviour
     {
         return currentHat.GetComponent<HatItem>().GetHatID();
     }
+    //BIG ISSUE: MUST ADD PURCHASED HATS
     public void SetHat(string hatID)
     {
+        Debug.Log("Setting Hat to: " + hatID);
         for(int i = 0; i < ownedHats.Length; i++)
         {
-            if(hatID == ownedHats[i])
+            if(hatID == ownedHats[i].GetComponent<HatItem>().GetHatID())
             { //Allow player to equip item!
-                GameObject.Destroy(currentHat);
+                if(currentHat != null)
+                {
+                    GameObject.Destroy(currentHat);
+                }
                 
+                currentHat = Instantiate(ownedHats[i], Player.transform);
             }
+        }
+    }
+
+    public void RemoveHat()
+    {
+        if (currentHat != null)
+        {
+            GameObject.Destroy(currentHat);
         }
     }
 
@@ -52,7 +67,7 @@ public class CashEquipsData : MonoBehaviour
         }
     }
 
-    public string[] GetOwnedHats()
+    public GameObject[] GetOwnedHats()
     {
         return ownedHats;
     }

@@ -9,8 +9,11 @@ public class ShopManager : MonoBehaviour
     public PHPManager phpManager;
     public Button[] TabButtons;
     public CashEquipsData CEData;
+    [SerializeField]
+    private ShopItemController CurrentEquippedHatItem;
     [Header("Prefabs")]
     public GameObject ShopItemPrefab;
+
 
 
     // Start is called before the first frame update
@@ -73,9 +76,10 @@ public class ShopManager : MonoBehaviour
         //yield return cwd.coroutine;
         //Destroy(LoadingEntry);
         //string shopitems = cwd.result.ToString();
-        string shopitems = "True\tHat #1\t150\t001\tHat #2\t250\t002\tHat #3\t50\t003\tHat #4\t100\t004";
+        string shopitems = "True\tHat #1\t150\t001\tHat #2\t250\t002";
         string playeritemspurchased = "";
-        string[] OwnedHats = CEData.GetOwnedHats();
+        //string[] OwnedHats = CEData.GetOwnedHats();
+        string[] OwnedHats = { "" };
         for (int i = 0; i < OwnedHats.Length; i++)
         {
             playeritemspurchased += OwnedHats[i] + "\t";
@@ -96,22 +100,36 @@ public class ShopManager : MonoBehaviour
                 Text[] newEntryTexts = newEntry.GetComponentsInChildren<Text>();
                 newEntryTexts[0].text = sortedEntries[i];
                 newEntryTexts[2].text = sortedEntries[i+1] + " GB";
-                if(playeritemspurchased.Contains(sortedEntries[i+2]))
+                newEntry.GetComponent<ShopItemController>().SetHatID(sortedEntries[i+2]);
+                if (playeritemspurchased.Contains(sortedEntries[i+2]))
                 {
-                    Debug.Log(CEData.GetCurrentHat() + "  " + sortedEntries[i + 2]);
+                    //Debug.Log(CEData.GetCurrentHat() + "  " + sortedEntries[i + 2]);
                     if(CEData.GetCurrentHat() == sortedEntries[i+2])
                     {
-                        newEntryTexts[1].text = "Unequip";
+                        //newEntryTexts[1].text = "Unequip";
+                        CurrentEquippedHatItem = newEntry.GetComponent<ShopItemController>();
+                        CurrentEquippedHatItem.setButtonMode("Unequip");
                     }
                     else
                     {
-                        newEntryTexts[1].text = "Equip";
+                        //newEntryTexts[1].text = "Equip";
+                        newEntry.GetComponent<ShopItemController>().setButtonMode("Equip");
                     }
-                    newEntryTexts[1].transform.parent.GetComponent<Image>().color = new Color(1f, 1f, 1f);
+                    //newEntryTexts[1].transform.parent.GetComponent<Image>().color = new Color(1f, 1f, 1f);
                 }
 
                 addedEntries++;
             }
         }
+    }
+
+    public void OverrideLastHatEquipped(ShopItemController newShopItem)
+    {
+        if(CurrentEquippedHatItem != null)
+        {
+            CurrentEquippedHatItem.setButtonMode("Equip");
+        }
+        
+        CurrentEquippedHatItem = newShopItem;
     }
 }

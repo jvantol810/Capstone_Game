@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HatItem : MonoBehaviour
 {
+    
     [SerializeField]
     private string hatID;
     [SerializeField]
@@ -15,6 +17,7 @@ public class HatItem : MonoBehaviour
     void Start()
     {
         transform.localPosition = offset;
+        
     }
 
     // Update is called once per frame
@@ -27,4 +30,6 @@ public class HatItem : MonoBehaviour
     {
         return hatID;
     }
+
+    
 }
