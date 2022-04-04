@@ -130,6 +130,7 @@ MonoBehaviour:
   pooledAmount: 20
   willGrow: 1
   pooledObjects: []
+  currentActiveObjectIndex: 0
 --- !u!1 &4590285704490552941
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,7 +383,6 @@ MonoBehaviour:
   bombForce: 3
   meleePrefab: {fileID: 5605824123106662679}
   player: {fileID: 5684243186576125843}
-  CreatureState: 0
   dashSpeed: 20
   dashLength: 3
   dashCooldown: 1
