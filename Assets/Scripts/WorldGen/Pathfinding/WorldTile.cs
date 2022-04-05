@@ -13,7 +13,6 @@ public class WorldTile
     public float hCost; //heuristic cost to reach the end node, basically an estimate to the goal
     //f cost represents the sum of gCost and hCost
     public int gridX, gridY, cellX, cellY;
-
     public WorldTile(bool walkable, int gridX, int gridY, AStarGrid parentGrid)
     {
         this.walkable = walkable;
