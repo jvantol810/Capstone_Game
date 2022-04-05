@@ -316,9 +316,9 @@ MonoBehaviour:
   roomCenters: []
   globalMonList: []
   prefabPoints: []
-  testing: 1
+  testing: 0
   floorMax: 1500
-  seeded: 1
+  seeded: 0
   seed: 8702
   monsterPrefabs:
   - {fileID: 3350636786608551685, guid: 297622065862cf14d92ba3ef460fddd6, type: 3}
