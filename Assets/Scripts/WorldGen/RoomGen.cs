@@ -18,19 +18,18 @@ public class RoomGen : MonoBehaviour
     public Tilemap map;
     public AStarGrid aStarGrid;
     public Tile[] tiles;
-    //public GameObject enemyPrefab; new spawning function should render this obsolete
     public GameObject playerPrefab;
     //List for allRooms and list of their centers for connecting them to main map
     private List<RoomPrefab> allRooms = new List<RoomPrefab>();
     public List<Vector2Int> roomCenters = new List<Vector2Int>();
-    
+
+    public List<GameObject> globalMonList = new List<GameObject>();
+        
     public List<Vector2Int> prefabPoints = new List<Vector2Int>();
     
     private int mapHeight;
     private int mapWidth;
-    // public int roomsMax;
-    // public int roomSeeds;
-    
+
     [Header("Debugging Settings")]
     [Tooltip("When enabled space bar regens level")]
     public bool testing = false;
@@ -199,16 +198,7 @@ public class RoomGen : MonoBehaviour
         DrunkenWalkGen(true);
         MultiPrefabGeneration();
         SpawnMonsters();
-        //SpawnEntity();
-        
-        //New spawning function should render this chunk obsolete
-        /*for (int i = 0; i < 3; i++)
-        {
-            Vector2 spawnPoint = aStarGrid.GetRandomWalkableTile().centerWorldPosition;
-            Instantiate(enemyPrefab, new Vector3(spawnPoint.x, spawnPoint.y, 0), Quaternion.identity);
-        }*/
-        Vector2 spawnPoint2 = aStarGrid.GetRandomWalkableTile().centerWorldPosition;
-        Instantiate(playerPrefab, new Vector3(spawnPoint2.x, spawnPoint2.y, 0), Quaternion.identity);
+        SpawnPlayer();
     }
     
     //Randomly 'Walks' to create walkable area for player
@@ -243,7 +233,10 @@ public class RoomGen : MonoBehaviour
         aStarGrid.AddTile(new WorldTile(walkable, position.x, position.y, aStarGrid));
     }
     
+    
+    
     //Overloaded to accept WorldTiles as parameter 
+    [Obsolete("This function deletes and reassigns some aStarGrid tile neighbors when used. Use with caution")]//True as of 4/4/22
     public void AddTileToMap(WorldTile worldTile, Tile tileObject)
     {
         //Set the tile onto the world's tilemap
@@ -328,7 +321,7 @@ public class RoomGen : MonoBehaviour
         }
     }
 
-    //I don't like doing it this way
+    //Connects Rooms 
     private void ConnectPrefab(List<Vector2Int> prefabPlacePoints)
     {
         Vector2 prevTile;
@@ -405,6 +398,25 @@ public class RoomGen : MonoBehaviour
         
     }//Works multi
 
+    //Connects prefabs using astar pathfinding WIP
+    private void ConnectPrefabAstar(List<Vector2Int> prefabPlacePoints)
+    {
+        //Problem lies in the player not being able to move diagonally would need additional code to make these paths walkable for players
+        foreach (var center in roomCenters)
+        {
+            WorldTile closestTile = aStarGrid.GetNearestWalkableTile(center, prefabPlacePoints);
+            //Debug.Log(closestTile.gridPosition);
+            WorldTile[] closestPath = aStarGrid.FindPath(closestTile.gridPosition, center, false);
+            Debug.Log(closestPath.Length);
+            foreach (var tile in closestPath)
+            {
+                AddTileToMap(true, tile.gridPosition, tiles[1]);
+                Debug.Log("placed tile");
+            }  
+        }
+        
+    }
+
     //Functions for multiprefab generation below
     private void MultiPrefabGeneration()
     {
@@ -415,6 +427,7 @@ public class RoomGen : MonoBehaviour
             prefabPlacePoints = MultiFindPrefabSpace(room);
             MultiPlacePrefab(room, prefabPlacePoints);
             ConnectPrefab(prefabPlacePoints);
+            //ConnectPrefabAstar(prefabPlacePoints); needs additional code to be useable
         }
     }
 
@@ -425,7 +438,7 @@ public class RoomGen : MonoBehaviour
         int pWidth = room.prefabTiles[0].Count;
         int pHeight = room.prefabTiles.Count;
 
-        List<Vector2Int> unwalkableLocations = aStarGrid.GetUnwalkableTileLocations(new Vector2((float)pWidth, (float)pHeight));
+        List<Vector2Int> unwalkableLocations = aStarGrid.GetUnwalkableTileLocations(new Vector2(pWidth, pHeight));
         
         //Get random point
         int randIndex = Random.Range(0, unwalkableLocations.Count - 1);
@@ -486,7 +499,6 @@ public class RoomGen : MonoBehaviour
                     //Debug.Log("J:" + j + "I"+ i);
                     //aStarGrid.PlaceMarker(new Vector2Int(j, i), Color.red);
                     multiPrefabPoints.Add(new Vector2Int(j, i));
-                    //Debug.Log("HIT2");
                 }
                 else
                 {
@@ -517,11 +529,11 @@ public class RoomGen : MonoBehaviour
                 //If walkable set the map to floor if not walls and add to map and astar grid
                 if (room.prefabTiles[j][i].walkable)
                 {
-                    AddTileToMap(true, room.prefabTiles[j][i].gridPosition, tiles[1]);
+                    AddTileToMap(true, room.prefabTiles[j][i].gridPosition, tiles[RandomIndex(tiles.Length,1)]);
                 }
                 else
                 {
-                    AddTileToMap(room.prefabTiles[j][i], tiles[0]);
+                    AddTileToMap(false, room.prefabTiles[j][i].gridPosition, tiles[0]);
                 }
             }
         }
@@ -531,69 +543,36 @@ public class RoomGen : MonoBehaviour
     {
         List<Vector2Int> walkableLocations = aStarGrid.GetWalkableTileLocations();
 
-        for (int i = 0; i < LevelSettings.MapData.MobPerSpawn * 3; i++)
+        for (int i = 0; i < LevelSettings.MapData.totalMons; i++)
         {
             var spawn = walkableLocations[RandomIndex(walkableLocations.Count)];
             var tilespawn = aStarGrid.GetTileAt(spawn);
-            Instantiate(monsterPrefabs[RandomIndex(monsterPrefabs.Length)], new Vector3(tilespawn.centerWorldPosition.x, tilespawn.centerWorldPosition.y, 0), Quaternion.identity);
+            GameObject newMon = Instantiate(monsterPrefabs[RandomIndex(monsterPrefabs.Length)], new Vector3(tilespawn.centerWorldPosition.x, tilespawn.centerWorldPosition.y, 0), Quaternion.identity);
+            globalMonList.Add(newMon);
             //aStarGrid.PlaceMarker(spawn * 2, Color.yellow);
         }
     }
-    //This should be in it's own file, but I'm not sure how to port over the grids
-    private void SpawnEntity()
+
+    //Tries to spawn player furthest from monsters as possible
+    private void SpawnPlayer()
     {
-        List<Vector2Int> walkableLocations = aStarGrid.GetWalkableTileLocations();
-        List<Vector2Int> spawnLocations = new List<Vector2Int>();
-
-        float xMin = 3;
-        float xMax = 13;
-        float yMin = 3;
-        float yMax = 13;
-
-        //Get random points for spawning
-        for (int i = 0; i < LevelSettings.MapData.mapSpawnPoints; i++)
+        var walkTiles = aStarGrid.GetWalkableTileLocations();
+        float max = 0;
+        Vector2Int furthSpawn = Vector2Int.zero;
+        foreach (var tile in walkTiles)
         {
-            int spawnIndex = Random.Range(0, walkableLocations.Count - 1);
-            spawnLocations.Add(walkableLocations[spawnIndex]);
-            //aStarGrid.PlaceMarker(walkableLocations[spawnIndex], Color.yellow);
-        }
-
-        foreach (var spawnCoord in spawnLocations)
-        {
-            for (int i = 0; i < LevelSettings.MapData.MobPerSpawn; i++)
+            foreach (var mon in globalMonList)
             {
-                float xOffset = Random.Range(xMin, xMax);
-                float yOffset = Random.Range(yMin, yMax);
-
-                //Vector2 spawn = new Vector2(spawnCoord.x + xOffset, spawnCoord.y+yOffset);
-                Vector2 spawn = new Vector2(spawnCoord.x, spawnCoord.y);
-                Debug.Log("SPAWNLOCATION:" + spawn);
-
-                if (spawn.x > LevelSettings.MapData.width)
-                    spawn.x = LevelSettings.MapData.width - 2;
-                if (spawn.y > LevelSettings.MapData.height)
-                    spawn.y = LevelSettings.MapData.height - 2;
-                if (spawn.x < 0)
-                    spawn.x = 3;
-                if (spawn.y < 0)
-                    spawn.y = 3;
-                
-                //Debug.Log("X:" +spawn.x + "Y:" + spawn.y);
-                if (aStarGrid.GetTileAt(Vector2Int.RoundToInt(spawn)).walkable)
+                float distance = Vector2.Distance(mon.transform.position, tile);
+                if (distance > max)
                 {
-                    //aStarGrid.PlaceMarker(spawn, Color.green);
-                    Instantiate(monsterPrefabs[RandomIndex(monsterPrefabs.Length)], new Vector3(spawn.x, spawn.y, 0), Quaternion.identity);
-                }
-                else
-                {
-                    //aStarGrid.PlaceMarker(aStarGrid.GetNearestWalkableTile(spawn).centerWorldPosition, Color.green);
-                    spawn = aStarGrid.GetNearestWalkableTile(spawn).worldPosition;
-                    var tileSpawn = aStarGrid.GetNearestWalkableTile(spawn);
-                    Instantiate(monsterPrefabs[RandomIndex(monsterPrefabs.Length)], new Vector3(tileSpawn.centerWorldPosition.x, tileSpawn.centerWorldPosition.y, 0), Quaternion.identity);
+                    max = distance;
+                    furthSpawn = tile;
                 }
             }
-            
         }
+        
+        Instantiate(playerPrefab, new Vector3(furthSpawn.x+.5f, furthSpawn.y+.5f, 0), Quaternion.identity);
     }
 
     private int RandomIndex(int maxIndex, int minIndex=0)
@@ -724,6 +703,63 @@ public class RoomGen : MonoBehaviour
         }
         
         return true;
+    }
+    
+    [Obsolete("This function is inconsistent and can cause errors. Please use SpawnMonsters instead", true)]
+    private void SpawnEntity()
+    {
+        List<Vector2Int> walkableLocations = aStarGrid.GetWalkableTileLocations();
+        List<Vector2Int> spawnLocations = new List<Vector2Int>();
+
+        float xMin = 3;
+        float xMax = 13;
+        float yMin = 3;
+        float yMax = 13;
+
+        //Get random points for spawning
+        for (int i = 0; i < 3; i++)
+        {
+            int spawnIndex = Random.Range(0, walkableLocations.Count - 1);
+            spawnLocations.Add(walkableLocations[spawnIndex]);
+            //aStarGrid.PlaceMarker(walkableLocations[spawnIndex], Color.yellow);
+        }
+
+        foreach (var spawnCoord in spawnLocations)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                float xOffset = Random.Range(xMin, xMax);
+                float yOffset = Random.Range(yMin, yMax);
+
+                //Vector2 spawn = new Vector2(spawnCoord.x + xOffset, spawnCoord.y+yOffset);
+                Vector2 spawn = new Vector2(spawnCoord.x, spawnCoord.y);
+                Debug.Log("SPAWNLOCATION:" + spawn);
+
+                if (spawn.x > LevelSettings.MapData.width)
+                    spawn.x = LevelSettings.MapData.width - 2;
+                if (spawn.y > LevelSettings.MapData.height)
+                    spawn.y = LevelSettings.MapData.height - 2;
+                if (spawn.x < 0)
+                    spawn.x = 3;
+                if (spawn.y < 0)
+                    spawn.y = 3;
+                
+                //Debug.Log("X:" +spawn.x + "Y:" + spawn.y);
+                if (aStarGrid.GetTileAt(Vector2Int.RoundToInt(spawn)).walkable)
+                {
+                    //aStarGrid.PlaceMarker(spawn, Color.green);
+                    Instantiate(monsterPrefabs[RandomIndex(monsterPrefabs.Length)], new Vector3(spawn.x, spawn.y, 0), Quaternion.identity);
+                }
+                else
+                {
+                    //aStarGrid.PlaceMarker(aStarGrid.GetNearestWalkableTile(spawn).centerWorldPosition, Color.green);
+                    spawn = aStarGrid.GetNearestWalkableTile(spawn).worldPosition;
+                    var tileSpawn = aStarGrid.GetNearestWalkableTile(spawn);
+                    Instantiate(monsterPrefabs[RandomIndex(monsterPrefabs.Length)], new Vector3(tileSpawn.centerWorldPosition.x, tileSpawn.centerWorldPosition.y, 0), Quaternion.identity);
+                }
+            }
+            
+        }
     }
 
 }

@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e2855985-2c7a-414b-8d5a-eab741c63575" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Capstone_Game/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/LevelSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/LevelSettings.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,8 +33,8 @@
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/FileParse.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/SpawnEntity.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/Pathfinding/AStarGrid.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/LevelSettings.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Enemies/StateBehaviors/CreatureWander.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/LevelSettings.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/WorldGen/RoomGen.cs" />
     </changedPaths>
   </component>
@@ -102,6 +103,7 @@
       <workItem from="1647852606267" duration="7814000" />
       <workItem from="1648191759235" duration="15198000" />
       <workItem from="1648408328382" duration="2720000" />
+      <workItem from="1649112814608" duration="3482000" />
     </task>
     <servers />
   </component>

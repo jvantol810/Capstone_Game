@@ -10,8 +10,7 @@ public static class LevelSettings
         public static int height = 50;
         public static int width = 50;
         public static AStarGrid activeAStarGrid;
-        public static int mapSpawnPoints = 1; //Originally 3
-        public static int MobPerSpawn = 3; // Originally 3
+        public static int totalMons = 9;
         public static void SetSize(int height, int width)
         {
             MapData.height = height;
