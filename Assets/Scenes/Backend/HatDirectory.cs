@@ -18,11 +18,15 @@ public class HatDirectory : MonoBehaviour
         
     }
 
-    public void FindHatByID(string hatID)
+    public GameObject FindHatByID(string hatID)
     {
         for(int i = 0; i < AvailableHats.Length; i++)
         {
-
+            if(AvailableHats[i].GetComponent<HatItem>().GetHatID() == hatID)
+            {
+                return AvailableHats[i];
+            }
         }
+        return new GameObject("None.");
     }
 }

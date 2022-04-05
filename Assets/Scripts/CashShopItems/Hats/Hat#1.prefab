@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6513093844322405052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.088, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -45,9 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hatID: 001
-  offset: {x: 0.088, y: 0.4, z: 0}
-  forwardSprite: {fileID: 0}
-  backwardSprite: {fileID: 0}
+  offsetD: {x: 0.04, y: 0.64, z: 0}
+  offsetU: {x: 0.04, y: 0.64, z: 0}
+  offsetL: {x: -0.07, y: 0.64, z: 0}
+  offsetR: {x: 0.085, y: 0.64, z: 0}
+  forwardSprite: {fileID: 21300000, guid: 95ab8c7a629f0044da7bd2cd38e97c81, type: 3}
+  backwardSprite: {fileID: 21300000, guid: 4852ba27df15cf44c82f3bda3a0f1b98, type: 3}
 --- !u!212 &6513093844322405054
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -88,8 +91,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: 46d5b7ee1aaae3c4d9fd3a54774428d5, type: 3}
-  m_Color: {r: 0, g: 0.82662964, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 95ab8c7a629f0044da7bd2cd38e97c81, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

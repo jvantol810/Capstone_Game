@@ -11,7 +11,8 @@ public class CashEquipsData : MonoBehaviour
     GameObject currentBandana;
     [Header("Owned")]
     [SerializeField]
-    GameObject[] ownedHats;
+    //GameObject[] ownedHats;
+    List<GameObject> ownedHats;
     [SerializeField]
     string[] ownedBandanas;
     public GameObject Player;
@@ -34,7 +35,7 @@ public class CashEquipsData : MonoBehaviour
     public void SetHat(string hatID)
     {
         Debug.Log("Setting Hat to: " + hatID);
-        for(int i = 0; i < ownedHats.Length; i++)
+        for(int i = 0; i < ownedHats.Count; i++)
         {
             if(hatID == ownedHats[i].GetComponent<HatItem>().GetHatID())
             { //Allow player to equip item!
@@ -67,9 +68,14 @@ public class CashEquipsData : MonoBehaviour
         }
     }
 
-    public GameObject[] GetOwnedHats()
+    public List<GameObject> GetOwnedHats()
     {
         return ownedHats;
+    }
+
+    public void AddOwnedHat(GameObject newHat)
+    {
+        ownedHats.Add(newHat);
     }
 
     public string[] GetOwnedBandanas()

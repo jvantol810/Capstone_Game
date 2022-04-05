@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class CurrencyData : MonoBehaviour
 {
     public TitleScreenManager TSM;
+    public HatDirectory hatDir;
     [SerializeField]
     private int currentGhostBucks = 0;
     // Start is called before the first frame update
@@ -83,7 +84,17 @@ public class CurrencyData : MonoBehaviour
             //Update owneditems
             if(itemPurchased == "Hat")
             {
-
+                GameObject purchasedHat = hatDir.FindHatByID(itemID);
+                if(purchasedHat.name == "None.")
+                {
+                    Debug.Log("Failed to add hat to owned hats!");
+                    return false;
+                }
+                else
+                {
+                    GetComponent<CashEquipsData>().AddOwnedHat(purchasedHat);
+                }
+                
             }
 
 
