@@ -17,26 +17,27 @@ public class CreatureWander : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //Teleport the creature to a walkable tile
-        if (animator.GetComponent<CreatureStats>() == null) { return; }
-
+        //if (animator.GetComponent<CreatureStats>() == null) { return; }
+        //if(LevelSettings.MapData.activeAStarGrid.initialized == false) { return; }
         creature = animator.GetComponent<CreatureStats>();
         m_rb = animator.GetComponent<Rigidbody2D>();
         currentDestination = GenerateNewDestination();
-        AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
-        currentPath = grid.FindPath(animator.transform.position, currentDestination);
+        //AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
+        currentPath = LevelSettings.MapData.activeAStarGrid.FindPath(animator.transform.position, currentDestination);
     }
 
     //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //Check if the creatureController has been destroyed. If it has, destroy yourself.
-        if(creature == null)
+        if (creature == null)
         {
             Destroy(animator);
         }
         ////Calculate the path to the destination
         //Debug.Log("Reached destination: " + hasReached(currentDestination));
-        Debug.Log(currentDestination);
+        //Debug.Log(currentDestination);
+        //if(currentDestination == null) { return; }
         //While you haven't reached the current destination, continue moving towards it along the path
         if (!hasReached(currentDestination) && nextTileIndex < currentPath.Length)
         {
@@ -75,11 +76,19 @@ public class CreatureWander : StateMachineBehaviour
     
     public Vector2 GenerateNewDestination()
     {
-        AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
-        Vector2Int tilePosition = grid.ConvertWorldPositionToTilePosition(creature.transform.position);
+        //AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
+        if(LevelSettings.MapData.activeAStarGrid != null)
+        {
+            Debug.Log("Grid is not null!");
+        }
+        else
+        {
+            Debug.Log("Grid is null!");
+        }
+        Vector2Int tilePosition = LevelSettings.MapData.activeAStarGrid.ConvertWorldPositionToTilePosition(creature.transform.position);
         //Debug.Log("Starting tile position: " + tilePosition);
         //Get a random nearby walkable tile in the aStarGrid
-        WorldTile newDestination = grid.GetWalkableTileWithinRange(tilePosition, 10f, 20f);
+        WorldTile newDestination = LevelSettings.MapData.activeAStarGrid.GetWalkableTileWithinRange(tilePosition, 10f, 20f);
 
         //Place a yellow marker on your current destination
         //grid.PlaceMarker(newDestination.gridPosition, Color.yellow);

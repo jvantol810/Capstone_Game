@@ -26,11 +26,11 @@ public class PowerUp : MonoBehaviour
 
         player.AddStatusEffect(powerupEffect);
         //if else statements check which kind of powerup the player has collided with by the tag
-        //if(this.CompareTag("speed"))
+        //if (this.CompareTag("speed"))
         //{
 
         //}
-        //else if(this.CompareTag("health"))
+        //else if (this.CompareTag("health"))
         //{
         //    stats.currentHealth += healthBoost;
         //}

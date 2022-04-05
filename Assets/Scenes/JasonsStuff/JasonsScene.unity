@@ -283,6 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba2055e3af241744fadfc0994778ee0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
   map: {fileID: 2018857603}
   tileRow: []
   enemiesOnGrid: []
@@ -311,15 +312,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b33c06c5ed7f48a43a7590eead9e9ff8, type: 2}
   - {fileID: 11400000, guid: 3dfc287ff5ee9764fa1316c86acb53bc, type: 2}
   - {fileID: 11400000, guid: ce82193a626e6f949b95aaffbf57c174, type: 2}
-  playerPrefab: {fileID: 5684243186576125843, guid: 5a70a9b837cdba14181275b9628fe453, type: 3}
+  playerPrefab: {fileID: 5684243186576125843, guid: 1d0e40e533a3af543bb354c7ac64ddf0, type: 3}
   roomCenters: []
+  globalMonList: []
   prefabPoints: []
   testing: 1
   floorMax: 1500
   seeded: 1
   seed: 8702
   monsterPrefabs:
-  - {fileID: 3350636786608551685, guid: 297622065862cf14d92ba3ef460fddd6, type: 3}
+  - {fileID: 8821750546496874717, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
 --- !u!4 &974129684
 Transform:
   m_ObjectHideFlags: 0

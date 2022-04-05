@@ -9,9 +9,9 @@ public class Bomb : MonoBehaviour
     Rigidbody2D rigidbody2d;
     public float fieldOfImpact;
     public float explosionForce;
-
     public LayerMask layerToHit;
-    public GameObject explosion;
+    public GameObject bombParticleSystem;
+
     void Awake()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -27,8 +27,7 @@ public class Bomb : MonoBehaviour
         //wait to continue with function
         yield return new WaitForSeconds(duration);
 
-        //Enable the explosion gameobject
-        explosion.SetActive(true);
+        //Set the explosion bool to be true
 
         //Construct a list of objects overlapping the explosion.
         Collider2D[] objects = Physics2D.OverlapCircleAll(transform.position, fieldOfImpact, layerToHit);
@@ -52,11 +51,15 @@ public class Bomb : MonoBehaviour
         }
 
         //make the bomb sprite disappear
-        GetComponent<SpriteRenderer>().enabled = false;
-        GetComponent<Collider2D>().enabled = false;
+        //GetComponent<SpriteRenderer>().enabled = false;
+        //GetComponent<Collider2D>().enabled = false;
+
+        //Enable the explosion
+        bombParticleSystem.SetActive(true);
 
         //Disable the bomb
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+
     }
 
     private void OnDrawGizmosSelected()

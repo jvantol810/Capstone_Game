@@ -7,9 +7,10 @@ using UnityEngine.Events;
 using System.Collections.ObjectModel;
 public class AStarGrid : MonoBehaviour
 {
+    public bool initialized = false;
     //public Tilemap walkableMap;
     public Tilemap map;
-    
+    //private Vector2 tileSize;
     [SerializeField]
     public WorldTileRow[] tileRow;
     //Contains the locations for all tiles occupied by entities
@@ -36,7 +37,8 @@ public class AStarGrid : MonoBehaviour
             tileRow[i].tileColumn = new WorldTile[LevelSettings.MapData.height];
         }
         //Subscribe to the OnEnemyMove event with the setTileToUnwalkable function (so each time the enemy moves into a new location, its tile is set as unwalkable)
-        GameEvents.OnEnemyMove.AddListener(UpdateOccupiedTile);
+        //GameEvents.OnEnemyMove.AddListener(UpdateOccupiedTile);
+        initialized = true;
     }
 
     public void FindEnemiesOnGrid()
@@ -47,6 +49,7 @@ public class AStarGrid : MonoBehaviour
             enemiesOnGrid.Add(enemyObj.transform);
         }
     }
+
     public void UpdateOccupiedTile(Vector2Int tilePosition)
     {
         if(enemiesOnGrid.Count == 0) { FindEnemiesOnGrid(); }
@@ -154,7 +157,8 @@ public class AStarGrid : MonoBehaviour
         //Convert from the world position to the tile position
         //Vector3Int cellPosition = map.WorldToCell((Vector3)worldPosition);
         //Subtract 0.5 from each coordinate because of offset
-        Vector2Int cellPosition = new Vector2Int(Mathf.RoundToInt(worldPosition.x - 0.5f), Mathf.RoundToInt(worldPosition.y - 0.5f));
+
+        Vector2Int cellPosition = new Vector2Int(Mathf.RoundToInt(worldPosition.x - 0.5f/*(map.cellSize.x*0.5f)*/), Mathf.RoundToInt(worldPosition.y - 0.5f/*(map.cellSize.y * 0.5f)*/));
         //Place a red marker on the position
         //PlaceMarker((Vector2Int)cellPosition, Color.red);
 

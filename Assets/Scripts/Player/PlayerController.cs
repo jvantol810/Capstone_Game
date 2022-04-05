@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     private float dashCounter;
     private float dashCoolCounter;
     public bool isDashing;
+
     private Vector2 direction;
 
     [SerializeField]
@@ -94,7 +95,7 @@ public class PlayerController : MonoBehaviour
 
         AddPower(Powers.Dash);
         //AddPower(Powers.ShootWeb);
-        //AddPower(Powers.Explode);
+        AddPower(Powers.Explode);
     }
 
     public string GetPowersText()

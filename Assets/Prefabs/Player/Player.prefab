@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 5504799620948407033}
   - component: {fileID: 1347803477486358032}
   m_Layer: 8
-  m_Name: ObjectPool
+  m_Name: BombPool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27023605a20385d43b8c72b6065727e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pooledObject: {fileID: 6457130007538514051, guid: 6e88045a9e3b00c45b5bb76e63fe8f75, type: 3}
+  pooledObject: {fileID: 6457130007538514051, guid: 0c241ccf0cd132e4ebad8b2bc080cb1d, type: 3}
   pooledAmount: 20
   willGrow: 1
   pooledObjects: []

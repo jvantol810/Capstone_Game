@@ -39,7 +39,9 @@ public class WorldTile
             }
             
         }
+        //Debug.Log("Neighbor Tile Has ")
         this.neighborLocations = tempNeighborLocations.ToArray();
+
     }
 
 
