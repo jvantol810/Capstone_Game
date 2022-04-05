@@ -10,11 +10,18 @@ public class Bomb : MonoBehaviour
     public float fieldOfImpact;
     public float explosionForce;
     public LayerMask layerToHit;
-    public GameObject bombParticleSystem;
-
+    public ParticleSystem bombParticleSystem;
+    private SpriteRenderer m_renderer;
     void Awake()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
+        m_renderer = GetComponent<SpriteRenderer>();
+        //m_renderer.enabled = true;
+    }
+
+    private void Start()
+    {
+        m_renderer.enabled = true;
     }
 
     public void Detonate()
@@ -55,16 +62,17 @@ public class Bomb : MonoBehaviour
         //GetComponent<Collider2D>().enabled = false;
 
         //Enable the explosion
-        bombParticleSystem.SetActive(true);
+        bombParticleSystem.Play();
 
         //Disable the bomb
-        //gameObject.SetActive(false);
-
+        yield return new WaitForSeconds(bombParticleSystem.main.duration);
+        m_renderer.enabled = false;
+        gameObject.SetActive(false);
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position, fieldOfImpact);
+        Gizmos.DrawWireSphere(transform.position, fieldOfImpact);
     }
 }

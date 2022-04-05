@@ -17,17 +17,17 @@ public class MinotaurController : MonoBehaviour
     public Transform firePoint;
     [Header("Melee Attacks")]
     public GameObject meleePrefab;
-    [Header("Charge Attacks")]
-    public float chargeSpeed;
-    public float chargeDamage;
-    public float chargeKnockbackForce;
+    [Header("Dashing")]
+    public float dashSpeed;
+    public float dashLength, dashCooldown;
+    private float dashCounter;
+    private float dashCoolCounter;
+    public bool isDashing;
+    Vector2 dashDirection;
     [HideInInspector]
     public Vector2 knockbackForce = Vector2.zero;
     [HideInInspector]
     public bool isBeingKnockedBack = false;
-
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -60,6 +60,22 @@ public class MinotaurController : MonoBehaviour
         if (isBeingKnockedBack)
         {
             m_rigidbody.MovePosition(transform.position + (Vector3)knockbackForce);
+        }
+
+        if (dashCounter > 0)
+        {
+            Move(dashDirection, dashSpeed);
+            dashCounter -= Time.deltaTime;
+            if (dashCounter <= 0)
+            {
+                dashCoolCounter = dashCooldown;
+                isDashing = false;
+            }
+        }
+
+        if (dashCoolCounter > 0)
+        {
+            dashCoolCounter -= Time.deltaTime;
         }
     }
 
@@ -146,6 +162,23 @@ public class MinotaurController : MonoBehaviour
         meleePrefab.transform.position = transform.position + firePoint.right * 0.4f;
     }
 
+    public void StartDash()
+    {
+        if (dashCoolCounter <= 0 && dashCounter <= 0)
+        {
+            dashDirection = firePoint.right;
+            dashCounter = dashLength;
+            isDashing = true;
+        }
+    }
+
+    public void StopDash()
+    {
+        dashCounter = 0;
+        dashCoolCounter = dashCooldown;
+        isDashing = false;
+    }
+
     public bool isPlayerInMeleeAttackRange()
     {
         //Create an array of colliders of all gameObjects in this enemies detection range
@@ -175,5 +208,10 @@ public class MinotaurController : MonoBehaviour
         aimDirection = (player.position - transform.position).normalized;
         aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
         firePoint.rotation = Quaternion.Euler(0, 0, aimAngle);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        m_animator.GetBehaviour<MinotaurChase>().StopDash();
     }
 }

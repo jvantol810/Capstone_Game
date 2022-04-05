@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pooledObject: {fileID: 6457130007538514051, guid: 0c241ccf0cd132e4ebad8b2bc080cb1d, type: 3}
   pooledAmount: 20
-  willGrow: 1
+  willGrow: 0
   pooledObjects: []
   currentActiveObjectIndex: 0
 --- !u!1 &4590285704490552941
@@ -379,8 +379,7 @@ MonoBehaviour:
   launchForce: 750
   webPrefab: {fileID: 9005828045066945513, guid: 973ddae8fc36b774fad2fc5d221fd3e1, type: 3}
   webForce: 5
-  bombPrefab: {fileID: 6457130007538514051, guid: 6e88045a9e3b00c45b5bb76e63fe8f75, type: 3}
-  bombForce: 3
+  bombPool: {fileID: 1347803477486358032}
   meleePrefab: {fileID: 5605824123106662679}
   player: {fileID: 5684243186576125843}
   dashSpeed: 20
@@ -389,7 +388,6 @@ MonoBehaviour:
   isDashing: 0
   powersDisplay: {fileID: 9208038344933527248}
   firePoint: {fileID: 8777197021643624684}
-  bombPool: {fileID: 1347803477486358032}
   isBeingKnockedBack: 0
   knockbackForce: {x: 0, y: 0}
 --- !u!50 &5684243186576125847

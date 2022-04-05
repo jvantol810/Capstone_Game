@@ -89,9 +89,7 @@ MonoBehaviour:
   minotaurStats: {fileID: 0}
   player: {fileID: 0}
   meleeAttackRange: 1
-  chargeAttackCooldown: 1
-  chargeAttackTimer: 0
-  onCooldown: 0
+  isDashing: 0
   tempPlayerPosition: {x: 0, y: 0}
   currentPath: []
 --- !u!1107 &-128049979670886534
@@ -133,13 +131,13 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isChasing
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer

@@ -48,7 +48,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -4899,7 +4899,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -5062,9 +5062,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 3
   explosionDamage: 2
-  fieldOfImpact: 100
-  explosionForce: 20
+  fieldOfImpact: 2
+  explosionForce: 6
   layerToHit:
     serializedVersion: 2
     m_Bits: 1536
-  bombParticleSystem: {fileID: 5240001597311868681}
+  bombParticleSystem: {fileID: 6797144288486216208}

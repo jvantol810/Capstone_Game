@@ -31,8 +31,9 @@ public class PlayerController : MonoBehaviour
     public GameObject webPrefab;
     public float webForce;
 
-    public GameObject bombPrefab;
-    public float bombForce;
+    public ObjectPool bombPool;
+    //public GameObject bombPrefab;
+    //public float bombForce;
 
     public GameObject meleePrefab;
 
@@ -53,7 +54,7 @@ public class PlayerController : MonoBehaviour
     private int maxNumberOfPowers = 2;
     public string powersText { get { return GetPowersText(); } }
     public Transform firePoint;
-    public ObjectPool bombPool;
+    //public ObjectPool bombPool;
 
     //Knockback settings
     //[HideInInspector]
