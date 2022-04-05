@@ -14,7 +14,7 @@ AnimatorState:
   - {fileID: -3174971581719541512}
   - {fileID: 4861006455793961087}
   m_StateMachineBehaviours:
-  - {fileID: -3992071703637365327}
+  - {fileID: -8911085292318969982}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -29,6 +29,27 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &-8911085292318969982
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80b160fb0752986488845d99f1f833bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bombDude: {fileID: 0}
+  bombDudeStats: {fileID: 0}
+  player: {fileID: 0}
+  meleeAttackRange: 1
+  webAttackCooldown: 1
+  webAttackTimer: 0
+  onCooldown: 0
+  tempPlayerPosition: {x: 0, y: 0}
+  currentPath: []
 --- !u!1101 &-8607949647373603323
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -111,23 +132,6 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!114 &-3992071703637365327
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca6de6c26babb5a42af25536cc3d0310, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  creatureController: {fileID: 0}
-  player: {fileID: 0}
-  meleeAttackRange: 1
-  tempPlayerPosition: {x: 0, y: 0}
-  currentPath: []
 --- !u!1102 &-3415125779370906663
 AnimatorState:
   serializedVersion: 6
@@ -141,8 +145,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: -8559106060261873303}
   - {fileID: 2869924995708537447}
-  m_StateMachineBehaviours:
-  - {fileID: 3796622049501761107}
+  m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -408,6 +411,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimumChargeDistance: 0
   attack: 0
+  minotaurController: {fileID: 0}
+  playerPos: {x: 0, y: 0, z: 0}
 --- !u!1101 &4861006455793961087
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

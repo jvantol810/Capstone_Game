@@ -47,7 +47,7 @@ public class MeleeAttack : MonoBehaviour
         for (int i = 0; i < hits.Length; i++)
         {
             GameObject obj = hits[i].gameObject;
-            hitDirection = (hits[i].transform.position - transform.position).normalized;
+            hitDirection = (hits[i].transform.position - transform.parent.position).normalized;
             meleeKnockback.vectorValue = hitDirection * (knockbackForce / 10);
             //If the hit has a player controller, hit them.
             if (obj.GetComponent<PlayerController>() != null)
