@@ -309,9 +309,10 @@ MonoBehaviour:
   map: {fileID: 2018857603}
   aStarGrid: {fileID: 974129682}
   tiles:
-  - {fileID: 11400000, guid: b33c06c5ed7f48a43a7590eead9e9ff8, type: 2}
-  - {fileID: 11400000, guid: 3dfc287ff5ee9764fa1316c86acb53bc, type: 2}
   - {fileID: 11400000, guid: ce82193a626e6f949b95aaffbf57c174, type: 2}
+  - {fileID: 11400000, guid: 3dfc287ff5ee9764fa1316c86acb53bc, type: 2}
+  - {fileID: 11400000, guid: ea06628fc1ba41145853cea2353b7e7d, type: 2}
+  - {fileID: 11400000, guid: add294d4f375b63438ffe07a0c7b69a4, type: 2}
   playerPrefab: {fileID: 5684243186576125843, guid: 1d0e40e533a3af543bb354c7ac64ddf0, type: 3}
   roomCenters: []
   globalMonList: []
