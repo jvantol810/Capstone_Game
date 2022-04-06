@@ -17,6 +17,12 @@ public class CreatureStats : MonoBehaviour
         currentSpeed = baseSpeed;
     }
 
+    //public void Hit(float damage)
+    //{
+
+    //    ChangeHealth(-damage);
+    //}
+
     public void ChangeHealth(float amount)
     {
         health += amount;

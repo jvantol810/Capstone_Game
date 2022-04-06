@@ -95,7 +95,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7304071872370713332
 Transform:
   m_ObjectHideFlags: 0
@@ -367,7 +367,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f3869f6241a95408f1c4643ff19c2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   currentSpeed: 0
   damage: 3
   firePoint: {fileID: 7448757010409400608}
@@ -376,8 +375,6 @@ MonoBehaviour:
   webShootSpeed: 5
   webRadius: 0.5
   webSpeedReduction: 50
-  knockbackForce: {x: 0, y: 0}
-  isBeingKnockedBack: 0
 --- !u!114 &6645070416482636097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,6 +405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37f04e3d41155f144839f6e3ae6b4f72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 2296222164914975295}
 --- !u!1001 &1159220773
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ public class SpiderController : MonoBehaviour
     [Header("References")]
     private Rigidbody2D m_rigidbody;
     private Animator m_animator;
-    public Transform player;
+    private Transform player;
     //[Header("Attributes")]
     //public float health;
     //public float baseSpeed;
@@ -28,10 +28,6 @@ public class SpiderController : MonoBehaviour
     public float webShootSpeed;
     public float webRadius;
     public float webSpeedReduction;
-    [HideInInspector]
-    public Vector2 knockbackForce = Vector2.zero;
-    [HideInInspector]
-    public bool isBeingKnockedBack = false;
 
 
 
@@ -62,12 +58,6 @@ public class SpiderController : MonoBehaviour
 
         //Update the aim of the firepoint to target the player
         UpdateAim();
-
-        //Check if knockback is being applied. If it is, move in direction of knockback.
-        if (isBeingKnockedBack)
-        {
-            m_rigidbody.MovePosition(transform.position + (Vector3)knockbackForce);
-        }
     }
 
     private void FixedUpdate()

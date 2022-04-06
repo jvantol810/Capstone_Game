@@ -22,13 +22,6 @@ public class BombController : MonoBehaviour
     public float bombShootSpeed;
     public float bombExplosionSize;
     public float bombDamage;
-    [HideInInspector]
-    public Vector2 knockbackForce = Vector2.zero;
-    [HideInInspector]
-    public bool isBeingKnockedBack = false;
-
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -57,11 +50,6 @@ public class BombController : MonoBehaviour
         //Update the aim of the firepoint to target the player
         UpdateAim();
 
-        //Check if knockback is being applied. If it is, move in direction of knockback.
-        if (isBeingKnockedBack)
-        {
-            m_rigidbody.MovePosition(transform.position + (Vector3)knockbackForce);
-        }
     }
 
     private void FixedUpdate()

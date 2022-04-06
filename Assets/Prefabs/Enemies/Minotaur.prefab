@@ -200,6 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37f04e3d41155f144839f6e3ae6b4f72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 1749924217359425396}
 --- !u!114 &206149462290058053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,15 +231,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0749c3a59d6619549b2349a129892724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   firePoint: {fileID: 2582587053687302335}
   meleePrefab: {fileID: 1156711393799963212}
   dashSpeed: 10
   dashLength: 2
   dashCooldown: 3
   isDashing: 0
-  knockbackForce: {x: 0, y: 0}
-  isBeingKnockedBack: 0
 --- !u!58 &2234895193805004624
 CircleCollider2D:
   m_ObjectHideFlags: 0

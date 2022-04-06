@@ -8,7 +8,7 @@ public class MinotaurController : MonoBehaviour
     [Header("References")]
     private Rigidbody2D m_rigidbody;
     private Animator m_animator;
-    public Transform player;
+    private Transform player;
     //[Header("Attributes")]
     //public float health;
     //public float baseSpeed;
@@ -24,10 +24,6 @@ public class MinotaurController : MonoBehaviour
     private float dashCoolCounter;
     public bool isDashing;
     Vector2 dashDirection;
-    [HideInInspector]
-    public Vector2 knockbackForce = Vector2.zero;
-    [HideInInspector]
-    public bool isBeingKnockedBack = false;
 
     // Start is called before the first frame update
     void Start()
@@ -55,12 +51,6 @@ public class MinotaurController : MonoBehaviour
 
         //Update the aim of the firepoint to target the player
         UpdateAim();
-
-        //Check if knockback is being applied. If it is, move in direction of knockback.
-        if (isBeingKnockedBack)
-        {
-            m_rigidbody.MovePosition(transform.position + (Vector3)knockbackForce);
-        }
 
         if (dashCounter > 0)
         {

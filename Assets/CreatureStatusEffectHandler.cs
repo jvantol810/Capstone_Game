@@ -6,6 +6,7 @@ using UnityEngine;
 public class CreatureStatusEffectHandler : MonoBehaviour
 {
     public HashSet<StatusEffect> statusEffects = new HashSet<StatusEffect>();
+    public SpriteRenderer spriteRenderer;
     private CreatureStats stats;
     private Vector2 knockbackForce;
     private bool isBeingKnockedBack = false;
@@ -74,6 +75,8 @@ public class CreatureStatusEffectHandler : MonoBehaviour
                 {
                     //Reenable the animator
                     GetComponent<Animator>().enabled = true;
+                    //Set the sprite to be normal again
+                    spriteRenderer.color = Color.white;
                     //Disable knockback effect
                     isBeingKnockedBack = false;
                     //Destroy the bomb gameObject associated with the knockback effect
@@ -84,6 +87,9 @@ public class CreatureStatusEffectHandler : MonoBehaviour
                     //Temporarily enable the BoxCollider so that the creature collides with walls
                     //Disable the animator temporarily 
                     GetComponent<Animator>().enabled = false;
+                    //Set the sprite to be red
+                    Debug.Log("Set sprite to be red!");
+                    spriteRenderer.color = Color.red;
                     //Set the knockback force
                     knockbackForce = effect.vectorValue;
                     //Set isBeingKnockedBack to true
