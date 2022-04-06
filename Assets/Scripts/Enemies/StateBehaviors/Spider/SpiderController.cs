@@ -23,6 +23,7 @@ public class SpiderController : MonoBehaviour
     public Transform firePoint;
     [Header("Melee Attacks")]
     public GameObject meleePrefab;
+    public float meleeOffset;
     [Header("Web Attacks")]
     public ObjectPool webPool;
     public float webShootSpeed;
@@ -63,7 +64,11 @@ public class SpiderController : MonoBehaviour
     private void FixedUpdate()
     {
     }
-
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position + firePoint.right * meleeOffset, 0.3f);
+    }
     /// <summary>This method changes the gameobject's location by
     /// moving it in the given direction at the given speed.
     /// <example>For example:
@@ -170,7 +175,8 @@ public class SpiderController : MonoBehaviour
         //Enable the melee attack prefab
         meleePrefab.SetActive(true);
         //Set its position to the firepoint (which is updated based on the player's position)
-        meleePrefab.transform.position = transform.position + firePoint.right * 0.4f;
+        meleePrefab.transform.position = transform.position + firePoint.right * meleeOffset;
+        meleePrefab.transform.rotation = Quaternion.Euler(0, 0, aimAngle);
     }
 
     public bool isPlayerInMeleeAttackRange()

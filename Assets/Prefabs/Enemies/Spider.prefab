@@ -371,6 +371,7 @@ MonoBehaviour:
   damage: 3
   firePoint: {fileID: 7448757010409400608}
   meleePrefab: {fileID: 5065158946730723431}
+  meleeOffset: 0.66
   webPool: {fileID: 159857255}
   webShootSpeed: 5
   webRadius: 0.5
@@ -419,19 +420,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205890, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+      propertyPath: attackRadius
+      value: 0.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+      propertyPath: attackOffset.x
+      value: 0.06
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.06881321
+      objectReference: {fileID: 0}
+    - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.06881321
+      objectReference: {fileID: 0}
+    - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.386
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.045
+      value: -0.002
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_LocalPosition.z

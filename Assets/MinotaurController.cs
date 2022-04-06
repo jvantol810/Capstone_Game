@@ -17,6 +17,7 @@ public class MinotaurController : MonoBehaviour
     public Transform firePoint;
     [Header("Melee Attacks")]
     public GameObject meleePrefab;
+    public float meleeOffset;
     [Header("Dashing")]
     public float dashSpeed;
     public float dashLength, dashCooldown;
@@ -53,6 +54,12 @@ public class MinotaurController : MonoBehaviour
         UpdateAim();
 
         
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position + firePoint.right * meleeOffset, 0.3f);
     }
 
     private void FixedUpdate()
@@ -149,7 +156,8 @@ public class MinotaurController : MonoBehaviour
         //Enable the melee attack prefab
         meleePrefab.SetActive(true);
         //Set its position to the firepoint (which is updated based on the player's position)
-        meleePrefab.transform.position = transform.position + firePoint.right * 0.4f;
+        meleePrefab.transform.position = transform.position + firePoint.right * meleeOffset;
+        meleePrefab.transform.rotation = Quaternion.Euler(0, 0, aimAngle);
     }
 
     public void StartDash()

@@ -8,12 +8,11 @@ public class MeleeAttack : MonoBehaviour
     public int damage;
     public float knockbackForce;
     public float attackRadius;
+    public Vector2 attackOffset;
     public LayerMask whatCanBeHit;
-
-    // Start is called before the first frame update
     void Start()
     {
-        
+       
     }
 
     private void OnEnable()
@@ -30,7 +29,7 @@ public class MeleeAttack : MonoBehaviour
     void Attack()
     {
         //Create a circle at the attack position with the range given for melee attacks, and store the hit colliders in an array called hits
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, attackRadius, whatCanBeHit);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position + (Vector3)attackOffset, attackRadius, whatCanBeHit);
 
         //Calculate the direction of the melee attack for knockback
         Vector2 hitDirection = Vector2.zero;
@@ -66,6 +65,6 @@ public class MeleeAttack : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, attackRadius);
+        Gizmos.DrawWireSphere(transform.position + (Vector3)attackOffset, attackRadius);
     }
 }

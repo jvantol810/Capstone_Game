@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody2D rigidbody2d;
     Animator animator;
+    PlayerAim playerAim;
 
     private Vector2 moveInput;
     float horizontal;
@@ -34,8 +35,9 @@ public class PlayerController : MonoBehaviour
     public ObjectPool bombPool;
     //public GameObject bombPrefab;
     //public float bombForce;
-
+    [Header("Melee Attack")]
     public GameObject meleePrefab;
+    public float meleeOffset;
 
     public GameObject player;
     private Animator m_animator;
@@ -47,7 +49,7 @@ public class PlayerController : MonoBehaviour
     public bool isDashing;
 
     private Vector2 direction;
-
+    
     [SerializeField]
     public Queue<Powers> playerPowers = new Queue<Powers>();
     public TextMeshProUGUI powersDisplay;
@@ -94,6 +96,8 @@ public class PlayerController : MonoBehaviour
 
         animator = GetComponent<Animator>();
 
+        playerAim = GetComponent<PlayerAim>();
+
         AddPower(Powers.Dash);
         //AddPower(Powers.ShootWeb);
         AddPower(Powers.Explode);
@@ -114,7 +118,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Update the aim
-        UpdateAim();
+        //UpdateAim();
 
         //get input from user
         moveInput.x = Input.GetAxis("Horizontal");
@@ -171,9 +175,9 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            meleePrefab.SetActive(true);
-            meleePrefab.transform.position = transform.position + firePoint.right;
+            MeleeAttack();
         }
+
         if (HasPower(Powers.Dash))
         {
             if (Input.GetKeyDown(KeyCode.C))
@@ -213,7 +217,12 @@ public class PlayerController : MonoBehaviour
         //DisplayPowers();
     }
 
-    
+    public void MeleeAttack()
+    {
+        meleePrefab.SetActive(true);
+        meleePrefab.transform.rotation = Quaternion.Euler(0, 0, playerAim.aimAngle);
+        meleePrefab.transform.position = transform.position + firePoint.right * meleeOffset;
+    }
     public void DisplayPowers()
     {
         UnityEditor.Handles.color = Color.green;
@@ -280,7 +289,7 @@ public class PlayerController : MonoBehaviour
                 Web web = webObj.GetComponent<Web>();
                 web.speed = webForce;
                 //shoot web in direction player is facing
-                web.Launch(aimDirection);
+                web.Launch(playerAim.aimDirection);
                 break;
             case Powers.Explode:
                 Vector3 bombSpawnPosition = new Vector3(firePoint.position.x + 0.25f, firePoint.position.y, 0);
@@ -293,16 +302,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    float aimAngle;
-    Vector2 mousePosition;
-    Vector2 aimDirection;
-    public void UpdateAim()
-    {
-        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        aimDirection = (mousePosition - (Vector2)transform.position).normalized;
-        aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-        firePoint.rotation = Quaternion.Euler(0, 0, aimAngle);
-    }
 
     public void StopDash()
     {
