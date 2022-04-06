@@ -220,6 +220,7 @@ Transform:
   - {fileID: 8777197021643624684}
   - {fileID: 5504799620948407033}
   - {fileID: 2234928176010113105}
+  - {fileID: 8963682330099119189}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -294,7 +295,7 @@ MonoBehaviour:
   lookDirection: {x: 1, y: 0}
   projectilePrefab: {fileID: 8930198046437737982, guid: c25fa86d41ebbf446b305deedc86fa26, type: 3}
   launchForce: 750
-  webPrefab: {fileID: 9005828045066945513, guid: 973ddae8fc36b774fad2fc5d221fd3e1, type: 3}
+  webPool: {fileID: 8999122931901413522}
   webForce: 5
   bombPool: {fileID: 1347803477486358032}
   meleePrefab: {fileID: 5605824123106662679}
@@ -475,6 +476,54 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &7160236942799222360
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8963682330099119189}
+  - component: {fileID: 8999122931901413522}
+  m_Layer: 8
+  m_Name: WebPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8963682330099119189
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7160236942799222360}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5684243186576125845}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8999122931901413522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7160236942799222360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27023605a20385d43b8c72b6065727e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObject: {fileID: 9005828045066945513, guid: 973ddae8fc36b774fad2fc5d221fd3e1, type: 3}
+  pooledAmount: 20
+  willGrow: 0
+  pooledObjects: []
+  currentActiveObjectIndex: 0
 --- !u!1 &8125842186712076848
 GameObject:
   m_ObjectHideFlags: 0

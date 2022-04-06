@@ -24,13 +24,13 @@ public class PlayerController : MonoBehaviour
     float vertical;
 
     public Vector2 lookDirection = new Vector2(1, 0);
-
+    [Header("Possession")]
     public GameObject projectilePrefab;
     public float launchForce;
-
-    public GameObject webPrefab;
+    [Header("Web Power")]
+    public ObjectPool webPool;
     public float webForce;
-
+    [Header("Bomb Power")]
     public ObjectPool bombPool;
     //public GameObject bombPrefab;
     //public float bombForce;
@@ -95,8 +95,8 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         AddPower(Powers.Dash);
-        //AddPower(Powers.ShootWeb);
-        AddPower(Powers.Explode);
+        AddPower(Powers.ShootWeb);
+        //AddPower(Powers.Explode);
     }
 
     public string GetPowersText()
@@ -181,13 +181,13 @@ public class PlayerController : MonoBehaviour
                 ActivatePower(Powers.Dash);
             }
         }
-        //if (HasPower(Powers.ShootWeb))
-        //{
-        //    if (Input.GetMouseButtonDown(0))
-        //    {
-        //        ActivatePower(Powers.ShootWeb);
-        //    }
-        //}
+        if (HasPower(Powers.ShootWeb))
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                ActivatePower(Powers.ShootWeb);
+            }
+        }
         if (HasPower(Powers.Explode))
         {
             if (Input.GetKeyDown(KeyCode.J))
@@ -275,8 +275,9 @@ public class PlayerController : MonoBehaviour
                 break;
             case Powers.ShootWeb:
                 //Shoot web
-                GameObject webObject = Instantiate(webPrefab, transform.position, Quaternion.identity);
-                Web web = webObject.GetComponent<Web>();
+                Vector3 webSpawnPosition = new Vector3(firePoint.position.x + 0.25f, firePoint.position.y, 0);
+                GameObject webObj = webPool.GetPooledObject(webSpawnPosition);
+                Web web = webObj.GetComponent<Web>();
                 web.speed = webForce;
                 //shoot web in direction player is facing
                 web.Launch(aimDirection);
