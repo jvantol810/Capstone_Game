@@ -95,8 +95,8 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         AddPower(Powers.Dash);
-        AddPower(Powers.ShootWeb);
-        //AddPower(Powers.Explode);
+        //AddPower(Powers.ShootWeb);
+        AddPower(Powers.Explode);
     }
 
     public string GetPowersText()

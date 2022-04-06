@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27023605a20385d43b8c72b6065727e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pooledObject: {fileID: 6457130007538514051, guid: 6e88045a9e3b00c45b5bb76e63fe8f75, type: 3}
+  pooledObject: {fileID: 6457130007538514051, guid: 8c2a889a12702374c989adaef32d12d2, type: 3}
   pooledAmount: 20
   willGrow: 0
   pooledObjects:
@@ -188,7 +188,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.0001
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -246,6 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37f04e3d41155f144839f6e3ae6b4f72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 1921959048153719108}
 --- !u!114 &6918014208417266599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,8 +268,6 @@ MonoBehaviour:
   bombShootSpeed: 3
   bombExplosionSize: 3
   bombDamage: 3
-  knockbackForce: {x: 0, y: 0}
-  isBeingKnockedBack: 0
 --- !u!58 &-2003426162544515308
 CircleCollider2D:
   m_ObjectHideFlags: 0
