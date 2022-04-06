@@ -322,7 +322,7 @@ MonoBehaviour:
   seeded: 0
   seed: 8702
   monsterPrefabs:
-  - {fileID: 1921959048153719105, guid: 3609ec2c417327541b8221f1c89ec382, type: 3}
+  - {fileID: 3350636786608551685, guid: 297622065862cf14d92ba3ef460fddd6, type: 3}
 --- !u!4 &974129684
 Transform:
   m_ObjectHideFlags: 0

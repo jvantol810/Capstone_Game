@@ -21,7 +21,7 @@ public class MinotaurController : MonoBehaviour
     public float dashSpeed;
     public float dashLength, dashCooldown;
     private float dashCounter;
-    private float dashCoolCounter;
+    public float dashCoolCounter;
     public bool isDashing;
     Vector2 dashDirection;
 
@@ -52,25 +52,25 @@ public class MinotaurController : MonoBehaviour
         //Update the aim of the firepoint to target the player
         UpdateAim();
 
+        
+    }
+
+    private void FixedUpdate()
+    {
         if (dashCounter > 0)
         {
-            Move(dashDirection, dashSpeed);
-            dashCounter -= Time.deltaTime;
+            Move(dashDirection, dashSpeed * Time.fixedDeltaTime);
+            dashCounter -= Time.fixedDeltaTime;
             if (dashCounter <= 0)
             {
-                dashCoolCounter = dashCooldown;
-                isDashing = false;
+                StopDash();
             }
         }
 
         if (dashCoolCounter > 0)
         {
-            dashCoolCounter -= Time.deltaTime;
+            dashCoolCounter -= Time.fixedDeltaTime;
         }
-    }
-
-    private void FixedUpdate()
-    {
     }
 
     /// <summary>This method changes the gameobject's location by
@@ -156,6 +156,7 @@ public class MinotaurController : MonoBehaviour
     {
         if (dashCoolCounter <= 0 && dashCounter <= 0)
         {
+            m_animator.enabled = false;
             dashDirection = firePoint.right;
             dashCounter = dashLength;
             isDashing = true;
@@ -164,8 +165,8 @@ public class MinotaurController : MonoBehaviour
 
     public void StopDash()
     {
-        dashCounter = 0;
         dashCoolCounter = dashCooldown;
+        m_animator.enabled = true;
         isDashing = false;
     }
 
