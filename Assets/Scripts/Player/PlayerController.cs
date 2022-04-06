@@ -282,9 +282,8 @@ public class PlayerController : MonoBehaviour
                 web.Launch(aimDirection);
                 break;
             case Powers.Explode:
-                //Slash big
-                GameObject bombObj = bombPool.GetPooledObject();
-                bombObj.transform.position = new Vector3(firePoint.position.x + 0.25f, firePoint.position.y, 0);
+                Vector3 bombSpawnPosition = new Vector3(firePoint.position.x + 0.25f, firePoint.position.y, 0);
+                GameObject bombObj = bombPool.GetPooledObject(bombSpawnPosition);
                 Bomb bomb = bombObj.GetComponent<Bomb>();
 
                 //throw bomb in direction player is facing

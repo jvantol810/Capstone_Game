@@ -21,7 +21,7 @@ public class Bomb : MonoBehaviour
 
     private void Start()
     {
-        m_renderer.enabled = true;
+        
     }
 
     public void Detonate()
@@ -31,10 +31,12 @@ public class Bomb : MonoBehaviour
     
     IEnumerator Explode()
     {
+        m_renderer.enabled = true;
         //wait to continue with function
         yield return new WaitForSeconds(duration);
 
-        //Set the explosion bool to be true
+        //Set the bomb's sprite to vanish as it explodes
+        m_renderer.enabled = false;
 
         //Construct a list of objects overlapping the explosion.
         Collider2D[] objects = Physics2D.OverlapCircleAll(transform.position, fieldOfImpact, layerToHit);
@@ -66,7 +68,7 @@ public class Bomb : MonoBehaviour
 
         //Disable the bomb
         yield return new WaitForSeconds(bombParticleSystem.main.duration);
-        m_renderer.enabled = false;
+
         gameObject.SetActive(false);
     }
 
