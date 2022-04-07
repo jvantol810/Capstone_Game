@@ -292,7 +292,7 @@ public class RoomGen : MonoBehaviour
         foreach (var tile in noWalkLoc)
         {
             var tileObj = aStarGrid.GetTileAt(tile);
-            float yOffset = Random.Range(0f, .25f);
+            float yOffset = Random.Range(-.45f, -.25f);
             float xOffset = Random.Range(0f, .25f);
             GameObject tree = Instantiate(trees[RandomIndex(trees.Length)], new Vector3(tileObj.centerWorldPosition.x + xOffset, tileObj.centerWorldPosition.y + yOffset, 0), quaternion.identity);
             tree.transform.SetParent(GameObject.Find("Forest").transform);
