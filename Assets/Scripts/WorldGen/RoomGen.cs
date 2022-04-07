@@ -11,6 +11,7 @@ using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using Unity.Mathematics;
 
 
 public class RoomGen : MonoBehaviour
@@ -18,6 +19,7 @@ public class RoomGen : MonoBehaviour
     public Tilemap map;
     public AStarGrid aStarGrid;
     public Tile[] tiles;
+    public GameObject[] trees;
     public GameObject playerPrefab;
     //List for allRooms and list of their centers for connecting them to main map
     private List<RoomPrefab> allRooms = new List<RoomPrefab>();
@@ -197,6 +199,7 @@ public class RoomGen : MonoBehaviour
         InitMap();
         DrunkenWalkGen(true);
         MultiPrefabGeneration();
+        PlantTrees();
         SpawnMonsters();
         SpawnPlayer();
     }
@@ -282,7 +285,20 @@ public class RoomGen : MonoBehaviour
 
         return false;
     }
-    
+
+    private void PlantTrees()
+    {
+        var noWalkLoc = aStarGrid.GetUnwalkableTileLocations();
+        foreach (var tile in noWalkLoc)
+        {
+            var tileObj = aStarGrid.GetTileAt(tile);
+            float yOffset = Random.Range(0f, .25f);
+            float xOffset = Random.Range(0f, .25f);
+            GameObject tree = Instantiate(trees[RandomIndex(trees.Length)], new Vector3(tileObj.centerWorldPosition.x + xOffset, tileObj.centerWorldPosition.y + yOffset, 0), quaternion.identity);
+            tree.transform.SetParent(GameObject.Find("Forest").transform);
+        }
+    }
+
     //Converts String array into a Tilemap prefab
     private void ConvertToPrefab()//Works for multi
     {

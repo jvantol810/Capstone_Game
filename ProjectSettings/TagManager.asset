@@ -46,3 +46,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Back Trees
+    uniqueID: 3015631135
+    locked: 0
+  - name: Mid Trees
+    uniqueID: 3620751487
+    locked: 0
+  - name: Front Trees
+    uniqueID: 318374333
+    locked: 0
