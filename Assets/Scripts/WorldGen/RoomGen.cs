@@ -423,11 +423,21 @@ public class RoomGen : MonoBehaviour
             WorldTile closestTile = aStarGrid.GetNearestWalkableTile(center, prefabPlacePoints);
             //Debug.Log(closestTile.gridPosition);
             WorldTile[] closestPath = aStarGrid.FindPath(closestTile.gridPosition, center, false);
-            Debug.Log(closestPath.Length);
-            foreach (var tile in closestPath)
+            //Debug.Log(closestPath.Length);
+            for(int i = 0; i < closestPath.Length; i++)
             {
-                AddTileToMap(true, tile.gridPosition, tiles[1]);
-                Debug.Log("placed tile");
+                if (i == 0)
+                {
+                    AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]); 
+                    AddTileToMap(true, closestPath[i].neighborLocations[6], tiles[RandomIndex(tiles.Length,1)]); 
+                    AddTileToMap(true, closestPath[i].neighborLocations[2], tiles[RandomIndex(tiles.Length,1)]); 
+                }
+                if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[0]).walkable || !aStarGrid.GetTileAt(closestPath[i].neighborLocations[4]).walkable)
+                {
+                    AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]); 
+                }
+
+                AddTileToMap(true, closestPath[i].gridPosition, tiles[2]);
             }  
         }
         
@@ -442,8 +452,8 @@ public class RoomGen : MonoBehaviour
         {
             prefabPlacePoints = MultiFindPrefabSpace(room);
             MultiPlacePrefab(room, prefabPlacePoints);
-            ConnectPrefab(prefabPlacePoints);
-            //ConnectPrefabAstar(prefabPlacePoints); needs additional code to be useable
+            //ConnectPrefab(prefabPlacePoints);
+            ConnectPrefabAstar(prefabPlacePoints); 
         }
     }
 
@@ -530,6 +540,7 @@ public class RoomGen : MonoBehaviour
     
     private void MultiPlacePrefab(RoomPrefab room, List<Vector2Int> prefabPlacePoints)
     {
+        Debug.Log("New");
         int totalTiles = 0;
         
         //Loops through the allRooms tiles setting their positions to a valid area 
@@ -553,6 +564,8 @@ public class RoomGen : MonoBehaviour
                 }
             }
         }
+        
+        //roomCenters.Add(new Vector2Int());
     }
 
     private void SpawnMonsters()
@@ -595,7 +608,7 @@ public class RoomGen : MonoBehaviour
     {
         return Random.Range(minIndex, maxIndex);
     }
-    
+
     //You are now entering the depreciated zone
     //Tread with caution
     
