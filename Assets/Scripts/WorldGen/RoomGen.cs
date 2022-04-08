@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.CompilerServices;
+#if UNITY_EDITOR
 using UnityEditor.Experimental;
 using UnityEditorInternal.VersionControl;
+#endif
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;

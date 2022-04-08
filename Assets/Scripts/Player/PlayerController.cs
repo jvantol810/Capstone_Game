@@ -223,12 +223,13 @@ public class PlayerController : MonoBehaviour
         meleePrefab.transform.rotation = Quaternion.Euler(0, 0, playerAim.aimAngle);
         meleePrefab.transform.position = transform.position + firePoint.right * meleeOffset;
     }
+#if UNITY_Editor
     public void DisplayPowers()
     {
         UnityEditor.Handles.color = Color.green;
         Handles.Label(new Vector3(transform.position.x, transform.position.y + 1f, 0), powersText);
     }
-
+#endif
     public void Hit(int damage, StatusEffect knockback)
     {
         //Apply knockback in the direction of the hit

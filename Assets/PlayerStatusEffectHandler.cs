@@ -12,7 +12,7 @@ public class PlayerStatusEffectHandler : MonoBehaviour
     {
         player = GetComponent<PlayerController>();
     }
-
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         DisplaySFX();
@@ -24,7 +24,7 @@ public class PlayerStatusEffectHandler : MonoBehaviour
         UnityEditor.Handles.color = Color.green;
         Handles.Label(new Vector3(transform.position.x, transform.position.y + 1f, 0), GetStatusEffectsText());
     }
-
+#endif
     public string GetStatusEffectsText()
     {
         string text = "Status EFfects: ";
