@@ -226,6 +226,10 @@ public class MinotaurController : MonoBehaviour
             StatusEffect dashKnockback = new StatusEffect(StatusEffectTypes.Knockback, (player.position - transform.position).normalized * dashKnockbackForce, false, 0.2f);
             collision.gameObject.GetComponent<PlayerController>().Hit(dashDamage, dashKnockback);
         }
-        m_animator.GetBehaviour<MinotaurChase>().StopDash();
+        if(m_animator.GetBehaviour<MinotaurChase>() != null)
+        {
+            m_animator.GetBehaviour<MinotaurChase>().StopDash();
+        }
+        
     }
 }

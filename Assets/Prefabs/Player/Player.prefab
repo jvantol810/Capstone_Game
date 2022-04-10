@@ -294,20 +294,28 @@ MonoBehaviour:
   maxHealth: 5
   currentHealth: 0
   timeInvincible: 2
+  isInvincible: 0
   lookDirection: {x: 1, y: 0}
   projectilePrefab: {fileID: 8930198046437737982, guid: c25fa86d41ebbf446b305deedc86fa26, type: 3}
   launchForce: 750
   webPool: {fileID: 8999122931901413522}
   webForce: 5
   bombPool: {fileID: 1347803477486358032}
-  meleePrefab: {fileID: 5605824123106662679}
+  meleeAttack: {fileID: 5605824123106662667}
   meleeOffset: 0.35
+  hitInvincibilityLength: 0
   player: {fileID: 5684243186576125843}
-  dashSpeed: 20
-  dashLength: 3
-  dashCooldown: 1
+  defaultDashSpeed: 0
+  defaultDashLength: 0
+  defaultDashCooldown: 0
+  minotaurDashSpeed: 0
+  minotaurDashLength: 0
+  minotaurDashKnockbackForce: 0
+  minotaurDashDamage: 0
+  dashStunLength: 0
   isDashing: 0
   powersDisplay: {fileID: 9208038344933527248}
+  healthDisplay: {fileID: 0}
   firePoint: {fileID: 8777197021643624684}
   isBeingKnockedBack: 0
   knockbackForce: {x: 0, y: 0}
@@ -379,6 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d142bbf659a250f43999845b8e9944b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 5684243186576125842}
 --- !u!114 &8605009441762998539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -621,7 +630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27023605a20385d43b8c72b6065727e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pooledObject: {fileID: 9005828045066945513, guid: 973ddae8fc36b774fad2fc5d221fd3e1, type: 3}
+  pooledObject: {fileID: 9005828045066945513, guid: e535990688aac8243a2bb188e7f3d640, type: 3}
   pooledAmount: 20
   willGrow: 0
   pooledObjects: []
@@ -760,15 +769,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205890, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackRadius
-      value: 0.2
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackOffset.x
-      value: -0.01
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: whatCanBeHit.m_Bits
@@ -780,15 +789,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.10086395
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.10086395
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.10086395
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_LocalPosition.x
@@ -832,13 +841,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+--- !u!114 &5605824123106662667 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+  m_PrefabInstance: {fileID: 828922294142771029}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4142669d55e35a44a818a05bf75cc23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5605824123106662666 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
-  m_PrefabInstance: {fileID: 828922294142771029}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5605824123106662679 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5065158945608205890, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
   m_PrefabInstance: {fileID: 828922294142771029}
   m_PrefabAsset: {fileID: 0}

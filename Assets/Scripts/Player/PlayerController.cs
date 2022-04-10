@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour
     {
         //Update the aim
         //UpdateAim();
-        healthDisplay.text = "Health: " + currentHealth;
+        //healthDisplay.text = "Health: " + currentHealth;
 
         //get input from user
         moveInput.x = Input.GetAxis("Horizontal");

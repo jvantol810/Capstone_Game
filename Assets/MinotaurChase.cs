@@ -124,7 +124,11 @@ public class MinotaurChase : StateMachineBehaviour
     {
         Debug.Log("Stop dash!");
         dashCounter = 0;
-        dashCoolCounter = minotaur.dashCooldown;
+        if(minotaur != null)
+        {
+            dashCoolCounter = minotaur.dashCooldown;
+        }
+
         isDashing = false;
     }
 

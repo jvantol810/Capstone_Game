@@ -123,6 +123,36 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &22035563
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 22035564}
+  m_Layer: 0
+  m_Name: Forest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &22035564
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 22035563}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 20.483273, y: 17.317135, z: -17.402784}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &37109680
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,6 +342,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3dfc287ff5ee9764fa1316c86acb53bc, type: 2}
   - {fileID: 11400000, guid: ea06628fc1ba41145853cea2353b7e7d, type: 2}
   - {fileID: 11400000, guid: add294d4f375b63438ffe07a0c7b69a4, type: 2}
+  trees:
+  - {fileID: 172457618747701973, guid: ffc2a03cb31acba4f8263840f7cc4d58, type: 3}
+  - {fileID: 1700791690902952388, guid: c71e41be2e598f045889656cf03d175c, type: 3}
+  - {fileID: 6407549897264005552, guid: 8afb822e80aff764ba27bdfa0c9cb582, type: 3}
+  - {fileID: 5477258199380739856, guid: 1535a620359a92f48b90a85196257cdb, type: 3}
   playerPrefab: {fileID: 5684243186576125843, guid: 1d0e40e533a3af543bb354c7ac64ddf0, type: 3}
   roomCenters: []
   globalMonList: []
@@ -784,7 +819,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
