@@ -1481,6 +1481,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01fb4384b14a58d44b176673b1466f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lastRetrievedLeaderboardData: 
+  connectionSuccess: 0
+  lastRetrievedOwnedHats: 
 --- !u!4 &206457293
 Transform:
   m_ObjectHideFlags: 0
@@ -2338,7 +2341,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AvailableHats:
   - {fileID: 6513093844322405052, guid: fea05d3297237a843b5e757ed1354d63, type: 3}
-  - {fileID: 6513093844322405052, guid: 929ed058d7d5afd459951bee63d89dec, type: 3}
 --- !u!1 &356722649
 GameObject:
   m_ObjectHideFlags: 0
@@ -3515,7 +3517,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3539,7 +3541,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 478899434}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3554,6 +3556,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1599603427, guid: 1d0e40e533a3af543bb354c7ac64ddf0, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516957364079033679, guid: 1d0e40e533a3af543bb354c7ac64ddf0, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5684243186576125843, guid: 1d0e40e533a3af543bb354c7ac64ddf0, type: 3}
@@ -5395,18 +5401,6 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 2124467081}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1754367191}
-        m_TargetAssemblyTypeName: TitleScreenManager, Assembly-CSharp
-        m_MethodName: SignedIn
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7349,7 +7343,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TSM: {fileID: 1754367191}
   hatDir: {fileID: 356489664}
-  currentGhostBucks: 1000
 --- !u!114 &874525075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7367,6 +7360,8 @@ MonoBehaviour:
   ownedHats: []
   ownedBandanas: []
   Player: {fileID: 1012467692}
+  phpManager: {fileID: 206457292}
+  hatDirectory: {fileID: 356489664}
 --- !u!1 &879634956
 GameObject:
   m_ObjectHideFlags: 0
@@ -9166,7 +9161,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1176292282}
   m_OnClick:
     m_PersistentCalls:
@@ -9182,6 +9177,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1378744050}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1176292282
 MonoBehaviour:
@@ -11206,7 +11213,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1378744051
 Transform:
   m_ObjectHideFlags: 0
@@ -13982,6 +13989,7 @@ MonoBehaviour:
   GBPurchaseScreen: {fileID: 437757957}
   GBDisplayText: {fileID: 502311812}
   GBPurchaseButton: {fileID: 0}
+  CashShopButton: {fileID: 1176292281}
 --- !u!1 &1756873346
 GameObject:
   m_ObjectHideFlags: 0
@@ -15849,6 +15857,7 @@ MonoBehaviour:
   message: 
   registerMenuText: {fileID: 1312313313}
   registerButton: {fileID: 1386488811}
+  titleScreenManager: {fileID: 1754367191}
 --- !u!114 &1976624828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16455,6 +16464,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 1754367187}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1378744050}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

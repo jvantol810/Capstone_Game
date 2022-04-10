@@ -13,6 +13,9 @@ public class TitleScreenManager : MonoBehaviour
     public GameObject GBPurchaseScreen;
     public Text GBDisplayText;
     public Button GBPurchaseButton;
+    public Button CashShopButton;
+
+    //public CashEquipsData CEData;
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +54,10 @@ public class TitleScreenManager : MonoBehaviour
     public void SignedIn()
     {
         signinButton.interactable = (DatabaseManager.username == null);
+        CashShopButton.interactable = (DatabaseManager.userid > 0);
+        UpdateGhostBucksDisplay(DatabaseManager.currency);
+        FindObjectOfType<PHPManager>().CallGetPlayerReceipts();
+        //CEData.InitializeOwnedHats();
     }
 
     public void SetUserInfo()

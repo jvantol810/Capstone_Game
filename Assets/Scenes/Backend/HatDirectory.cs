@@ -29,4 +29,14 @@ public class HatDirectory : MonoBehaviour
         }
         return new GameObject("None.");
     }
+
+    public string ReturnHatInformation()
+    {
+        string output = "";
+        for(int i = 0; i < AvailableHats.Length; i++)
+        {
+            output += "\t" + AvailableHats[i].name + "\t" + AvailableHats[i].GetComponent<HatItem>().GetHatPrice() + "\t" + AvailableHats[i].GetComponent<HatItem>().GetHatID();
+        }
+        return output;
+    }
 }

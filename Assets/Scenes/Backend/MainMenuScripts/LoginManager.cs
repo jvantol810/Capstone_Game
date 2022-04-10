@@ -44,19 +44,33 @@ public class LoginManager : MonoBehaviour
             {
                 message = loginPOST.downloadHandler.text;
 
-                if (message.StartsWith("3")) //Username already exists
+                if (message.StartsWith("3:")) //Username already exists
                 {
                     Debug.Log(message);
                     loginMenuText.text = "Log into your account" + "\n" + message.Substring(2);
                 }
-                else if (message.StartsWith("4"))
+                else if (message.StartsWith("4:"))
                 {
                     Debug.Log(message);
                     loginMenuText.text = "Log into your account" + "\n" + message.Substring(2);
+                }
+                else if (message.StartsWith("2:"))
+                {
+                    Debug.Log(message);
+                    //change text to incorrect password
                 }
                 else
                 {
-                    DatabaseManager.username = nameField.text;
+                    //Debug.Log(message);
+                    //split message by tabs, and we get [0] = playerid, [1] = username, [2] = totalruns, [3] = currenttime, [4] = currency;
+                    string[] splitmessage = message.Split('\t');
+                    DatabaseManager.userid = int.Parse(splitmessage[0]);
+                    Debug.Log(DatabaseManager.userid);
+                    DatabaseManager.username = splitmessage[1];
+                    Debug.Log(DatabaseManager.username);
+                    DatabaseManager.currency = int.Parse(splitmessage[4]);
+                    Debug.Log(DatabaseManager.currency);
+
                     titleScreenManager.SignedIn();
                     titleScreenManager.SwitchScreen(titleScreenManager.gameObject);
                     //loginMenuText.text = ("Previous High Score: " + message);

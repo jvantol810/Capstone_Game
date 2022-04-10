@@ -76,14 +76,17 @@ public class ShopManager : MonoBehaviour
         //yield return cwd.coroutine;
         //Destroy(LoadingEntry);
         //string shopitems = cwd.result.ToString();
-        string shopitems = "True\tHat #1\t150\t001\tHat #2\t250\t002";
+        string shopitems = "True\tHat #1\t150\tH001\tHat #2\t250\tH002";
+        shopitems = FindObjectOfType<HatDirectory>().ReturnHatInformation();
+        
         string playeritemspurchased = "";
-        //string[] OwnedHats = CEData.GetOwnedHats();
-        string[] OwnedHats = { "" };
-        for (int i = 0; i < OwnedHats.Length; i++)
+        List<GameObject> OwnedHats = CEData.GetOwnedHats();
+        //string[] OwnedHats = { "" };
+        for (int i = 0; i < OwnedHats.Count; i++)
         {
-            playeritemspurchased += OwnedHats[i] + "\t";
+            playeritemspurchased += OwnedHats[i].GetComponent<HatItem>().GetHatID() + "\t";
         }
+        Debug.Log(playeritemspurchased);
         //Debug.Log(leaderboardscores);
         yield return new WaitForSeconds(1f);
         string[] sortedEntries = shopitems.Split('\t');
@@ -101,6 +104,7 @@ public class ShopManager : MonoBehaviour
                 newEntryTexts[0].text = sortedEntries[i];
                 newEntryTexts[2].text = sortedEntries[i+1] + " GB";
                 newEntry.GetComponent<ShopItemController>().SetHatID(sortedEntries[i+2]);
+                newEntry.GetComponent<Image>().sprite = FindObjectOfType<HatDirectory>().FindHatByID(sortedEntries[i + 2]).GetComponent<SpriteRenderer>().sprite;
                 if (playeritemspurchased.Contains(sortedEntries[i+2]))
                 {
                     //Debug.Log(CEData.GetCurrentHat() + "  " + sortedEntries[i + 2]);

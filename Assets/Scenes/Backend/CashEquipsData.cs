@@ -16,6 +16,8 @@ public class CashEquipsData : MonoBehaviour
     [SerializeField]
     string[] ownedBandanas;
     public GameObject Player;
+    public PHPManager phpManager;
+    public HatDirectory hatDirectory;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +31,15 @@ public class CashEquipsData : MonoBehaviour
     }
     public string GetCurrentHat()
     {
-        return currentHat.GetComponent<HatItem>().GetHatID();
+        if(currentHat != null)
+        {
+            return currentHat.GetComponent<HatItem>().GetHatID();
+        }
+        else
+        {
+            return "0000";
+        }
+        
     }
     //BIG ISSUE: MUST ADD PURCHASED HATS
     public void SetHat(string hatID)
@@ -45,6 +55,7 @@ public class CashEquipsData : MonoBehaviour
                 }
                 
                 currentHat = Instantiate(ownedHats[i], Player.transform);
+                
             }
         }
     }
@@ -76,6 +87,29 @@ public class CashEquipsData : MonoBehaviour
     public void AddOwnedHat(GameObject newHat)
     {
         ownedHats.Add(newHat);
+        HatItem hatDetails = newHat.GetComponent<HatItem>();
+        phpManager.CallPostPlayerReceipt(hatDetails.GetHatID(), hatDetails.GetHatPrice());
+    }
+
+    public void InitializeOwnedHats(string receipts)
+    {
+        //string returnedHatIDs = phpManager.CallGetPlayerReceipts();
+        string[] splitHatIDs = receipts.Split('\t');
+        for(int i = 0; i < splitHatIDs.Length; i++)
+        {
+            
+            GameObject FoundHat = hatDirectory.FindHatByID(splitHatIDs[i]);
+            if (FoundHat.name != "None.")
+            {
+                Debug.Log("Player owns hat: " + splitHatIDs[i]);
+                ownedHats.Add(hatDirectory.FindHatByID(splitHatIDs[i]));
+            }
+            else
+            {
+                Destroy(FoundHat);
+            }
+            
+        }
     }
 
     public string[] GetOwnedBandanas()
