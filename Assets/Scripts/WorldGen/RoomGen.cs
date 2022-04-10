@@ -4,13 +4,17 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.CompilerServices;
+#if UNITY_EDITOR
 using UnityEditor.Experimental;
 using UnityEditorInternal.VersionControl;
+#endif
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using Unity.Mathematics;
+using UnityEngine.Analytics;
 
 
 public class RoomGen : MonoBehaviour
@@ -18,6 +22,7 @@ public class RoomGen : MonoBehaviour
     public Tilemap map;
     public AStarGrid aStarGrid;
     public Tile[] tiles;
+    public GameObject[] trees;
     public GameObject playerPrefab;
     //List for allRooms and list of their centers for connecting them to main map
     private List<RoomPrefab> allRooms = new List<RoomPrefab>();
@@ -197,6 +202,7 @@ public class RoomGen : MonoBehaviour
         InitMap();
         DrunkenWalkGen(true);
         MultiPrefabGeneration();
+        PlantTrees();
         SpawnMonsters();
         SpawnPlayer();
     }
@@ -282,7 +288,20 @@ public class RoomGen : MonoBehaviour
 
         return false;
     }
-    
+
+    private void PlantTrees()
+    {
+        var noWalkLoc = aStarGrid.GetUnwalkableTileLocations();
+        foreach (var tile in noWalkLoc)
+        {
+            var tileObj = aStarGrid.GetTileAt(tile);
+            float yOffset = Random.Range(-.45f, -.25f);
+            float xOffset = Random.Range(0f, .25f);
+            GameObject tree = Instantiate(trees[RandomIndex(trees.Length)], new Vector3(tileObj.centerWorldPosition.x + xOffset, tileObj.centerWorldPosition.y + yOffset, 0), quaternion.identity);
+            tree.transform.SetParent(GameObject.Find("Forest").transform);
+        }
+    }
+
     //Converts String array into a Tilemap prefab
     private void ConvertToPrefab()//Works for multi
     {
@@ -407,11 +426,40 @@ public class RoomGen : MonoBehaviour
             WorldTile closestTile = aStarGrid.GetNearestWalkableTile(center, prefabPlacePoints);
             //Debug.Log(closestTile.gridPosition);
             WorldTile[] closestPath = aStarGrid.FindPath(closestTile.gridPosition, center, false);
-            Debug.Log(closestPath.Length);
-            foreach (var tile in closestPath)
+            //Debug.Log(closestPath.Length);
+            for(int i = 0; i < closestPath.Length; i++)
             {
-                AddTileToMap(true, tile.gridPosition, tiles[1]);
-                Debug.Log("placed tile");
+                //This fixes any disconnect with a diagonal at the beginning of a path
+                if (i == 0)
+                {
+                    if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[0]).walkable || !aStarGrid.GetTileAt(closestPath[i].neighborLocations[4]).walkable)
+                    {
+                        AddTileToMap(true, closestPath[i].neighborLocations[0], tiles[RandomIndex(tiles.Length,1)]); 
+                        AddTileToMap(true, closestPath[i].neighborLocations[2], tiles[RandomIndex(tiles.Length,1)]); 
+                        AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]); 
+                        AddTileToMap(true, closestPath[i].neighborLocations[6], tiles[RandomIndex(tiles.Length,1)]); 
+                    }
+                    else
+                    {
+                        AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]);
+                    }
+                }
+                
+                //This changes the diamond path to a star step
+                if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[0]).walkable  || !aStarGrid.GetTileAt(closestPath[i].neighborLocations[4]).walkable)
+                {
+                    if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[2]).walkable || !aStarGrid.GetTileAt(closestPath[i].neighborLocations[6]).walkable)
+                    {
+                        if (aStarGrid.GetTileAt(closestPath[i].neighborLocations[2]) != closestPath[i+1] && aStarGrid.GetTileAt(closestPath[i].neighborLocations[6]) != closestPath[i+1])
+                        {
+                            AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]); 
+                        }
+                    }
+                    
+                }
+                //Adds tile from path
+                AddTileToMap(true, closestPath[i].gridPosition, tiles[2]);
+               
             }  
         }
         
@@ -426,15 +474,15 @@ public class RoomGen : MonoBehaviour
         {
             prefabPlacePoints = MultiFindPrefabSpace(room);
             MultiPlacePrefab(room, prefabPlacePoints);
-            ConnectPrefab(prefabPlacePoints);
-            //ConnectPrefabAstar(prefabPlacePoints); needs additional code to be useable
+            //ConnectPrefab(prefabPlacePoints);
+            ConnectPrefabAstar(prefabPlacePoints); 
         }
     }
 
     private List<Vector2Int> MultiFindPrefabSpace(RoomPrefab room)
     {
         List<Vector2Int> multiPrefabPoints = new List<Vector2Int>();
-        
+
         int pWidth = room.prefabTiles[0].Count;
         int pHeight = room.prefabTiles.Count;
 
@@ -468,11 +516,13 @@ public class RoomGen : MonoBehaviour
             upperY = randomPoint.y + pHeight;
             
         }
+        //Debug.Log("X: " + randomPoint.x + "Y:" + randomPoint.y);
         
         //Grab room center
         //Calculate these in a different way
         int xCenter = (randomPoint.x + upperX)/2;
         int yCenter = (randomPoint.y + upperY) / 2;
+        //Debug.Log("centerX: " + xCenter + "centerY:" + yCenter);
         roomCenters.Add(new Vector2Int(xCenter,yCenter));
 
         return multiPrefabPoints;
@@ -481,6 +531,7 @@ public class RoomGen : MonoBehaviour
     
     private bool GetMultiPrefabPoints(List<Vector2Int> multiPrefabPoints, Vector2Int randomPoint, int upperY, int upperX)
     {
+        multiPrefabPoints.Clear();//need this or some points can overlap somehow
         //Loop through all the points to make sure their valid for placing 
         for (int i = randomPoint.y; i < upperY; i++)
         {
@@ -497,7 +548,6 @@ public class RoomGen : MonoBehaviour
                 if (aStarGrid.GetTileAt(new Vector2Int(j, i)).walkable == false)
                 {
                     //Debug.Log("J:" + j + "I"+ i);
-                    //aStarGrid.PlaceMarker(new Vector2Int(j, i), Color.red);
                     multiPrefabPoints.Add(new Vector2Int(j, i));
                 }
                 else
@@ -523,6 +573,7 @@ public class RoomGen : MonoBehaviour
             {
                 room.prefabTiles[j][i].gridX = prefabPlacePoints[totalTiles].x;
                 room.prefabTiles[j][i].gridY = prefabPlacePoints[totalTiles].y;
+                //Debug.Log(prefabPlacePoints[totalTiles]);
                 totalTiles++;
                 
                 
@@ -537,6 +588,8 @@ public class RoomGen : MonoBehaviour
                 }
             }
         }
+        
+        //roomCenters.Add(new Vector2Int());
     }
 
     private void SpawnMonsters()
@@ -579,7 +632,7 @@ public class RoomGen : MonoBehaviour
     {
         return Random.Range(minIndex, maxIndex);
     }
-    
+
     //You are now entering the depreciated zone
     //Tread with caution
     

@@ -9,6 +9,8 @@ public class HatItem : MonoBehaviour
     [SerializeField]
     private string hatID;
     [SerializeField]
+    private int hatPrice;
+    [SerializeField]
     private Vector3 offsetD;
     [SerializeField]
     private Vector3 offsetU;
@@ -43,6 +45,11 @@ public class HatItem : MonoBehaviour
     public string GetHatID()
     {
         return hatID;
+    }
+
+    public int GetHatPrice()
+    {
+        return hatPrice;
     }
 
     public void updateSprite()

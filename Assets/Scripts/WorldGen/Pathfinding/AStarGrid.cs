@@ -371,7 +371,7 @@ public class AStarGrid : MonoBehaviour
         path.Reverse();
         return path.ToArray();
     }
-
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         DisplayTileCoordinates();
@@ -389,7 +389,7 @@ public class AStarGrid : MonoBehaviour
             }
         }
     }
-
+#endif
     bool done = false;
 
     [Header("Markers for Debugging")]

@@ -7,8 +7,8 @@ public class CurrencyData : MonoBehaviour
 {
     public TitleScreenManager TSM;
     public HatDirectory hatDir;
-    [SerializeField]
-    private int currentGhostBucks = 0;
+    //[SerializeField]
+    //private int currentGhostBucks = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,32 +54,34 @@ public class CurrencyData : MonoBehaviour
         switch (itemID)
         {
             case '1':
-                currentGhostBucks += 300;
+                DatabaseManager.currency += 300;
                 break;
             case '2':
-                currentGhostBucks += 1000;
+                DatabaseManager.currency += 1000;
                 break;
             case '3':
-                currentGhostBucks += 3300;
+                DatabaseManager.currency += 3300;
                 break;
             default:
                 break;
         }
-        TSM.UpdateGhostBucksDisplay(currentGhostBucks);
+        FindObjectOfType<PHPManager>().CallUpdatePlayerCurrency();
+        TSM.UpdateGhostBucksDisplay(DatabaseManager.currency);
     }
 
     public bool SpendCurrency(int amountspent, string itemPurchased, string itemID)
     {
-        Debug.Log(currentGhostBucks);
-        if(Mathf.Abs(amountspent) > currentGhostBucks)
+        //Debug.Log(currentGhostBucks);
+        if(Mathf.Abs(amountspent) > DatabaseManager.currency)
         {
             
             return false;
         }
         else
         {
-            currentGhostBucks -= Mathf.Abs(amountspent);
-            TSM.UpdateGhostBucksDisplay(currentGhostBucks);
+            DatabaseManager.currency -= Mathf.Abs(amountspent);
+            FindObjectOfType<PHPManager>().CallUpdatePlayerCurrency();
+            TSM.UpdateGhostBucksDisplay(DatabaseManager.currency);
             //Save data to server!!!
             //Update owneditems
             if(itemPurchased == "Hat")
@@ -88,6 +90,7 @@ public class CurrencyData : MonoBehaviour
                 if(purchasedHat.name == "None.")
                 {
                     Debug.Log("Failed to add hat to owned hats!");
+                    Destroy(purchasedHat);
                     return false;
                 }
                 else

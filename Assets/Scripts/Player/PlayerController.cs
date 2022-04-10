@@ -276,20 +276,14 @@ public class PlayerController : MonoBehaviour
         meleeAttack.transform.position = transform.position + firePoint.right * meleeOffset;
         meleeAttack.Attack();
     }
-#if UNITY_EDITOR
+#if UNITY_Editor
+
     public void DisplayPowers()
     {
         UnityEditor.Handles.color = Color.green;
         Handles.Label(new Vector3(transform.position.x, transform.position.y + 1f, 0), powersText);
     }
 #endif
-    public void DisplayHealth()
-    {
-        UnityEditor.Handles.color = Color.green;
-        Handles.Label(new Vector3(transform.position.x, transform.position.y + 1f, 0), powersText);
-    }
-
-
     public void Hit(int damage, StatusEffect knockback)
     {
         if (isInvincible) { return; }
