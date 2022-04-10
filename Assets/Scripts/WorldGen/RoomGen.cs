@@ -14,6 +14,7 @@ using Random = UnityEngine.Random;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using Unity.Mathematics;
+using UnityEngine.Analytics;
 
 
 public class RoomGen : MonoBehaviour
@@ -431,11 +432,12 @@ public class RoomGen : MonoBehaviour
                 //This fixes any disconnect with a diagonal at the beginning of a path
                 if (i == 0)
                 {
-                    if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[0]).walkable && !aStarGrid.GetTileAt(closestPath[i].neighborLocations[4]).walkable)
+                    if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[0]).walkable || !aStarGrid.GetTileAt(closestPath[i].neighborLocations[4]).walkable)
                     {
+                        AddTileToMap(true, closestPath[i].neighborLocations[0], tiles[RandomIndex(tiles.Length,1)]); 
+                        AddTileToMap(true, closestPath[i].neighborLocations[2], tiles[RandomIndex(tiles.Length,1)]); 
                         AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]); 
                         AddTileToMap(true, closestPath[i].neighborLocations[6], tiles[RandomIndex(tiles.Length,1)]); 
-                        AddTileToMap(true, closestPath[i].neighborLocations[2], tiles[RandomIndex(tiles.Length,1)]); 
                     }
                     else
                     {
@@ -446,15 +448,18 @@ public class RoomGen : MonoBehaviour
                 //This changes the diamond path to a star step
                 if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[0]).walkable  || !aStarGrid.GetTileAt(closestPath[i].neighborLocations[4]).walkable)
                 {
-                    if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[2]).walkable && !aStarGrid.GetTileAt(closestPath[i].neighborLocations[6]).walkable)
+                    if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[2]).walkable || !aStarGrid.GetTileAt(closestPath[i].neighborLocations[6]).walkable)
                     {
-                        AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]); 
+                        if (aStarGrid.GetTileAt(closestPath[i].neighborLocations[2]) != closestPath[i+1] && aStarGrid.GetTileAt(closestPath[i].neighborLocations[6]) != closestPath[i+1])
+                        {
+                            AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]); 
+                        }
                     }
                     
                 }
-
                 //Adds tile from path
                 AddTileToMap(true, closestPath[i].gridPosition, tiles[2]);
+               
             }  
         }
         
