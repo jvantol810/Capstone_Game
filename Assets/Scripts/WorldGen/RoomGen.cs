@@ -428,17 +428,32 @@ public class RoomGen : MonoBehaviour
             //Debug.Log(closestPath.Length);
             for(int i = 0; i < closestPath.Length; i++)
             {
+                //This fixes any disconnect with a diagonal at the beginning of a path
                 if (i == 0)
                 {
-                    AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]); 
-                    AddTileToMap(true, closestPath[i].neighborLocations[6], tiles[RandomIndex(tiles.Length,1)]); 
-                    AddTileToMap(true, closestPath[i].neighborLocations[2], tiles[RandomIndex(tiles.Length,1)]); 
+                    if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[0]).walkable && !aStarGrid.GetTileAt(closestPath[i].neighborLocations[4]).walkable)
+                    {
+                        AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]); 
+                        AddTileToMap(true, closestPath[i].neighborLocations[6], tiles[RandomIndex(tiles.Length,1)]); 
+                        AddTileToMap(true, closestPath[i].neighborLocations[2], tiles[RandomIndex(tiles.Length,1)]); 
+                    }
+                    else
+                    {
+                        AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]);
+                    }
                 }
-                if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[0]).walkable || !aStarGrid.GetTileAt(closestPath[i].neighborLocations[4]).walkable)
+                
+                //This changes the diamond path to a star step
+                if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[0]).walkable  || !aStarGrid.GetTileAt(closestPath[i].neighborLocations[4]).walkable)
                 {
-                    AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]); 
+                    if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[2]).walkable && !aStarGrid.GetTileAt(closestPath[i].neighborLocations[6]).walkable)
+                    {
+                        AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]); 
+                    }
+                    
                 }
 
+                //Adds tile from path
                 AddTileToMap(true, closestPath[i].gridPosition, tiles[2]);
             }  
         }
@@ -462,7 +477,7 @@ public class RoomGen : MonoBehaviour
     private List<Vector2Int> MultiFindPrefabSpace(RoomPrefab room)
     {
         List<Vector2Int> multiPrefabPoints = new List<Vector2Int>();
-        
+
         int pWidth = room.prefabTiles[0].Count;
         int pHeight = room.prefabTiles.Count;
 
@@ -496,11 +511,13 @@ public class RoomGen : MonoBehaviour
             upperY = randomPoint.y + pHeight;
             
         }
+        //Debug.Log("X: " + randomPoint.x + "Y:" + randomPoint.y);
         
         //Grab room center
         //Calculate these in a different way
         int xCenter = (randomPoint.x + upperX)/2;
         int yCenter = (randomPoint.y + upperY) / 2;
+        //Debug.Log("centerX: " + xCenter + "centerY:" + yCenter);
         roomCenters.Add(new Vector2Int(xCenter,yCenter));
 
         return multiPrefabPoints;
@@ -509,6 +526,7 @@ public class RoomGen : MonoBehaviour
     
     private bool GetMultiPrefabPoints(List<Vector2Int> multiPrefabPoints, Vector2Int randomPoint, int upperY, int upperX)
     {
+        multiPrefabPoints.Clear();//need this or some points can overlap somehow
         //Loop through all the points to make sure their valid for placing 
         for (int i = randomPoint.y; i < upperY; i++)
         {
@@ -525,7 +543,6 @@ public class RoomGen : MonoBehaviour
                 if (aStarGrid.GetTileAt(new Vector2Int(j, i)).walkable == false)
                 {
                     //Debug.Log("J:" + j + "I"+ i);
-                    //aStarGrid.PlaceMarker(new Vector2Int(j, i), Color.red);
                     multiPrefabPoints.Add(new Vector2Int(j, i));
                 }
                 else
@@ -542,7 +559,6 @@ public class RoomGen : MonoBehaviour
     
     private void MultiPlacePrefab(RoomPrefab room, List<Vector2Int> prefabPlacePoints)
     {
-        Debug.Log("New");
         int totalTiles = 0;
         
         //Loops through the allRooms tiles setting their positions to a valid area 
@@ -552,6 +568,7 @@ public class RoomGen : MonoBehaviour
             {
                 room.prefabTiles[j][i].gridX = prefabPlacePoints[totalTiles].x;
                 room.prefabTiles[j][i].gridY = prefabPlacePoints[totalTiles].y;
+                //Debug.Log(prefabPlacePoints[totalTiles]);
                 totalTiles++;
                 
                 
