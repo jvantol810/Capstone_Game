@@ -6,28 +6,45 @@ public class MeleeAttack : MonoBehaviour
 {
     //Values for damage
     public int damage;
+    public float attackCooldown;
+    private SpriteRenderer spriteRenderer;
+    private Animator animator;
+    private float attackCooldownCounter;
     public float knockbackForce;
     public float attackRadius;
     public Vector2 attackOffset;
     public LayerMask whatCanBeHit;
     void Start()
     {
-       
+        attackCooldownCounter = 0;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.enabled = false;
+        animator = GetComponent<Animator>();
+        animator.enabled = false;
     }
 
     private void OnEnable()
     {
-        Attack();
+        //Attack();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        attackCooldownCounter -= Time.deltaTime;
     }
 
-    void Attack()
+    public void Attack()
     {
+        //If we are currently on cooldown, don't execute the attack
+        if(attackCooldownCounter > 0) { return; }
+
+        spriteRenderer.enabled = true;
+        animator.enabled = true;
+        animator.Play("melee_slash", 0, 0f);
+        
+       
+
         //Create a circle at the attack position with the range given for melee attacks, and store the hit colliders in an array called hits
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position + (Vector3)attackOffset, attackRadius, whatCanBeHit);
 
@@ -56,10 +73,18 @@ public class MeleeAttack : MonoBehaviour
             //If the hit has a creature controller, hit them.
             else if (obj.GetComponent<CreatureStats>() != null)
             {
-                obj.GetComponent<CreatureStats>().ChangeHealth(-damage);
-                obj.GetComponent<CreatureStatusEffectHandler>().AddStatusEffect(meleeKnockback);
+                obj.GetComponent<CreatureStats>().Hit(damage, meleeKnockback);
+                //obj.GetComponent<CreatureStatusEffectHandler>().AddStatusEffect(meleeKnockback);
             }
         }
+    }
+
+    public void StopAttack()
+    {
+        Debug.Log("Stop attack!");
+        spriteRenderer.enabled = false;
+        animator.enabled = false;
+        attackCooldownCounter = attackCooldown;
     }
 
     private void OnDrawGizmos()

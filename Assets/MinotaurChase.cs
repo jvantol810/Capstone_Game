@@ -10,9 +10,11 @@ public class MinotaurChase : StateMachineBehaviour
     public float meleeAttackRange = 1f;
 
     private float dashSpeed;
-    private float dashLength, dashCooldown;
+    private float dashLength;
     private float dashCounter;
     private float dashCoolCounter;
+    public float postDashMeleeCooldown;
+    private float postDashMeleeCoolCounter;
     public bool isDashing;
     Vector2 dashDirection;
     //public float timeUntilDash = 0f;
@@ -33,12 +35,21 @@ public class MinotaurChase : StateMachineBehaviour
         dashSpeed = minotaur.dashSpeed;
         dashLength = minotaur.dashLength;
         dashCounter = dashLength;
-        dashCooldown = minotaur.dashCooldown;
+        postDashMeleeCooldown = minotaur.postDashMeleeCooldown;
+        postDashMeleeCoolCounter = postDashMeleeCooldown;
     }
 
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (isDashing)
+        {
+            animator.GetComponent<CreatureStatusEffectHandler>().spriteRenderer.color = Color.blue;
+        }
+        else
+        {
+            animator.GetComponent<CreatureStatusEffectHandler>().spriteRenderer.color = Color.white;
+        }
         //If the cooldown has completed and the dash has completed, set the dash direction and dash counter. Set dashing to true.
         if (dashCoolCounter <= 0 && dashCounter <= 0)
         {
@@ -57,8 +68,9 @@ public class MinotaurChase : StateMachineBehaviour
             //If the dash counter has hit 0, start the cooldown counter and set isDashing to false
             if (dashCounter <= 0)
             {
-                dashCoolCounter = dashCooldown;
+                dashCoolCounter = minotaur.dashCooldown;
                 isDashing = false;
+                postDashMeleeCoolCounter = postDashMeleeCooldown;
             }
         }
 
@@ -66,6 +78,11 @@ public class MinotaurChase : StateMachineBehaviour
         if (dashCoolCounter > 0)
         {
             dashCoolCounter -= Time.deltaTime;
+        }
+
+        if (postDashMeleeCoolCounter > 0)
+        {
+            postDashMeleeCoolCounter -= Time.deltaTime;
         }
 
         //If we are not dashing, update the path.
@@ -87,7 +104,7 @@ public class MinotaurChase : StateMachineBehaviour
             }
 
             //If the player is in melee range, do a melee attack
-            if (minotaur.isPlayerInMeleeAttackRange())
+            if (minotaur.isPlayerInMeleeAttackRange() && postDashMeleeCoolCounter <= 0)
             {
                 minotaur.MeleeAttack();
             }
@@ -105,10 +122,12 @@ public class MinotaurChase : StateMachineBehaviour
 
     public void StopDash()
     {
+        Debug.Log("Stop dash!");
         dashCounter = 0;
-        dashCoolCounter = dashCooldown;
+        dashCoolCounter = minotaur.dashCooldown;
         isDashing = false;
     }
+
     public void UpdatePath()
     {
         AStarGrid grid = LevelSettings.MapData.activeAStarGrid;

@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 9005828045066945511}
   - component: {fileID: 9005828045066945512}
   - component: {fileID: 7378410415542450878}
-  m_Layer: 7
-  m_Name: Web
-  m_TagString: Untagged
+  m_Layer: 12
+  m_Name: PlayerWeb
+  m_TagString: Web
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: d53c3f62ed6c7604cb28274ca62d9481, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

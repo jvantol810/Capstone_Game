@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8930198046437737982
+--- !u!1 &9005828045066945513
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8930198046437737968}
-  - component: {fileID: 8930198046437737983}
-  - component: {fileID: 8930198046437737969}
-  - component: {fileID: 8930198046437737970}
-  - component: {fileID: 8930198046437737971}
-  m_Layer: 12
-  m_Name: Possession
-  m_TagString: Untagged
+  - component: {fileID: 9005828045066945509}
+  - component: {fileID: 9005828045066945510}
+  - component: {fileID: 9005828045066945511}
+  - component: {fileID: 9005828045066945512}
+  - component: {fileID: 7378410415542450878}
+  m_Layer: 7
+  m_Name: EnemyWeb
+  m_TagString: Web
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8930198046437737968
+--- !u!4 &9005828045066945509
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8930198046437737982}
+  m_GameObject: {fileID: 9005828045066945513}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.29, y: 1.35, z: 0}
-  m_LocalScale: {x: 0.11251799, y: 0.11251799, z: 0.11251799}
+  m_LocalPosition: {x: -1.2854195, y: -2.5031548, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &8930198046437737983
+--- !u!212 &9005828045066945510
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8930198046437737982}
+  m_GameObject: {fileID: 9005828045066945513}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -73,42 +73,42 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3274b1f243c293c47b90d055918a3955, type: 3}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: -2413806693520163455, guid: d53c3f62ed6c7604cb28274ca62d9481, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 5, y: 5}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &8930198046437737969
+--- !u!58 &9005828045066945511
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8930198046437737982}
+  m_GameObject: {fileID: 9005828045066945513}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.10986902, y: 0.05493398}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.5111833
---- !u!50 &8930198046437737970
+  m_Radius: 0.5
+--- !u!50 &9005828045066945512
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8930198046437737982}
+  m_GameObject: {fileID: 9005828045066945513}
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
@@ -122,15 +122,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &8930198046437737971
+--- !u!114 &7378410415542450878
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8930198046437737982}
+  m_GameObject: {fileID: 9005828045066945513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b24f11a8442ed9429b78b3a639653fe, type: 3}
+  m_Script: {fileID: 11500000, guid: ffd73d6c5bbed3d4e8d6b2c1040bd6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectileWebSprite: {fileID: -2413806693520163455, guid: d53c3f62ed6c7604cb28274ca62d9481, type: 3}
+  explodedWebSprite: {fileID: 21300000, guid: 261276e778ce42f4b90be62defe4e382, type: 3}
+  speed: 0
+  travelDistance: 50
+  speedReduction: 50
+  webRadius: 0.5

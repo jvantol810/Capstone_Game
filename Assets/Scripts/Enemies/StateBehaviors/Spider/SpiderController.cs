@@ -22,14 +22,14 @@ public class SpiderController : MonoBehaviour
     [Header("Fire Point")]
     public Transform firePoint;
     [Header("Melee Attacks")]
-    public GameObject meleePrefab;
+    public MeleeAttack meleeAttack;
     public float meleeOffset;
     [Header("Web Attacks")]
     public ObjectPool webPool;
     public float webShootSpeed;
     public float webRadius;
     public float webSpeedReduction;
-
+    public float webCooldown;
 
 
 
@@ -173,16 +173,16 @@ public class SpiderController : MonoBehaviour
     public void MeleeAttack()
     {
         //Enable the melee attack prefab
-        meleePrefab.SetActive(true);
+        meleeAttack.Attack();
         //Set its position to the firepoint (which is updated based on the player's position)
-        meleePrefab.transform.position = transform.position + firePoint.right * meleeOffset;
-        meleePrefab.transform.rotation = Quaternion.Euler(0, 0, aimAngle);
+        meleeAttack.transform.position = transform.position + firePoint.right * meleeOffset;
+        meleeAttack.transform.rotation = Quaternion.Euler(0, 0, aimAngle);
     }
 
     public bool isPlayerInMeleeAttackRange()
     {
         //Create an array of colliders of all gameObjects in this enemies detection range
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, meleePrefab.GetComponent<MeleeAttack>().attackRadius);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, meleeAttack.attackRadius);
 
         //Iterate through hits and check if any of them were the player
         for (int i = 0; i < hits.Length; i++)

@@ -16,11 +16,18 @@ public class MinotaurController : MonoBehaviour
     [Header("Fire Point")]
     public Transform firePoint;
     [Header("Melee Attacks")]
-    public GameObject meleePrefab;
+    public MeleeAttack meleeAttack;
     public float meleeOffset;
     [Header("Dashing")]
+    public float dashKnockbackForce;
+    //private StatusEffect dashKnockback;
+    public int dashDamage;
     public float dashSpeed;
-    public float dashLength, dashCooldown;
+    public float dashLength;
+    public Vector2 dashCooldownRange;
+    [HideInInspector]
+    public float dashCooldown { get { return Random.Range(dashCooldownRange.x, dashCooldownRange.y); } }
+    public float postDashMeleeCooldown;
     private float dashCounter;
     public float dashCoolCounter;
     public bool isDashing;
@@ -154,10 +161,10 @@ public class MinotaurController : MonoBehaviour
     public void MeleeAttack()
     {
         //Enable the melee attack prefab
-        meleePrefab.SetActive(true);
+        meleeAttack.Attack();
         //Set its position to the firepoint (which is updated based on the player's position)
-        meleePrefab.transform.position = transform.position + firePoint.right * meleeOffset;
-        meleePrefab.transform.rotation = Quaternion.Euler(0, 0, aimAngle);
+        meleeAttack.transform.position = transform.position + firePoint.right * meleeOffset;
+        meleeAttack.transform.rotation = Quaternion.Euler(0, 0, aimAngle);
     }
 
     public void StartDash()
@@ -181,7 +188,7 @@ public class MinotaurController : MonoBehaviour
     public bool isPlayerInMeleeAttackRange()
     {
         //Create an array of colliders of all gameObjects in this enemies detection range
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, meleePrefab.GetComponent<MeleeAttack>().attackRadius);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, meleeAttack.attackRadius);
 
         //Iterate through hits and check if any of them were the player
         for (int i = 0; i < hits.Length; i++)
@@ -211,6 +218,14 @@ public class MinotaurController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        //m_animator.enabled = true;
+        
+        if (collision.gameObject.CompareTag("Player") && m_animator.GetBehaviour<MinotaurChase>().isDashing)
+        {
+            Debug.Log("Player hit with minotaur dash!");
+            StatusEffect dashKnockback = new StatusEffect(StatusEffectTypes.Knockback, (player.position - transform.position).normalized * dashKnockbackForce, false, 0.2f);
+            collision.gameObject.GetComponent<PlayerController>().Hit(dashDamage, dashKnockback);
+        }
         m_animator.GetBehaviour<MinotaurChase>().StopDash();
     }
 }

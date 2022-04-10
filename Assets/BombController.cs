@@ -16,7 +16,8 @@ public class BombController : MonoBehaviour
     [Header("Fire Point")]
     public Transform firePoint;
     [Header("Melee Attacks")]
-    public GameObject meleePrefab;
+    public MeleeAttack meleeAttack;
+    public float meleeOffset;
     [Header("Bomb Attacks")]
     public ObjectPool bombPool;
     public float bombShootSpeed;
@@ -117,12 +118,17 @@ public class BombController : MonoBehaviour
         //Create a bomb prefab at the firepoint position
         GameObject bombObj = bombPool.GetPooledObject(transform.position + firePoint.right * 1.4f);
         Bomb bomb = bombObj.GetComponent<Bomb>();
-
+        
         //Set the bomb's settings based on BombController inspector values
         bomb.fieldOfImpact = bombExplosionSize;
         bomb.explosionDamage = bombDamage;
         bomb.Detonate();
         bomb.Detonate();
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position + firePoint.right * meleeOffset, 0.3f);
     }
 
     public void SetStateToWander()
@@ -144,15 +150,16 @@ public class BombController : MonoBehaviour
     public void MeleeAttack()
     {
         //Enable the melee attack prefab
-        meleePrefab.SetActive(true);
+        meleeAttack.Attack();
         //Set its position to the firepoint (which is updated based on the player's position)
-        meleePrefab.transform.position = transform.position + firePoint.right * 0.4f;
+        meleeAttack.transform.position = transform.position + firePoint.right * meleeOffset;
+        meleeAttack.transform.rotation = Quaternion.Euler(0, 0, aimAngle);
     }
 
     public bool isPlayerInMeleeAttackRange()
     {
         //Create an array of colliders of all gameObjects in this enemies detection range
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, meleePrefab.GetComponent<MeleeAttack>().attackRadius);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, meleeAttack.attackRadius);
 
         //Iterate through hits and check if any of them were the player
         for (int i = 0; i < hits.Length; i++)

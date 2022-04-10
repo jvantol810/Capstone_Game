@@ -33,7 +33,7 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -59,6 +59,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11e15425a0b165e41aac995d311385f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentTime: 0
+  meleeAttack: {fileID: 0}
 --- !u!1107 &1732596814767287484
 AnimatorStateMachine:
   serializedVersion: 6
@@ -70,7 +72,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 5999440057489481559}
-    m_Position: {x: 380, y: 100, z: 0}
+    m_Position: {x: 60, y: 270, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

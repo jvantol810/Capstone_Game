@@ -17,11 +17,11 @@ public class CreatureStats : MonoBehaviour
         currentSpeed = baseSpeed;
     }
 
-    //public void Hit(float damage)
-    //{
-
-    //    ChangeHealth(-damage);
-    //}
+    public void Hit(float damage, StatusEffect knockback)
+    {
+        GetComponent<CreatureStatusEffectHandler>().AddStatusEffect(knockback);
+        ChangeHealth(-damage);
+    }
 
     public void ChangeHealth(float amount)
     {
@@ -29,9 +29,14 @@ public class CreatureStats : MonoBehaviour
         Debug.Log("Creature " + gameObject.name + " has taken " + amount + " damage!");
         if (health <= 0)
         {
-            Debug.Log("Creature " + gameObject.name + " has died!");
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    public void Die()
+    {
+        Debug.Log("Creature " + gameObject.name + " has died!");
+        Destroy(gameObject);
     }
 
     public bool isPlayerDetected()

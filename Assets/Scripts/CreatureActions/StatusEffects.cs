@@ -6,7 +6,8 @@ public enum StatusEffectTypes
 {
     Slowed,
     Speedup,
-    Knockback
+    Knockback,
+    Invincible
 }
 public enum StatusEffectSources
 {
@@ -51,6 +52,13 @@ public class StatusEffect
         this.type = type;
         this.vectorValue = vectorValue;
         this.stackable = stackable;
+        this.duration = duration;
+    }
+
+
+    public StatusEffect(StatusEffectTypes type, float duration)
+    {
+        this.type = type;
         this.duration = duration;
     }
 

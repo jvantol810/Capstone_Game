@@ -9,9 +9,10 @@ public class SpiderChase : StateMachineBehaviour
     public Transform player;
     public float meleeAttackRange = 1f;
 
-    public float webAttackCooldown = 1f;
+    public float webAttackCooldown;
     public float webAttackTimer;
     public bool onCooldown = false;
+    private float shootDistance;
     //public float timeUntilDash = 0f;
     public Vector2 tempPlayerPosition;
     AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
@@ -27,13 +28,39 @@ public class SpiderChase : StateMachineBehaviour
         tempPlayerPosition = player.position;
         //Find the path from the creature's position to the player and store it in currentPath
         currentPath = LevelSettings.MapData.activeAStarGrid.FindPath(spider.transform.position, tempPlayerPosition);
-
+        webAttackCooldown = spider.webCooldown;
         webAttackTimer = webAttackCooldown;
+        shootDistance = spiderStats.detectionRange * 0.5f;
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        //Generate a path to the player using the astargrid
+        //If you're on the cooldown for shooting a web, update the timer
+        if (onCooldown)
+        {
+            webAttackTimer -= Time.deltaTime;
+            if (webAttackTimer <= 0f)
+            {
+                webAttackTimer = webAttackCooldown;
+                onCooldown = false;
+            }
+        }
+
+        //Check if you're in shooting distance. If so, shoot a web, start the cooldown, and exit.
+        if (isInShootingRange(animator.transform.position, player.position))
+        {
+            if (!onCooldown)
+            {
+                Debug.Log("Doing a web attack!");
+                spider.WebAttack();
+                onCooldown = true;
+                return;
+            }
+        }
+
+        //If you've reached this point in the code, then you're not in shooting range. At this point, you should be moving into position
+
+        //Generate a path to the player and continually move towards it. This process will pause once the Spider reaches a distance to the player equal to half of their detection radius.
         currentPath = LevelSettings.MapData.activeAStarGrid.FindPath(animator.transform.position, player.position);
         nextTileIndex = 0;
         if (currentPath.Length > 0)
@@ -42,6 +69,8 @@ public class SpiderChase : StateMachineBehaviour
             spider.MoveTowards(currentPath[nextTileIndex], spiderStats.currentSpeed);
             if (nextTileIndex + 1 < currentPath.Length) { nextTileIndex++; }
         }
+
+
 
         else if (!hasReached(player.position))
         {
@@ -54,22 +83,7 @@ public class SpiderChase : StateMachineBehaviour
             spider.MeleeAttack();
         }
 
-        else if (!onCooldown)
-        {
-            Debug.Log("Doing a web attack!");
-            spider.WebAttack();
-            onCooldown = true;
-        }
-
-        if (onCooldown)
-        {
-            webAttackTimer -= Time.deltaTime;
-            if(webAttackTimer <= 0f)
-            {
-                webAttackTimer = webAttackCooldown;
-                onCooldown = false;
-            }
-        }
+       
 
         UpdatePath();
 
@@ -97,7 +111,7 @@ public class SpiderChase : StateMachineBehaviour
 
     public bool isInShootingRange(Vector2 currentPosition, Vector2 playerPosition)
     {
-        return Vector2.Distance(currentPosition, playerPosition) >= meleeAttackRange;
+        return Vector2.Distance(currentPosition, playerPosition) <= shootDistance;
     }
 
     public bool isInMeleeRange(Vector2 currentPosition, Vector2 playerPosition)

@@ -5,9 +5,13 @@ using UnityEngine;
 public class DestroyOnExit : StateMachineBehaviour
 {
     public float currentTime;
+    public MeleeAttack meleeAttack;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        currentTime = 0;
+        meleeAttack = animator.GetComponent<MeleeAttack>();
+        Debug.Log("Enter state!");
         //animator.gameObject.SetActive(false, stateInfo.length);
         //Destroy(animator.gameObject, stateInfo.length);
     }
@@ -23,7 +27,8 @@ public class DestroyOnExit : StateMachineBehaviour
         currentTime += Time.deltaTime;
         if (currentTime >= stateInfo.length)
         {
-            animator.gameObject.SetActive(false);
+            //animator.gameObject.SetActive(false);
+            meleeAttack.StopAttack();
         }
     }
 

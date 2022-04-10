@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     public int currentHealth;
 
     public float timeInvincible = 2.0f;
-    bool isInvincible;
+    [HideInInspector]
+    public bool isInvincible;
     float invincibleTimer;
 
     Rigidbody2D rigidbody2d;
@@ -36,23 +37,39 @@ public class PlayerController : MonoBehaviour
     //public GameObject bombPrefab;
     //public float bombForce;
     [Header("Melee Attack")]
-    public GameObject meleePrefab;
+    public MeleeAttack meleeAttack;
     public float meleeOffset;
-
+    [Header("Invincibility")]
+    public float hitInvincibilityLength;
     public GameObject player;
     private Animator m_animator;
-
-    public float dashSpeed;
-    public float dashLength, dashCooldown;
-    private float dashCounter;
+    [Header("Default Dash Stats")]
+    public float defaultDashSpeed;
+    public float defaultDashLength, defaultDashCooldown;
+    [Header("Minotaur Dash Stats")]
+    public float minotaurDashSpeed;
+    public float minotaurDashLength;
+    public float minotaurDashKnockbackForce;
+    public float minotaurDashDamage;
+    [Header("Post Dash Collision Stun Duration")]
+    public float dashStunLength;
+    private float dashStunCounter;
+    private float currentDashLength, currentDashSpeed, currentDashCooldown;
+    private float dashCounter = 0;
     private float dashCoolCounter;
     public bool isDashing;
-
-    private Vector2 direction;
+    public enum DashTypes
+    {
+        Default,
+        Minotaur
+    }
+    private DashTypes DashType = DashTypes.Default;
+    private Vector2 dashDirection;
     
     [SerializeField]
     public Queue<Powers> playerPowers = new Queue<Powers>();
     public TextMeshProUGUI powersDisplay;
+    public TextMeshProUGUI healthDisplay;
     private int maxNumberOfPowers = 2;
     public string powersText { get { return GetPowersText(); } }
     public Transform firePoint;
@@ -73,6 +90,12 @@ public class PlayerController : MonoBehaviour
                 playerPowers.Dequeue();
             }
             playerPowers.Enqueue(power);
+            //If the dash power is being added, update the dash settings
+            if(power == Powers.Dash)
+            {
+                Debug.Log("update dash speed");
+                SetDashStats(minotaurDashLength, minotaurDashSpeed, defaultDashCooldown);
+            }
             powersDisplay.text = powersText;
         }
     }
@@ -85,6 +108,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SetDashStats(defaultDashLength, defaultDashSpeed, defaultDashCooldown);
         //Create a reference to the player's rigidbody
         rigidbody2d = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
@@ -119,6 +143,7 @@ public class PlayerController : MonoBehaviour
     {
         //Update the aim
         //UpdateAim();
+        healthDisplay.text = "Health: " + currentHealth;
 
         //get input from user
         moveInput.x = Input.GetAxis("Horizontal");
@@ -133,7 +158,7 @@ public class PlayerController : MonoBehaviour
         //Update the look direction but only if the player is not dashing
         if (!Mathf.Approximately(moveInput.x, 0.0f) || !Mathf.Approximately(moveInput.y, 0.0f))
         {
-            if (!isDashing && dashCoolCounter <= 0)
+            if (!isDashing && dashStunCounter <= 0)
             {
                 lookDirection.Set(moveInput.x, moveInput.y);
                 lookDirection.Normalize();
@@ -159,11 +184,13 @@ public class PlayerController : MonoBehaviour
 
         if (dashCounter > 0)
         {
-            CreatureActions.Move(rigidbody2d, lookDirection, dashSpeed);
+            Debug.Log("Dashing!");
+            CreatureActions.Move(rigidbody2d, lookDirection, currentDashSpeed);
             dashCounter -= Time.deltaTime;
             if(dashCounter <= 0)
             {
-                dashCoolCounter = dashCooldown;
+                dashCoolCounter = currentDashCooldown;
+                dashStunCounter = 0;
                 isDashing = false;
             }
         }
@@ -173,16 +200,32 @@ public class PlayerController : MonoBehaviour
             dashCoolCounter -= Time.deltaTime;
         }
 
+        if(dashStunCounter > 0)
+        {
+            dashStunCounter -= Time.deltaTime;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             MeleeAttack();
         }
 
-        if (HasPower(Powers.Dash))
+        //if (HasPower(Powers.Dash))
+        //{
+        //    if (Input.GetKeyDown(KeyCode.C))
+        //    {
+        //        ActivatePower(Powers.Dash);
+        //    }
+        //}
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (Input.GetKeyDown(KeyCode.C))
+            if (HasPower(Powers.Dash))
             {
                 ActivatePower(Powers.Dash);
+            }
+            else
+            {
+                StartDash(defaultDashLength, defaultDashSpeed, defaultDashCooldown);
             }
         }
         if (HasPower(Powers.ShootWeb))
@@ -206,7 +249,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (moveInput != Vector2.zero && isDashing == false && dashCoolCounter <= 0)
+        if (moveInput != Vector2.zero && isDashing == false && dashStunCounter <= 0)
         {
             CreatureActions.Move(rigidbody2d, moveInput, currentSpeed);
         }
@@ -217,29 +260,56 @@ public class PlayerController : MonoBehaviour
         //DisplayPowers();
     }
 
+    public void StartDodge()
+    {
+        dashDirection = playerAim.aimDirection;
+        if (dashCoolCounter <= 0 && dashCounter <= 0)
+        {
+            dashCounter = currentDashLength;
+            isDashing = true;
+        }
+    }
     public void MeleeAttack()
     {
-        meleePrefab.SetActive(true);
-        meleePrefab.transform.rotation = Quaternion.Euler(0, 0, playerAim.aimAngle);
-        meleePrefab.transform.position = transform.position + firePoint.right * meleeOffset;
+        //meleePrefab.SetActive(true);
+        meleeAttack.transform.rotation = Quaternion.Euler(0, 0, playerAim.aimAngle);
+        meleeAttack.transform.position = transform.position + firePoint.right * meleeOffset;
+        meleeAttack.Attack();
     }
+#if UNITY_EDITOR
     public void DisplayPowers()
     {
         UnityEditor.Handles.color = Color.green;
         Handles.Label(new Vector3(transform.position.x, transform.position.y + 1f, 0), powersText);
     }
+#endif
+    public void DisplayHealth()
+    {
+        UnityEditor.Handles.color = Color.green;
+        Handles.Label(new Vector3(transform.position.x, transform.position.y + 1f, 0), powersText);
+    }
+
 
     public void Hit(int damage, StatusEffect knockback)
     {
-        //Apply knockback in the direction of the hit
-        GetComponent<PlayerStatusEffectHandler>().AddStatusEffect(knockback);
+        if (isInvincible) { return; }
+        if(isDashing) { return; }
+
         //Update your health amount
         ChangeHealth(-damage);
+
+        //Apply knockback in the direction of the hit
+        GetComponent<PlayerStatusEffectHandler>().AddStatusEffect(knockback);
+
+        //Add invincibility
+        GetComponent<PlayerStatusEffectHandler>().AddStatusEffect(new StatusEffect(StatusEffectTypes.Invincible, hitInvincibilityLength));
     }
 
     public void ChangeHealth(int amount)
     {
-        if (amount < 0)
+        //Debug.Log("Health decreased by amount: " + amount);
+
+        if (amount <= 0)
         {
             //animator.SetTrigger("Hit");
 
@@ -250,9 +320,9 @@ public class PlayerController : MonoBehaviour
             invincibleTimer = timeInvincible;
             //PlaySound(hitClip);
         }
-
+        //Debug.Log("Health decreased by amount: " + amount);
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        Debug.Log(currentHealth);
+        //Debug.Log(currentHealth);
         //UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
     }
 
@@ -276,11 +346,14 @@ public class PlayerController : MonoBehaviour
         {
             case Powers.Dash:
                 //Do the dash
-                if(dashCoolCounter <= 0 && dashCounter <= 0)
-                {
-                    dashCounter = dashLength;
-                    isDashing = true;
-                }
+                //if(dashCoolCounter <= 0 && dashCounter <= 0)
+                //{
+                //    Debug.Log("do the thing");
+                //    dashDirection = playerAim.aimDirection;
+                //    dashCounter = currentDashLength;
+                //    isDashing = true;
+                //}
+                StartDash(minotaurDashLength, minotaurDashSpeed, defaultDashCooldown);
                 break;
             case Powers.ShootWeb:
                 //Shoot web
@@ -306,23 +379,48 @@ public class PlayerController : MonoBehaviour
     public void StopDash()
     {
         dashCounter = 0;
-        dashCoolCounter = dashCooldown;
+        dashCoolCounter = currentDashCooldown;
         isDashing = false;
     }
 
-    public void StartDash()
+    public void StartDash(float dashLength, float dashSpeed, float dashCooldown)
     {
-
+        if (dashCoolCounter <= 0 && dashCounter <= 0)
+        {
+            SetDashStats(dashLength, dashSpeed, dashCooldown);
+            Debug.Log("do the thing");
+            dashDirection = playerAim.aimDirection;
+            dashCounter = currentDashLength;
+            isDashing = true;
+        }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void SetDashStats(float dashLength, float dashSpeed, float dashCooldown)
+    {
+        currentDashLength = dashLength;
+        currentDashSpeed = dashSpeed;
+        currentDashCooldown = dashCooldown;
+        this.dashCounter = currentDashLength;
+        this.dashCoolCounter = currentDashCooldown;
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
     {
         if (isDashing)
         {
             //dashCounter = 0;
             //dashCoolCounter = dashCooldown;
             //isDashing = false;
-            StopDash();
+            if (collision.gameObject.CompareTag("Enemy") && HasPower(Powers.Dash))
+            {
+                Debug.Log("Dashed into an enemy!");
+                StatusEffect dashKnockback = new StatusEffect(StatusEffectTypes.Knockback, (collision.transform.position - transform.position).normalized * minotaurDashKnockbackForce, false, 0.2f);
+                collision.gameObject.GetComponent<CreatureStats>().Hit(minotaurDashDamage, dashKnockback);
+            }
+            dashCounter = 0;
+            dashCoolCounter = currentDashCooldown;
+            dashStunCounter = dashStunLength;
+            isDashing = false;
         }
     }
 }

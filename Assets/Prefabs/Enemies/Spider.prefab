@@ -370,12 +370,13 @@ MonoBehaviour:
   currentSpeed: 0
   damage: 3
   firePoint: {fileID: 7448757010409400608}
-  meleePrefab: {fileID: 5065158946730723431}
+  meleeAttack: {fileID: 5065158946730723451}
   meleeOffset: 0.66
   webPool: {fileID: 159857255}
   webShootSpeed: 5
   webRadius: 0.5
   webSpeedReduction: 50
+  webCooldown: 2
 --- !u!114 &6645070416482636097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389,11 +390,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 10
-  baseSpeed: 3
+  baseSpeed: 2
   currentSpeed: 0
   attackDamage: 5
   creatureType: 1
-  detectionRange: 3.16
+  detectionRange: 5.53
 --- !u!114 &36990252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,11 +421,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205890, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackRadius
       value: 0.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+      propertyPath: attackCooldown
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackOffset.x
@@ -484,13 +489,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
---- !u!1 &5065158946730723431 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5065158945608205890, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
-  m_PrefabInstance: {fileID: 1159220773}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5065158946730723450 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
   m_PrefabInstance: {fileID: 1159220773}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5065158946730723451 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+  m_PrefabInstance: {fileID: 1159220773}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4142669d55e35a44a818a05bf75cc23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

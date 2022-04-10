@@ -263,7 +263,8 @@ MonoBehaviour:
   currentSpeed: 0
   damage: 5
   firePoint: {fileID: 2717995255983796093}
-  meleePrefab: {fileID: 1150696699619291614}
+  meleeAttack: {fileID: 1150696699619291586}
+  meleeOffset: 0.58
   bombPool: {fileID: 2649484346700529999}
   bombShootSpeed: 3
   bombExplosionSize: 3
@@ -325,6 +326,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: MeleeAttack
       objectReference: {fileID: 0}
+    - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+      propertyPath: attackRadius
+      value: 0.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+      propertyPath: attackCooldown
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+      propertyPath: attackOffset.x
+      value: 0.58
+      objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -371,13 +384,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
---- !u!1 &1150696699619291614 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5065158945608205890, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
-  m_PrefabInstance: {fileID: 5310614450596427676}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1150696699619291587 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
   m_PrefabInstance: {fileID: 5310614450596427676}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1150696699619291586 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+  m_PrefabInstance: {fileID: 5310614450596427676}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4142669d55e35a44a818a05bf75cc23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

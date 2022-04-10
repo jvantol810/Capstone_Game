@@ -114,8 +114,8 @@ ParticleSystem:
     enabled: 1
     startLifetime:
       serializedVersion: 2
-      minMaxState: 3
-      scalar: 2
+      minMaxState: 0
+      scalar: 0.5
       minScalar: 1.5
       maxCurve:
         serializedVersion: 2
@@ -5062,8 +5062,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 3
   explosionDamage: 2
-  fieldOfImpact: 1
-  explosionForce: 6
+  fieldOfImpact: 1.2
+  explosionForce: 8
   layerToHit:
     serializedVersion: 2
     m_Bits: 256

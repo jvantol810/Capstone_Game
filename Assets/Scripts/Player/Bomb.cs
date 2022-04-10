@@ -56,6 +56,10 @@ public class Bomb : MonoBehaviour
                 obj.GetComponent<CreatureStatusEffectHandler>().AddStatusEffect(knockback);
                 obj.GetComponent<CreatureStats>().ChangeHealth(-explosionDamage);
             }
+            else if (obj.CompareTag("Web"))
+            {
+                obj.gameObject.SetActive(false);
+            }
             
         }
 

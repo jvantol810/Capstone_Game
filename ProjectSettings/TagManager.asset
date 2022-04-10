@@ -9,6 +9,7 @@ TagManager:
   - health
   - Marker
   - Enemy
+  - Web
   layers:
   - Default
   - TransparentFX
@@ -17,12 +18,12 @@ TagManager:
   - Water
   - UI
   - Unwalkable
-  - Projectile
+  - EnemyProjectile
   - Player
   - Enemy
   - Enemy_IgnoreWalls
   - Map
-  - 
+  - PlayerProjectile
   - 
   - 
   - 

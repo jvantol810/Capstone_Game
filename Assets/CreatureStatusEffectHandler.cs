@@ -9,7 +9,7 @@ public class CreatureStatusEffectHandler : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     private CreatureStats stats;
     private Vector2 knockbackForce;
-    private bool isBeingKnockedBack = false;
+    public bool isBeingKnockedBack = false;
     private Rigidbody2D m_rigidbody;
     private void Start()
     {
@@ -88,7 +88,7 @@ public class CreatureStatusEffectHandler : MonoBehaviour
                     //Disable the animator temporarily 
                     GetComponent<Animator>().enabled = false;
                     //Set the sprite to be red
-                    Debug.Log("Set sprite to be red!");
+                    //Debug.Log("Set sprite to be red!");
                     spriteRenderer.color = Color.red;
                     //Set the knockback force
                     knockbackForce = effect.vectorValue;
