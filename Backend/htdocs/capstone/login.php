@@ -28,7 +28,7 @@
     $namecheck = mysqli_query($con,$namecheckquery) or die("2: Namecheck Query Failed");
 	
 
-	if (mysqli_num_rows($namecheck) != 1)
+	if (mysqli_num_rows($namecheck) < 1)
 	{
 		echo "3: Username not found"; //error #3
 		exit();

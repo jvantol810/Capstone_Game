@@ -8,7 +8,7 @@
         exit();
     }
     //Connection was established.
-    $leaderboardquery = "SELECT username, time FROM leaderboard;";
+    $leaderboardquery = "SELECT username, time FROM leaderboard WHERE TIME IS NOT NULL ORDER BY time desc;";
 
     $leaderboardresults = mysqli_query($con, $leaderboardquery) or die("2: Failed to query."); //Error code 2 = name check query failed.
 
