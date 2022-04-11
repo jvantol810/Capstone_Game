@@ -296,7 +296,8 @@ public class PlayerController : MonoBehaviour
         GetComponent<PlayerStatusEffectHandler>().AddStatusEffect(knockback);
 
         //Add invincibility
-        GetComponent<PlayerStatusEffectHandler>().AddStatusEffect(new StatusEffect(StatusEffectTypes.Invincible, hitInvincibilityLength));
+        //GetComponent<PlayerStatusEffectHandler>().AddStatusEffect(new StatusEffect(StatusEffectTypes.Invincible, hitInvincibilityLength));
+        isInvincible = true;
     }
 
     public void ChangeHealth(int amount)
