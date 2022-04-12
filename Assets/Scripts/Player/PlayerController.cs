@@ -100,9 +100,12 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("update dash speed");
                 SetDashStats(minotaurDashLength, minotaurDashSpeed, defaultDashCooldown);
+                //currentDashCooldown = 0;
+                StopDash();
+                
                 //GameObject.FindGameObjectsWithTag("DashIcon").SetActive(true);
             }
-            powersDisplay.text = powersText;
+            //powersDisplay.text = powersText;
         }
     }
 
@@ -249,6 +252,7 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log("Throwing bomb");
             }
         }
+        powersDisplay.text = "Dash counter: " + dashCounter;
         //Debug.Log("Dash counter: " + dashCounter);
 
     }
@@ -398,6 +402,8 @@ public class PlayerController : MonoBehaviour
 
     public void SetDashStats(float dashLength, float dashSpeed, float dashCooldown)
     {
+        isDashing = false;
+        dashCounter = 0;
         currentDashLength = dashLength;
         currentDashSpeed = dashSpeed;
         currentDashCooldown = dashCooldown;
@@ -420,7 +426,7 @@ public class PlayerController : MonoBehaviour
             }
             dashCounter = 0;
             dashCoolCounter = currentDashCooldown;
-            dashStunCounter = dashStunLength;
+            //dashStunCounter = dashStunLength;
             isDashing = false;
         }
     }

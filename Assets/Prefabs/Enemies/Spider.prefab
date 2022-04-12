@@ -376,7 +376,7 @@ MonoBehaviour:
   webShootSpeed: 5
   webRadius: 0.5
   webSpeedReduction: 50
-  webCooldown: 2
+  webCooldown: 1
 --- !u!114 &6645070416482636097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -392,7 +392,7 @@ MonoBehaviour:
   health: 10
   baseSpeed: 2
   currentSpeed: 0
-  attackDamage: 5
+  attackDamage: 1
   creatureType: 1
   detectionRange: 5.53
 --- !u!114 &36990252
