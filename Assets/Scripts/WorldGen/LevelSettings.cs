@@ -28,4 +28,6 @@ public static class LevelSettings
             activeAStarGrid.InitGrid();
         }
     }
+
+   
 }
