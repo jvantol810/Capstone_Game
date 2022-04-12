@@ -51,6 +51,7 @@ public class SubmitScoreManager : MonoBehaviour
         WWWForm formdata = new WWWForm();
         formdata.AddField("USERNAME", username);
         formdata.AddField("SCORE", score);
+        formdata.AddField("PLAYERID", DatabaseManager.userid);
 
         using (UnityWebRequest submitPOST = UnityWebRequest.Post("http://localhost/capstone/submit.php", formdata))
         {
