@@ -150,6 +150,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+      
         //Update the aim
         //UpdateAim();
         //healthDisplay.text = "Health: " + currentHealth;
