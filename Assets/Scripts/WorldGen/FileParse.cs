@@ -9,13 +9,9 @@ using UnityEngine;
 
 public static class FileParse 
 {
-    private static String textPath = Application.persistentDataPath + "/Prefabs";
+    private static String textPath = Application.streamingAssetsPath + "/Prefabs";
     
-    private static String path;
-    private static String jsonString;
-
     public static List<int> listDepth = new List<int>();
-    
     
     public static List<String[,]> allTextPrefabs = new List<string[,]>();
 
@@ -61,28 +57,5 @@ public static class FileParse
             allTextPrefabs.Add(ParseTextFile(file));
         }
     }
-    
-    //Reads in from JSON -- Doesn't Work -.-
-    private static void ParseJSON()
-    {
-        path = Application.persistentDataPath + "/TestPrefab.json";
-        
-        if (File.Exists(path))
-        {
-            Debug.Log("Should've worked");
-            jsonString = File.ReadAllText(path);
-            PrefabArray prefab = JsonUtility.FromJson<PrefabArray>(jsonString);
-            Debug.Log(prefab.jsonTiles[0,1]);
-        }
-        else
-        {
-            Debug.Log("Didn't work");
-        }
-    }
-    private class PrefabArray
-    {
-        public String[,] jsonTiles = {{"one","two"}};
-    }
-    
 
 }
