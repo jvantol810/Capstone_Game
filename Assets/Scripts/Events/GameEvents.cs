@@ -12,6 +12,6 @@ public static class GameEvents
     }
     public static Vector2IntEvent OnEnemyMove = new Vector2IntEvent();
     public static UnityEvent OnEnterTeleporter = new UnityEvent();
-
+    public static UnityEvent OnPlayerDie = new UnityEvent();
     
 }
