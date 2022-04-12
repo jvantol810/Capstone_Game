@@ -14,7 +14,7 @@ public static class FileParse
     public static List<int> listDepth = new List<int>();
     
     public static List<String[,]> allTextPrefabs = new List<string[,]>();
-
+    
     //Reads in text file splits into a String 2d array
     private static String[,] ParseTextFile(String file)
     {
@@ -51,11 +51,12 @@ public static class FileParse
 
     public static void ParseWholeFolder()
     {
-        //Reads each file in the folder */Prefabs
-        foreach (var file in Directory.GetFiles(textPath))
+        //Reads each file in the folder 
+        foreach (var file in Directory.GetFiles(textPath,"*.txt"))
         {
             allTextPrefabs.Add(ParseTextFile(file));
         }
+        Debug.Log(allTextPrefabs.Count);
     }
 
 }

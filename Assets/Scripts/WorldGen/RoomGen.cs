@@ -114,7 +114,7 @@ public class RoomGen : MonoBehaviour
                 //Set the aStarGrid in LevelSettings to be the aStarGrid assigned in inspector (this way any class can now reference the aStarGrid from LevelSettings)
                 LevelSettings.MapData.SetAStarGrid(aStarGrid);
 
-                FileParse.ParseWholeFolder();
+                //FileParse.ParseWholeFolder(); I don't think we need this
                 GenerateWorld();
             }
             if(Input.GetKeyDown(KeyCode.P))
