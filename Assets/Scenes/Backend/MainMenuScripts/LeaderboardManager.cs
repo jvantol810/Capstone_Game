@@ -14,6 +14,8 @@ public class LeaderboardManager : MonoBehaviour
     public GameObject lastEntryPrefab;
     public GameObject failedConnectionPrefab;
     public GameObject loadingEntryPrefab;
+    public GameObject lastLocalEntryPrefab;
+    public GameObject noLocalEntriesPrefab;
     [Header("Top Buttons")]
     public Button globalButton;
     public Button localButton;
@@ -35,6 +37,8 @@ public class LeaderboardManager : MonoBehaviour
         //globalButton.interactable = false;
         //globalButton.GetComponentInChildren<Text>().color = Color.white;
         SetLeaderboardType(1);
+        Debug.Log("Got... " + DatabaseManager.LoggedIn);
+        
     }
 
     // Update is called once per frame
@@ -59,7 +63,7 @@ public class LeaderboardManager : MonoBehaviour
         {
             currentDisplayType = "Local";
             WipeDataEntries();
-            RefreshLocalLeaderboard();
+            StartCoroutine(RefreshLocalLeaderboard());
         }
         else
         {
@@ -71,14 +75,14 @@ public class LeaderboardManager : MonoBehaviour
 
     private void UpdateTopButtons()
     {
-        if(currentDisplayType == "Global")
+        if (currentDisplayType == "Global")
         {
             globalButton.interactable = false;
             globalButton.GetComponentInChildren<Text>().color = Color.white;
             localButton.interactable = true;
             localButton.GetComponentInChildren<Text>().color = Color.black;
         }
-        else if(currentDisplayType == "Local")
+        else if (currentDisplayType == "Local")
         {
             localButton.interactable = false;
             localButton.GetComponentInChildren<Text>().color = Color.white;
@@ -119,7 +123,7 @@ public class LeaderboardManager : MonoBehaviour
         else
         {
             int addedEntries = 0;
-            for(int i = 4; i < sortedEntries.Length; i += 2)
+            for(int i = 2; i < sortedEntries.Length; i += 2)
             {
                 GameObject newEntry = Instantiate(scoreEntryPrefab, viewportContent.transform);
                 Text[] newEntryTexts = newEntry.GetComponentsInChildren<Text>();
@@ -135,20 +139,39 @@ public class LeaderboardManager : MonoBehaviour
     }
 
     //Needs to: Get local scores from database if logged in, or check savedata on machine.
-    private void RefreshLocalLeaderboard()
+    private IEnumerator RefreshLocalLeaderboard()
     {
-        /* // Debug test
-        for(int i = 1; i < 10; i++)
+        GameObject LoadingEntry = Instantiate(loadingEntryPrefab, viewportContent.transform);
+        CoroutineWithData cwd = new CoroutineWithData(this, phpManager.GetLocalLeaderboard());
+        yield return cwd.coroutine;
+        Destroy(LoadingEntry);
+        string leaderboardscores = cwd.result.ToString();
+        Debug.Log(leaderboardscores);
+        //Debug.Log(leaderboardscores);
+        string[] sortedEntries = leaderboardscores.Split('\t');
+        if (sortedEntries[0] == "False")
         {
-            Instantiate(scoreEntryPrefab, viewportContent.transform);
-        }*/
-        if(DatabaseManager.username != null)
+            Instantiate(failedConnectionPrefab, viewportContent.transform);
+        }
+        else if(sortedEntries[1].StartsWith("8:"))
         {
-            //Player is logged in
+            Instantiate(noLocalEntriesPrefab, viewportContent.transform);
         }
         else
         {
-            
+            int addedEntries = 0;
+            for (int i = 2; i < sortedEntries.Length; i += 2)
+            {
+                GameObject newEntry = Instantiate(scoreEntryPrefab, viewportContent.transform);
+                Text[] newEntryTexts = newEntry.GetComponentsInChildren<Text>();
+                newEntryTexts[0].text = sortedEntries[i - 1];
+                newEntryTexts[1].text = sortedEntries[i];
+                addedEntries++;
+            }
+            if (addedEntries < displayCount)
+            {
+                Instantiate(lastLocalEntryPrefab, viewportContent.transform);
+            }
         }
     }
 

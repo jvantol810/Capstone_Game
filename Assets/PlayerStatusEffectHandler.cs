@@ -36,6 +36,21 @@ public class PlayerStatusEffectHandler : MonoBehaviour
         return text;
 
     }
+
+    //public void AddPowerUpEffect(PowerupTypes type, int value, float duration)
+    //{
+    //    switch(type):
+    //        case: 
+    //}
+    public void AddPowerUp(PowerupTypes type, float effectValue)
+    {
+        switch (type)
+        {
+            case PowerupTypes.Healing:
+                player.ChangeHealth((int)effectValue);
+                break;
+        }
+    }
     public void AddStatusEffect(StatusEffect effect)
     {
         if (HasStatusEffect(effect.type))
@@ -104,6 +119,12 @@ public class PlayerStatusEffectHandler : MonoBehaviour
                     player.isBeingKnockedBack = true;
                     //Remove the effect
                     StartCoroutine(RemoveStatusEffectAfterDelay(effect, effect.duration));
+                }
+                break;
+            case StatusEffectTypes.Healing:
+                if (!isBeingRemoved)
+                {
+                    player.ChangeHealth((int)effect.value);
                 }
                 break;
         }

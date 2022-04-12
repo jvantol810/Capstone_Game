@@ -39,6 +39,7 @@ public class CreatureStats : MonoBehaviour
         Destroy(gameObject);
     }
 
+
     public bool isPlayerDetected()
     {
         //Create an array of colliders of all gameObjects in this enemies detection range

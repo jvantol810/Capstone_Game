@@ -21,9 +21,15 @@ public class CreatureStatusEffectHandler : MonoBehaviour
     {
         if (isBeingKnockedBack)
         {
-            m_rigidbody.MovePosition(transform.position + (Vector3)knockbackForce);
+            m_rigidbody.MovePosition(transform.position + (Vector3)knockbackForce * Time.deltaTime);
         }
     }
+
+    //public void Knockback(Vector2 force)
+    //{
+    //    m_rigidbody.AddForce(/*transform.position + */force, ForceMode2D.Force);
+    //    //isBeingKnockedBack = false;
+    //}
     public void AddStatusEffect(StatusEffect effect)
     {
         if (HasStatusEffect(effect.type))
@@ -71,6 +77,10 @@ public class CreatureStatusEffectHandler : MonoBehaviour
                 else { stats.currentSpeed += stats.baseSpeed * (effect.value / 100); };
                 break;
             case StatusEffectTypes.Knockback:
+                //if (!isBeingRemoved)
+                //{
+                //    Knockback(effect.vectorValue);
+                //}
                 if (isBeingRemoved)
                 {
                     //Reenable the animator

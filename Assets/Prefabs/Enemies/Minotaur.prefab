@@ -153,14 +153,14 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.0001
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &3350636786608551695
 BoxCollider2D:
@@ -235,11 +235,11 @@ MonoBehaviour:
   firePoint: {fileID: 2582587053687302335}
   meleeAttack: {fileID: 1156711393799963216}
   meleeOffset: 0.7
-  dashKnockbackForce: 0.2
+  dashKnockbackForce: 25
   dashDamage: 1
   dashSpeed: 10
   dashLength: 3
-  dashCooldownRange: {x: 1, y: 3}
+  dashCooldownRange: {x: 1, y: 1.5}
   postDashMeleeCooldown: 0
   dashCoolCounter: 0
   isDashing: 0
@@ -407,6 +407,10 @@ PrefabInstance:
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackOffset.x
       value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+      propertyPath: knockbackForce
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_RootOrder

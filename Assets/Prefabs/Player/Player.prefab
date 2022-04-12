@@ -310,7 +310,7 @@ MonoBehaviour:
   defaultDashCooldown: 0.5
   minotaurDashSpeed: 14
   minotaurDashLength: 6
-  minotaurDashKnockbackForce: 1
+  minotaurDashKnockbackForce: 100
   minotaurDashDamage: 1
   dashStunLength: 0
   isDashing: 0
@@ -772,12 +772,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+      propertyPath: damage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackRadius
       value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackOffset.x
       value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+      propertyPath: knockbackForce
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: whatCanBeHit.m_Bits

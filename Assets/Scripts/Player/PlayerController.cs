@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public float baseSpeed = 7f;
     public float currentSpeed;
     public int maxHealth = 5;
-    public int health { get { return currentHealth; } }
+    public int health { get { return currentHealth; } set { currentHealth = health; } }
     public int currentHealth;
 
     public float timeInvincible = 2.0f;
@@ -159,10 +159,10 @@ public class PlayerController : MonoBehaviour
         moveInput.y = Input.GetAxis("Vertical");
 
 
-        if (isBeingKnockedBack)
-        {
-            rigidbody2d.MovePosition(transform.position + (Vector3)knockbackForce);
-        }
+        //if (isBeingKnockedBack)
+        //{
+        //    rigidbody2d.MovePosition(transform.position + (Vector3)knockbackForce * Time.deltaTime);
+        //}
 
         //Update the look direction but only if the player is not dashing
         if (!Mathf.Approximately(moveInput.x, 0.0f) || !Mathf.Approximately(moveInput.y, 0.0f))
@@ -252,7 +252,8 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log("Throwing bomb");
             }
         }
-        powersDisplay.text = "Dash counter: " + dashCounter;
+        powersDisplay.text = "Knockback: " + isBeingKnockedBack;
+        //powersDisplay.text = "Dash counter: " + dashCounter;
         //Debug.Log("Dash counter: " + dashCounter);
 
     }
