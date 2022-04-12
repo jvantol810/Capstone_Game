@@ -52,8 +52,7 @@ public class GameManager : MonoBehaviour
         }
 
         TitleScreenManager title = FindObjectOfType<TitleScreenManager>();
-
-        Debug.Log(title);
-        title.SwitchToSubmit();
+        //Debug.Log(title);
+        title.SwitchScreen(title.submitScoresScreen);
     }
 }

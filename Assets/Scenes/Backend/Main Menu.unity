@@ -7298,7 +7298,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1527730671}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: NewGameButton, Assembly-CSharp
         m_MethodName: NewGame
         m_Mode: 1
         m_Arguments:
@@ -11785,7 +11785,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1527730670}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbb80187703d2b546af2828e9231212b, type: 3}
+  m_Script: {fileID: 11500000, guid: 280808c1b1f62824fb9588d64ed056af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1527730672

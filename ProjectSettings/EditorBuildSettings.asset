@@ -8,9 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Backend/Main Menu.unity
-    guid: 9177d2fac41f8294c9a4e3fb339398b8
+    guid: 902658ada1a3a0947b9ae3630d251314
   - enabled: 1
     path: Assets/Scenes/JasonsStuff/JasonsScene.unity
     guid: 14756ee1147dd8a4e9af62ba50dfbef4
