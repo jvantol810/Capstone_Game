@@ -5951,7 +5951,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &730147504
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9458,12 +9458,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1754367191}
         m_TargetAssemblyTypeName: TitleScreenManager, Assembly-CSharp
         m_MethodName: SwitchScreen
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgument: {fileID: 1735699980}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -13247,6 +13247,8 @@ MonoBehaviour:
   lastEntryPrefab: {fileID: 794273480691910048, guid: dec926764b89e534f955a798e446050e, type: 3}
   failedConnectionPrefab: {fileID: 4806636039317197740, guid: 5ea03093e673d8240ae039279fc7aab6, type: 3}
   loadingEntryPrefab: {fileID: 853747754132809998, guid: 3a075c3aa5463174bb5a037f82ff1c3d, type: 3}
+  lastLocalEntryPrefab: {fileID: 794273480691910048, guid: 294a87a1d629537449d7dd2249e92bb8, type: 3}
+  noLocalEntriesPrefab: {fileID: 794273480691910048, guid: 09e980e10b6ac1e42af2daeb9eaceeeb, type: 3}
   globalButton: {fileID: 721399732}
   localButton: {fileID: 647199772}
   dc10Button: {fileID: 179993543}

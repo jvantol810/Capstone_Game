@@ -66,6 +66,34 @@ public class PHPManager : MonoBehaviour
         }
     }
 
+    public IEnumerator GetLocalLeaderboard()
+    {
+        WWWForm formdata = new WWWForm();
+        formdata.AddField("LOCALFLAG", "True");
+        if (DatabaseManager.LoggedIn)
+        {
+            formdata.AddField("USERNAME", DatabaseManager.username);
+        }
+
+        UnityWebRequest leaderboardGET = UnityWebRequest.Post("http://localhost/capstone/globalleaderboard.php", formdata);
+        yield return leaderboardGET.SendWebRequest();
+        if (leaderboardGET.result != UnityWebRequest.Result.Success)
+        {
+            //Handle Error
+            Debug.Log(leaderboardGET.result);
+            //connectionSuccess = false;
+            yield return "False";
+        }
+        else
+        {
+            Debug.Log("Got it!");
+            //connectionSuccess = true;
+            //lastRetrievedLeaderboardData = leaderboardGET.downloadHandler.text;
+            //Debug.Log(lastRetrievedLeaderboardData);
+            yield return "True\t" + leaderboardGET.downloadHandler.text;
+        }
+    }
+
     public IEnumerator GetPlayerReceipts()
     {
         WWWForm formdata = new WWWForm();
@@ -112,7 +140,7 @@ public class PHPManager : MonoBehaviour
             else
             {
                 Debug.Log(playerReceiptsPOST.downloadHandler.text);
-                yield return "True\t" + playerReceiptsPOST.downloadHandler.text;
+                yield return "True" + '\t' + playerReceiptsPOST.downloadHandler.text;
             }
         }
     }
