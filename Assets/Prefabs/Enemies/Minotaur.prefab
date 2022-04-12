@@ -240,7 +240,7 @@ MonoBehaviour:
   dashSpeed: 10
   dashLength: 3
   dashCooldownRange: {x: 1, y: 3}
-  postDashMeleeCooldown: 0.5
+  postDashMeleeCooldown: 0
   dashCoolCounter: 0
   isDashing: 0
 --- !u!58 &2234895193805004624
@@ -397,12 +397,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
+      propertyPath: attackRadius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackCooldown
-      value: 0.3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackOffset.x
-      value: 0.12
+      value: 0.42
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_RootOrder

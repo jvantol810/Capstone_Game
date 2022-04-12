@@ -408,6 +408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 2296222164914975295}
+  isBeingKnockedBack: 0
 --- !u!1001 &1159220773
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -429,7 +430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackCooldown
-      value: 0.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackOffset.x

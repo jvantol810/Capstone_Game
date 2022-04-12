@@ -42,16 +42,24 @@ public class MinotaurChase : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (isDashing)
-        {
-            animator.GetComponent<CreatureStatusEffectHandler>().spriteRenderer.color = Color.blue;
-        }
-        else
-        {
-            animator.GetComponent<CreatureStatusEffectHandler>().spriteRenderer.color = Color.white;
-        }
+        //if (minotaur.isPlayerInMeleeAttackRange())
+        //{
+        //    player.GetComponent<SpriteRenderer>().color = Color.yellow;
+        //}
+        //else
+        //{
+        //    player.GetComponent<SpriteRenderer>().color = Color.white;
+        //}
+        //if (isDashing)
+        //{
+        //    animator.GetComponent<CreatureStatusEffectHandler>().spriteRenderer.color = Color.blue;
+        //}
+        //else
+        //{
+        //    animator.GetComponent<CreatureStatusEffectHandler>().spriteRenderer.color = Color.white;
+        //}
         //If the cooldown has completed and the dash has completed, set the dash direction and dash counter. Set dashing to true.
-        if (dashCoolCounter <= 0 && dashCounter <= 0)
+        if (dashCoolCounter <= 0 && dashCounter <= 0 && minotaur.isPlayerInMeleeAttackRange() == false)
         {
             dashDirection = (player.position - animator.transform.position).normalized;
             dashCounter = dashLength;
@@ -104,7 +112,7 @@ public class MinotaurChase : StateMachineBehaviour
             }
 
             //If the player is in melee range, do a melee attack
-            if (minotaur.isPlayerInMeleeAttackRange() && postDashMeleeCoolCounter <= 0)
+            if (minotaur.isPlayerInMeleeAttackRange()/*&& postDashMeleeCoolCounter <= 0*/)
             {
                 minotaur.MeleeAttack();
             }
@@ -118,6 +126,7 @@ public class MinotaurChase : StateMachineBehaviour
             animator.SetBool("isChasing", false);
         }
 
+        
     }
 
     public void StopDash()

@@ -182,7 +182,7 @@ public class PlayerController : MonoBehaviour
                 isInvincible = false;
         }
 
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             //Fire a projectile at the enemy, possessing them on contact
             FirePossession();
@@ -236,14 +236,14 @@ public class PlayerController : MonoBehaviour
         }
         if (HasPower(Powers.ShootWeb))
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(1))
             {
                 ActivatePower(Powers.ShootWeb);
             }
         }
         if (HasPower(Powers.Explode))
         {
-            if (Input.GetKeyDown(KeyCode.J))
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 ActivatePower(Powers.Explode);
                 //Debug.Log("Throwing bomb");

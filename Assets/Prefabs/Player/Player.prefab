@@ -293,7 +293,7 @@ MonoBehaviour:
   currentSpeed: 0
   maxHealth: 5
   currentHealth: 0
-  timeInvincible: 3
+  timeInvincible: 0.5
   isInvincible: 0
   lookDirection: {x: 1, y: 0}
   projectilePrefab: {fileID: 8930198046437737982, guid: c25fa86d41ebbf446b305deedc86fa26, type: 3}
@@ -305,11 +305,11 @@ MonoBehaviour:
   meleeOffset: 0.35
   hitInvincibilityLength: 0
   player: {fileID: 5684243186576125843}
-  defaultDashSpeed: 0
-  defaultDashLength: 0
-  defaultDashCooldown: 0
-  minotaurDashSpeed: 0
-  minotaurDashLength: 0
+  defaultDashSpeed: 14
+  defaultDashLength: 0.1
+  defaultDashCooldown: 0.5
+  minotaurDashSpeed: 14
+  minotaurDashLength: 6
   minotaurDashKnockbackForce: 1
   minotaurDashDamage: 1
   dashStunLength: 0
