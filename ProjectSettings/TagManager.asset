@@ -10,6 +10,9 @@ TagManager:
   - Marker
   - Enemy
   - Web
+  - DashIcon
+  - WebIcon
+  - BombIcon
   layers:
   - Default
   - TransparentFX

@@ -63,6 +63,7 @@ public class Possession : MonoBehaviour
 
         //Get the PlayerController script from the player in the scene
         PlayerController Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+
         if (!other.gameObject.TryGetComponent(out CreatureStats Creature))
         {
             Destroy(gameObject);

@@ -82,12 +82,17 @@ public class PlayerController : MonoBehaviour
     public Vector2 knockbackForce;
     public void AddPower(Powers power)
     {
+        //UIPowers UIPowers = GetComponent<UIPowers>();
         //Add the power if it isn't already in the power list
         if (playerPowers.Contains(power) == false)
         {
-            if(playerPowers.Count >= maxNumberOfPowers)
+            UIPowers.instance.ActivatePowerIcon(power);
+
+            if (playerPowers.Count >= maxNumberOfPowers)
             {
                 playerPowers.Dequeue();
+                //set image to inactive
+                UIPowers.instance.DeactivatePowerIcon(power);
             }
             playerPowers.Enqueue(power);
             //If the dash power is being added, update the dash settings
@@ -95,6 +100,7 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("update dash speed");
                 SetDashStats(minotaurDashLength, minotaurDashSpeed, defaultDashCooldown);
+                //GameObject.FindGameObjectsWithTag("DashIcon").SetActive(true);
             }
             powersDisplay.text = powersText;
         }
@@ -122,7 +128,7 @@ public class PlayerController : MonoBehaviour
 
         playerAim = GetComponent<PlayerAim>();
 
-        AddPower(Powers.Dash);
+        //AddPower(Powers.Dash);
         //AddPower(Powers.ShootWeb);
         AddPower(Powers.Explode);
     }
@@ -318,7 +324,7 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("Health decreased by amount: " + amount);
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         Debug.Log("Current Health: " + currentHealth);
-        UIManager.instance.SetValue(currentHealth / (float)maxHealth);
+        UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
     }
 
     void FirePossession()
