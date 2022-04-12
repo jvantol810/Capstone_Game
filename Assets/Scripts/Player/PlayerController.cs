@@ -296,7 +296,8 @@ public class PlayerController : MonoBehaviour
         GetComponent<PlayerStatusEffectHandler>().AddStatusEffect(knockback);
 
         //Add invincibility
-        GetComponent<PlayerStatusEffectHandler>().AddStatusEffect(new StatusEffect(StatusEffectTypes.Invincible, hitInvincibilityLength));
+        //GetComponent<PlayerStatusEffectHandler>().AddStatusEffect(new StatusEffect(StatusEffectTypes.Invincible, hitInvincibilityLength));
+        isInvincible = true;
     }
 
     public void ChangeHealth(int amount)
@@ -316,8 +317,8 @@ public class PlayerController : MonoBehaviour
         }
         //Debug.Log("Health decreased by amount: " + amount);
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        //Debug.Log(currentHealth);
-        //UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
+        Debug.Log("Current Health: " + currentHealth);
+        UIManager.instance.SetValue(currentHealth / (float)maxHealth);
     }
 
     void FirePossession()
