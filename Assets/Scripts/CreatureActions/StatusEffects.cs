@@ -7,7 +7,8 @@ public enum StatusEffectTypes
     Slowed,
     Speedup,
     Knockback,
-    Invincible
+    Invincible,
+    Healing
 }
 public enum StatusEffectSources
 {
@@ -61,6 +62,14 @@ public class StatusEffect
         this.type = type;
         this.duration = duration;
     }
+
+    public StatusEffect(StatusEffectTypes type, float value, float duration)
+    {
+        this.type = type;
+        this.value = value;
+        this.duration = duration;
+    }
+
 
     //Effects are considered to be identical if they are of the same type and derived from the same source
     public bool EffectEquals(StatusEffect effect)

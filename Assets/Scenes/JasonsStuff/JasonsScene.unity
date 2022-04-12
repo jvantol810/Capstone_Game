@@ -922,7 +922,6 @@ MonoBehaviour:
   seeded: 0
   seed: 8702
   monsterPrefabs:
-  - {fileID: 8821750546496874717, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
   - {fileID: 3350636786608551685, guid: 297622065862cf14d92ba3ef460fddd6, type: 3}
 --- !u!4 &974129684
 Transform:
@@ -1147,16 +1146,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e7707341102554082d75adfbeb92be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedMultiplier: 2
-  duration: 4
-  healthBoost: 1
-  powerupEffect:
-    type: 0
-    source: {fileID: 0}
-    value: 0
-    vectorValue: {x: 0, y: 0}
-    duration: 0
-    stackable: 0
+  effectValue: 1
+  powerupType: 0
 --- !u!212 &1462444542
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1297,16 +1288,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e7707341102554082d75adfbeb92be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedMultiplier: 2
-  duration: 4
-  healthBoost: 1
-  powerupEffect:
-    type: 1
-    source: {fileID: 0}
-    value: 25
-    vectorValue: {x: 0, y: 0}
-    duration: 3
-    stackable: 1
+  effectValue: 1
+  powerupType: 0
 --- !u!61 &1957926093
 BoxCollider2D:
   m_ObjectHideFlags: 0

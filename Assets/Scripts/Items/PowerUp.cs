@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class PowerUp : MonoBehaviour
 {
-    public float speedMultiplier = 2f;
-    public float duration = 4f;
-    public int healthBoost = 1;
-    [SerializeField]
-    public StatusEffect powerupEffect;
+    public int effectValue = 1;
+    public PowerupTypes powerupType;
+    //[SerializeField]
+    //private StatusEffect powerupEffect;
     void OnTriggerEnter2D(Collider2D other)
     {
         //detect of the player collides with the item
@@ -21,10 +20,13 @@ public class PowerUp : MonoBehaviour
 
     IEnumerator Pickup(Collider2D playerCollider)
     {
-        //get player script reference
+        //Get player script reference
         PlayerStatusEffectHandler player = playerCollider.GetComponent<PlayerStatusEffectHandler>();
 
-        player.AddStatusEffect(powerupEffect);
+        //StatusEffect powerUpEffect = new StatusEffect(effectType, effectValue, duration);
+        player.AddPowerUp(powerupType, effectValue);
+
+
         //if else statements check which kind of powerup the player has collided with by the tag
         //if (this.CompareTag("speed"))
         //{
@@ -36,8 +38,8 @@ public class PowerUp : MonoBehaviour
         //}
 
         //make the collectible sprite disappear
-        GetComponent<SpriteRenderer>().enabled = false;
-        GetComponent<Collider2D>().enabled = false;
+        //GetComponent<SpriteRenderer>().enabled = false;
+        //GetComponent<Collider2D>().enabled = false;
 
         //wait to continue with function
         //yield return new WaitForSeconds(duration);
@@ -49,7 +51,7 @@ public class PowerUp : MonoBehaviour
         ////}
 
         ////destroy the powerup
-        //Destroy(gameObject);
+        Destroy(gameObject);
         yield return null;
     }
 }
