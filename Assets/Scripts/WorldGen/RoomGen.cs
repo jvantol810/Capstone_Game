@@ -201,7 +201,7 @@ public class RoomGen : MonoBehaviour
         }
         InitMap();
         DrunkenWalkGen(true);
-        MultiPrefabGeneration();
+        //MultiPrefabGeneration();
         PlantTrees();
         SpawnMonsters();
         SpawnPlayer();

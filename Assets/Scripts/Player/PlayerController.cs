@@ -150,7 +150,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      
+        //Update player time alive
+        GameplaySession.playerAliveTime += Time.deltaTime;
+        Debug.Log("Player time: " + GameplaySession.playerAliveTime);
         //Update the aim
         //UpdateAim();
         //healthDisplay.text = "Health: " + currentHealth;
