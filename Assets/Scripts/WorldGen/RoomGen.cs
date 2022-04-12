@@ -44,7 +44,7 @@ public class RoomGen : MonoBehaviour
     public bool seeded = false;
     public int seed;
     public GameObject[] monsterPrefabs; // Move to another file along with SpawnEntity function
-
+    public GameObject portalPrefab; 
     private int walkX;
     private int walkY;
     private List<Vector3Int> tilesWalked = new List<Vector3Int>();
@@ -201,10 +201,11 @@ public class RoomGen : MonoBehaviour
         }
         InitMap();
         DrunkenWalkGen(true);
-        //MultiPrefabGeneration();
+        MultiPrefabGeneration();
         PlantTrees();
         SpawnMonsters();
         SpawnPlayer();
+        SpawnPortal();
     }
     
     //Randomly 'Walks' to create walkable area for player
@@ -813,6 +814,12 @@ public class RoomGen : MonoBehaviour
             }
             
         }
+    }
+
+    public void SpawnPortal()
+    {
+        Vector3 spawnPos = LevelSettings.MapData.activeAStarGrid.GetRandomWalkableTile().centerWorldPosition;
+        Instantiate(portalPrefab, spawnPos, Quaternion.identity);
     }
 
 }
