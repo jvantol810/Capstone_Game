@@ -14,6 +14,7 @@ public class TitleScreenManager : MonoBehaviour
     public Text GBDisplayText;
     public Button GBPurchaseButton;
     public Button CashShopButton;
+    public GameObject submitScoresScreen;
 
     //public CashEquipsData CEData;
 
@@ -40,6 +41,11 @@ public class TitleScreenManager : MonoBehaviour
         Leaderboard.SetActive(false);
         gameObject.SetActive(true);
         //SetUserInfo();
+    }
+    public void SwitchToSubmit()
+    {
+        currentScreen.SetActive(false);
+        submitScoresScreen.SetActive(true);
     }
 
     public void SwitchScreen(GameObject newScreen)
@@ -77,4 +83,5 @@ public class TitleScreenManager : MonoBehaviour
     {
         GBDisplayText.text = amt.ToString("n0") + " GB";
     }
+
 }

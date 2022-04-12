@@ -328,7 +328,7 @@ public class PlayerController : MonoBehaviour
         }
         //Debug.Log("Health decreased by amount: " + amount);
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        if(currentHealth == 0)
+        if(currentHealth <= 0)
         {
             GameEvents.OnPlayerDie.Invoke();
         }
