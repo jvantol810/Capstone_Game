@@ -83,6 +83,9 @@ public class RoomGen : MonoBehaviour
 
         //Generate a random path on the aStarGrid
         path = aStarGrid.GetRandomPath();
+
+        //Add the appropriate event listeners
+        GameEvents.OnEnemyDie.AddListener(RemoveMonFromList);
     }
     bool pathfinding = false;
 
@@ -207,7 +210,16 @@ public class RoomGen : MonoBehaviour
         SpawnPlayer();
         SpawnPortal();
     }
-    
+
+    //Removes a monster from the list
+    private void RemoveMonFromList(GameObject mon)
+    {
+        if (globalMonList.Contains(mon))
+        {
+            globalMonList.Remove(mon);
+        }
+    }
+
     //Randomly 'Walks' to create walkable area for player
     private void DrunkenWalkGen(bool jumpAtEdge)
     {

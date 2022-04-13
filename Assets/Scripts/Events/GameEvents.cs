@@ -10,8 +10,11 @@ public static class GameEvents
     public class Vector2IntEvent : UnityEvent<Vector2Int>
     {
     }
+    public class GameObjectEvent : UnityEvent<GameObject>
+    {
+    }
     public static Vector2IntEvent OnEnemyMove = new Vector2IntEvent();
     public static UnityEvent OnEnterTeleporter = new UnityEvent();
     public static UnityEvent OnPlayerDie = new UnityEvent();
-    
+    public static GameObjectEvent OnEnemyDie = new GameObjectEvent();
 }

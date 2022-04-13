@@ -35,8 +35,10 @@ public class CreatureStats : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("Creature " + gameObject.name + " has died!");
-        Destroy(gameObject);
+        //Debug.Log("Creature " + gameObject.name + " has died!");
+        GameEvents.OnEnemyDie.Invoke(gameObject);
+        gameObject.SetActive(false);
+        //Destroy(gameObject);
     }
 
 
