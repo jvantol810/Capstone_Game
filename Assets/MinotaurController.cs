@@ -219,7 +219,6 @@ public class MinotaurController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //m_animator.enabled = true;
-        
         if (collision.gameObject.CompareTag("Player") && m_animator.GetBehaviour<MinotaurChase>().isDashing)
         {
             Debug.Log("Player hit with minotaur dash!");
@@ -230,6 +229,14 @@ public class MinotaurController : MonoBehaviour
         {
             m_animator.GetBehaviour<MinotaurChase>().StopDash();
         }
-        
     }
+
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Map"))
+    //    {
+    //        Debug.Log("Touched the map!");
+    //        m_rigidbody.mass = 1f;
+    //    }
+    //}
 }

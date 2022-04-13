@@ -65,7 +65,24 @@ public class CreatureStats : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //m_animator.enabled = true;
+        if (collision.gameObject.CompareTag("Map"))
+        {
+            Debug.Log("Touched the map!");
+            GetComponent<Rigidbody2D>().mass = 100000000f;
+        }
+    }
 
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Map"))
+        {
+            Debug.Log("Touched the map!");
+            GetComponent<Rigidbody2D>().mass = 1f;
+        }
+    }
 
 
 }
