@@ -56,7 +56,6 @@ public static class FileParse
         {
             allTextPrefabs.Add(ParseTextFile(file));
         }
-        Debug.Log(allTextPrefabs.Count);
     }
 
 }
