@@ -1424,7 +1424,7 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 0.6213611, b: 0, a: 1}
+        key0: {r: 0, g: 1, b: 0.89161634, a: 1}
         key1: {r: 1, g: 1, b: 1, a: 1}
         key2: {r: 1, g: 1, b: 1, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
@@ -5001,7 +5001,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 89a0394c47101af47b48f49555deef98, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.6556604, g: 1, b: 0.9941544, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5063,7 +5063,7 @@ MonoBehaviour:
   duration: 3
   explosionDamage: 2
   fieldOfImpact: 1
-  explosionForce: 8
+  explosionForce: 12
   layerToHit:
     serializedVersion: 2
     m_Bits: 1664

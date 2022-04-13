@@ -23,6 +23,7 @@ public class BombController : MonoBehaviour
     public float bombShootSpeed;
     public float bombExplosionSize;
     public float bombDamage;
+    public float bombDropCooldown;
 
     // Start is called before the first frame update
     void Start()

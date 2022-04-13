@@ -6,11 +6,12 @@ public class BombChase : StateMachineBehaviour
 {
     public BombController bombDude;
     public CreatureStats bombDudeStats;
+    public CreatureSpriteAnimator spriteAnimator;
     public Transform player;
     public float meleeAttackRange = 1f;
 
-    public float webAttackCooldown = 1f;
-    public float webAttackTimer;
+    public float bombDropCooldown;
+    public float bombDropCoolCounter;
     public bool onCooldown = false;
     //public float timeUntilDash = 0f;
     public Vector2 tempPlayerPosition;
@@ -21,14 +22,16 @@ public class BombChase : StateMachineBehaviour
     {
         bombDude = animator.GetComponent<BombController>();
         bombDudeStats = animator.GetComponent<CreatureStats>();
+        spriteAnimator = animator.GetComponent<CreatureSpriteAnimator>();
         //Get a reference to the player's transform using Gameobject.Find()
         player = GameObject.FindGameObjectWithTag("Player").transform;
         //Store the player's position in a temporary variable
         tempPlayerPosition = player.position;
         //Find the path from the creature's position to the player and store it in currentPath
         currentPath = LevelSettings.MapData.activeAStarGrid.FindPath(bombDude.transform.position, tempPlayerPosition);
-
-        webAttackTimer = webAttackCooldown;
+        bombDropCooldown = bombDude.bombDropCooldown;
+        bombDropCoolCounter = bombDropCooldown;
+        
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -40,12 +43,14 @@ public class BombChase : StateMachineBehaviour
         {
             //Move towards the current tile on the path. If you've reached the current tile already, then increment the tile index.
             bombDude.MoveTowards(currentPath[nextTileIndex], bombDudeStats.currentSpeed);
+            spriteAnimator.currentDestination = currentPath[nextTileIndex];
             if (nextTileIndex + 1 < currentPath.Length) { nextTileIndex++; }
         }
 
         else if (!hasReached(player.position))
         {
             bombDude.MoveTowards(player.position, bombDudeStats.currentSpeed);
+            spriteAnimator.currentDestination = player.position;
         }
 
         //If the player is in melee range, do a melee attack
@@ -63,10 +68,10 @@ public class BombChase : StateMachineBehaviour
 
         if (onCooldown)
         {
-            webAttackTimer -= Time.deltaTime;
-            if (webAttackTimer <= 0f)
+            bombDropCoolCounter -= Time.deltaTime;
+            if (bombDropCoolCounter <= 0f)
             {
-                webAttackTimer = webAttackCooldown;
+                bombDropCoolCounter = bombDropCooldown;
                 onCooldown = false;
             }
         }

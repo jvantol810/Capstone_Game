@@ -98,13 +98,13 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isChasing
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -129,7 +129,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 4548055801709686961}
-    m_Position: {x: 270, y: -60, z: 0}
+    m_Position: {x: 340, y: 60, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -119702261885001690}
     m_Position: {x: 460, y: -190, z: 0}
@@ -156,6 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creature: {fileID: 0}
+  spriteAnimator: {fileID: 0}
   creatureColliderPosition: {x: 0, y: 0}
   wanderCooldown:
     cooldownAmount: 0.5
@@ -202,6 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bombDude: {fileID: 0}
   bombDudeStats: {fileID: 0}
+  spriteAnimator: {fileID: 0}
   player: {fileID: 0}
   meleeAttackRange: 1
   webAttackCooldown: 1

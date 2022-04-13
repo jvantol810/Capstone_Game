@@ -5063,7 +5063,7 @@ MonoBehaviour:
   duration: 3
   explosionDamage: 2
   fieldOfImpact: 1.2
-  explosionForce: 8
+  explosionForce: 12
   layerToHit:
     serializedVersion: 2
     m_Bits: 256
