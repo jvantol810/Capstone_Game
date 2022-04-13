@@ -21,7 +21,10 @@ public class TitleScreenManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if(GameplaySession.isPlaying == true)
+        {
+            SwitchToSubmit();
+        }
     }
 
     // Update is called once per frame

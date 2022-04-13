@@ -117,6 +117,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameplaySession.isPlaying = true;
         SetDashStats(defaultDashLength, defaultDashSpeed, defaultDashCooldown);
         //Create a reference to the player's rigidbody
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -153,6 +154,7 @@ public class PlayerController : MonoBehaviour
         //Update player time alive
         GameplaySession.playerAliveTime += Time.deltaTime;
         Debug.Log("Player time: " + GameplaySession.playerAliveTime);
+        
         //Update the aim
         //UpdateAim();
         //healthDisplay.text = "Health: " + currentHealth;
