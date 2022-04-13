@@ -447,10 +447,14 @@ public class RoomGen : MonoBehaviour
                 {
                     if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[0]).walkable || !aStarGrid.GetTileAt(closestPath[i].neighborLocations[4]).walkable)
                     {
-                        AddTileToMap(true, closestPath[i].neighborLocations[0], tiles[RandomIndex(tiles.Length,1)]); 
-                        AddTileToMap(true, closestPath[i].neighborLocations[2], tiles[RandomIndex(tiles.Length,1)]); 
-                        AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]); 
-                        AddTileToMap(true, closestPath[i].neighborLocations[6], tiles[RandomIndex(tiles.Length,1)]); 
+                        AddTileToMap(true, closestPath[i].neighborLocations[0], tiles[RandomIndex(tiles.Length,1)]);
+                        AddTileToMap(true, closestPath[i].neighborLocations[1], tiles[RandomIndex(tiles.Length,1)]);  
+                        AddTileToMap(true, closestPath[i].neighborLocations[2], tiles[RandomIndex(tiles.Length,1)]);
+                        AddTileToMap(true, closestPath[i].neighborLocations[3], tiles[RandomIndex(tiles.Length,1)]); 
+                        AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]);
+                        AddTileToMap(true, closestPath[i].neighborLocations[5], tiles[RandomIndex(tiles.Length,1)]); 
+                        AddTileToMap(true, closestPath[i].neighborLocations[6], tiles[RandomIndex(tiles.Length,1)]);
+                        AddTileToMap(true, closestPath[i].neighborLocations[7], tiles[RandomIndex(tiles.Length,1)]); 
                     }
                     else
                     {
