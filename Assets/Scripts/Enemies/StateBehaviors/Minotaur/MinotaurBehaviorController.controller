@@ -41,6 +41,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creature: {fileID: 0}
+  spriteAnimator: {fileID: 0}
   creatureColliderPosition: {x: 0, y: 0}
   wanderCooldown:
     cooldownAmount: 0.5
@@ -86,9 +87,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minotaur: {fileID: 0}
+  spriteAnimator: {fileID: 0}
   minotaurStats: {fileID: 0}
   player: {fileID: 0}
   meleeAttackRange: 1
+  postDashMeleeCooldown: 0
   isDashing: 0
   tempPlayerPosition: {x: 0, y: 0}
   currentPath: []
@@ -106,7 +109,7 @@ AnimatorStateMachine:
     m_Position: {x: 420, y: 100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1322262971255595973}
-    m_Position: {x: 430, y: 240, z: 0}
+    m_Position: {x: 420, y: 200, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

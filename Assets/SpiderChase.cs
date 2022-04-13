@@ -6,6 +6,7 @@ public class SpiderChase : StateMachineBehaviour
 {
     public SpiderController spider;
     public CreatureStats spiderStats;
+    public CreatureSpriteAnimator spriteAnimator;
     public Transform player;
     public float meleeAttackRange = 1f;
 
@@ -22,6 +23,7 @@ public class SpiderChase : StateMachineBehaviour
     {
         spider = animator.GetComponent<SpiderController>();
         spiderStats = animator.GetComponent<CreatureStats>();
+        spriteAnimator = animator.GetComponent<CreatureSpriteAnimator>();
         //Get a reference to the player's transform using Gameobject.Find()
         player = GameObject.FindGameObjectWithTag("Player").transform;
         //Store the player's position in a temporary variable
@@ -67,6 +69,7 @@ public class SpiderChase : StateMachineBehaviour
         {
             //Move towards the current tile on the path. If you've reached the current tile already, then increment the tile index.
             spider.MoveTowards(currentPath[nextTileIndex], spiderStats.currentSpeed);
+            spriteAnimator.currentDestination = currentPath[nextTileIndex];
             if (nextTileIndex + 1 < currentPath.Length) { nextTileIndex++; }
         }
 
@@ -74,6 +77,7 @@ public class SpiderChase : StateMachineBehaviour
 
         else if (!hasReached(player.position))
         {
+            spriteAnimator.currentDestination = player.position;
             spider.MoveTowards(player.position, spiderStats.currentSpeed);
         }
 

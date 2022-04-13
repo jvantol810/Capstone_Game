@@ -197,6 +197,7 @@ GameObject:
   - component: {fileID: 36990254}
   - component: {fileID: 6645070416482636097}
   - component: {fileID: 36990252}
+  - component: {fileID: 9044692593731970361}
   m_Layer: 9
   m_Name: Spider
   m_TagString: Enemy
@@ -409,6 +410,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 2296222164914975295}
   isBeingKnockedBack: 0
+--- !u!114 &9044692593731970361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8821750546496874717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a2df7a13b7f3e946bb62aa7d43d20e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lookX: 0
+  lookY: 0
+  spriteAnimator: {fileID: 3523432080842276664}
+  currentDestination: {x: 0, y: 0}
+  currentDirection: {x: 0, y: 0}
 --- !u!1001 &1159220773
 PrefabInstance:
   m_ObjectHideFlags: 0

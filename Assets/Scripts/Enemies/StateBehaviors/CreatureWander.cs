@@ -5,6 +5,7 @@ using UnityEngine;
 public class CreatureWander : StateMachineBehaviour
 {
     public CreatureStats creature;
+    public CreatureSpriteAnimator spriteAnimator;
     private Rigidbody2D m_rb;
     public Vector2 creatureColliderPosition;
     
@@ -20,6 +21,7 @@ public class CreatureWander : StateMachineBehaviour
         //if (animator.GetComponent<CreatureStats>() == null) { return; }
         //if(LevelSettings.MapData.activeAStarGrid.initialized == false) { return; }
         creature = animator.GetComponent<CreatureStats>();
+        spriteAnimator = animator.GetComponent<CreatureSpriteAnimator>();
         m_rb = animator.GetComponent<Rigidbody2D>();
         currentDestination = GenerateNewDestination();
         //AStarGrid grid = LevelSettings.MapData.activeAStarGrid;
@@ -44,6 +46,7 @@ public class CreatureWander : StateMachineBehaviour
             //if(nextTileIndex >= currentPath.Length) { return; }
             //Move towards the next tile in the path that you have generated
             CreatureActions.MoveTowards(m_rb, currentPath[nextTileIndex], creature.currentSpeed);
+            spriteAnimator.currentDestination = currentPath[nextTileIndex];
             if (hasReached(currentPath[nextTileIndex]))
             {
                 nextTileIndex++;

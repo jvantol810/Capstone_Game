@@ -5,6 +5,7 @@ using UnityEngine;
 public class MinotaurChase : StateMachineBehaviour
 {
     public MinotaurController minotaur;
+    public CreatureSpriteAnimator spriteAnimator;
     public CreatureStats minotaurStats;
     public Transform player;
     public float meleeAttackRange = 1f;
@@ -26,6 +27,7 @@ public class MinotaurChase : StateMachineBehaviour
     {
         minotaur = animator.GetComponent<MinotaurController>();
         minotaurStats = animator.GetComponent<CreatureStats>();
+        spriteAnimator = animator.GetComponent<CreatureSpriteAnimator>();
         //Get a reference to the player's transform using Gameobject.Find()
         player = GameObject.FindGameObjectWithTag("Player").transform;
         //Store the player's position in a temporary variable
@@ -103,12 +105,14 @@ public class MinotaurChase : StateMachineBehaviour
             {
                 //Move towards the current tile on the path. If you've reached the current tile already, then increment the tile index.
                 minotaur.MoveTowards(currentPath[nextTileIndex], minotaurStats.currentSpeed);
+                spriteAnimator.currentDestination = currentPath[nextTileIndex];
                 if (nextTileIndex + 1 < currentPath.Length) { nextTileIndex++; }
             }
 
             else if (!hasReached(player.position))
             {
                 minotaur.MoveTowards(player.position, minotaurStats.currentSpeed);
+                spriteAnimator.currentDestination = player.position;
             }
 
             //If the player is in melee range, do a melee attack
