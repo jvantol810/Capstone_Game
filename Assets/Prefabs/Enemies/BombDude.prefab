@@ -451,15 +451,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackRadius
-      value: 0.31
+      value: 0.42
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackCooldown
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: attackOffset.x
-      value: 0.58
+      value: 0.06
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_RootOrder

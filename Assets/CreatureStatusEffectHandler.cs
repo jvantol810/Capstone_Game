@@ -19,9 +19,14 @@ public class CreatureStatusEffectHandler : MonoBehaviour
 
     private void Update()
     {
+
+    }
+
+    private void FixedUpdate()
+    {
         if (isBeingKnockedBack)
         {
-            m_rigidbody.MovePosition(transform.position + (Vector3)knockbackForce * Time.deltaTime);
+            m_rigidbody.MovePosition(transform.position + (Vector3)knockbackForce * Time.fixedDeltaTime);
         }
     }
 
@@ -30,6 +35,7 @@ public class CreatureStatusEffectHandler : MonoBehaviour
     //    m_rigidbody.AddForce(/*transform.position + */force, ForceMode2D.Force);
     //    //isBeingKnockedBack = false;
     //}
+
     public void AddStatusEffect(StatusEffect effect)
     {
         if (HasStatusEffect(effect.type))

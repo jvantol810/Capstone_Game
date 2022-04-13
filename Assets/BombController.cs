@@ -124,8 +124,9 @@ public class BombController : MonoBehaviour
         bomb.fieldOfImpact = bombExplosionSize;
         bomb.explosionDamage = bombDamage;
         bomb.Detonate();
-        bomb.Detonate();
+        //bomb.Detonate();
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.magenta;

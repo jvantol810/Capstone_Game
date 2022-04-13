@@ -275,6 +275,8 @@ MonoBehaviour:
   lookX: 0
   lookY: 0
   spriteAnimator: {fileID: 1211580580180450488}
+  currentDestination: {x: 0, y: 0}
+  currentDirection: {x: 0, y: 0}
 --- !u!1 &6887990632782824461
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,7 +428,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205918, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: knockbackForce
-      value: 15
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5065158945608205919, guid: c20be0fffb11e5c409bb2fc23d2a4477, type: 3}
       propertyPath: m_RootOrder
