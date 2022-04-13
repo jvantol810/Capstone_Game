@@ -44,6 +44,7 @@ public class MinotaurChase : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        spriteAnimator.SetCharging(isDashing);
         //if (minotaur.isPlayerInMeleeAttackRange())
         //{
         //    player.GetComponent<SpriteRenderer>().color = Color.yellow;
@@ -73,6 +74,8 @@ public class MinotaurChase : StateMachineBehaviour
         {
             //Move in the direction of the dash by a speed of 20
             minotaur.Move(dashDirection, dashSpeed);
+            spriteAnimator.currentDestination = (Vector2)animator.transform.position + dashDirection;
+            
             //Decrement the dash counter
             dashCounter -= Time.deltaTime;
             //If the dash counter has hit 0, start the cooldown counter and set isDashing to false

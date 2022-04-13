@@ -17,4 +17,9 @@ public class CreatureSpriteAnimator : MonoBehaviour
         spriteAnimator.SetFloat("Look X", currentDirection.x);
         spriteAnimator.SetFloat("Look Y", currentDirection.y);
     }
+
+    public void SetCharging(bool isCharging)
+    {
+        spriteAnimator.SetBool("Charging", isCharging);
+    }
 }
