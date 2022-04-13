@@ -23,7 +23,7 @@ public class TitleScreenManager : MonoBehaviour
     {
         if(GameplaySession.isPlaying == true)
         {
-            SwitchToSubmit();
+            SwitchScreen(submitScoresScreen);
         }
     }
 
