@@ -49,6 +49,9 @@ public class PlayerStatusEffectHandler : MonoBehaviour
             case PowerupTypes.Healing:
                 player.ChangeHealth((int)effectValue);
                 break;
+            case PowerupTypes.SpeedBoost:
+                player.baseSpeed += 1;
+                break;
         }
     }
     public void AddStatusEffect(StatusEffect effect)
