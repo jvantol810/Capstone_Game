@@ -291,7 +291,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseSpeed: 4
   currentSpeed: 0
-  maxHealth: 5
+  maxHealth: 1000000
   currentHealth: 0
   timeInvincible: 0.5
   isInvincible: 0

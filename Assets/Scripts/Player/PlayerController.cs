@@ -90,9 +90,9 @@ public class PlayerController : MonoBehaviour
 
             if (playerPowers.Count >= maxNumberOfPowers)
             {
-                playerPowers.Dequeue();
+                Powers removedPower = playerPowers.Dequeue();
                 //set image to inactive
-                UIPowers.instance.DeactivatePowerIcon(power);
+                UIPowers.instance.DeactivatePowerIcon(removedPower);
             }
             playerPowers.Enqueue(power);
             //If the dash power is being added, update the dash settings
@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
 
         //AddPower(Powers.Dash);
         //AddPower(Powers.ShootWeb);
-        AddPower(Powers.Explode);
+        //AddPower(Powers.Explode);
     }
 
     public string GetPowersText()

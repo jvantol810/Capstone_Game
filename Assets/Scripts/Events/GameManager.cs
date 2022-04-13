@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    public  void ChangetoSubmit()
+    public void ChangetoSubmit()
     {
         SceneManager.LoadScene(0);
         StartCoroutine(StopYouveViolatedTheLaw());
