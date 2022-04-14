@@ -88,6 +88,13 @@ public class Web : MonoBehaviour
        
         
     }
+    public void ResetWeb()
+    {
+        state = WebStates.Projectile;
+        renderer.sprite = projectileWebSprite;
+        collider.isTrigger = false;
+        distanceTraveled = 0;
+    }
 
     //Transform the web from a projectile into a static obstacle in the scene
     void ExplodeWeb()

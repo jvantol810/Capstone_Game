@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pooledObject: {fileID: 6457130007538514051, guid: 0c241ccf0cd132e4ebad8b2bc080cb1d, type: 3}
-  pooledAmount: 20
+  pooledAmount: 5
   willGrow: 0
   pooledObjects: []
   currentActiveObjectIndex: 0
@@ -760,7 +760,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pooledObject: {fileID: 9005828045066945513, guid: e535990688aac8243a2bb188e7f3d640, type: 3}
-  pooledAmount: 20
+  pooledAmount: 5
   willGrow: 0
   pooledObjects: []
   currentActiveObjectIndex: 0

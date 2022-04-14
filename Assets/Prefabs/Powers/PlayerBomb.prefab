@@ -5172,6 +5172,6 @@ MonoBehaviour:
   explosionForce: 16
   layerToHit:
     serializedVersion: 2
-    m_Bits: 1664
+    m_Bits: 18048
   bombParticleSystem: {fileID: 6797144288486216208}
   audioSource: {fileID: 8413921773435951436}

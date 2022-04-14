@@ -382,6 +382,7 @@ public class PlayerController : MonoBehaviour
                 web.speed = webForce;
                 //shoot web in direction player is facing
                 GameEvents.OnShootWeb.Invoke(playerAudioSource);
+                web.ResetWeb();
                 web.Launch(playerAim.aimDirection);
                 break;
             case Powers.Explode:
