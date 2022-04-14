@@ -6,4 +6,5 @@ public enum PowerupTypes
 {
     Healing,
     SpeedBoost,
+    DamageBoost
 }

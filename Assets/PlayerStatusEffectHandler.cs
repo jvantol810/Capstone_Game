@@ -8,9 +8,13 @@ public class PlayerStatusEffectHandler : MonoBehaviour
     private PlayerController player;
     public HashSet<StatusEffect> statusEffects = new HashSet<StatusEffect>();
     public SpriteRenderer spriteRenderer;
+    private bool isBeingKnockedBack;
+    private Rigidbody2D m_rigidbody;
+    private Vector2 knockbackForce;
     private void Start()
     {
         player = GetComponent<PlayerController>();
+        m_rigidbody = GetComponent<Rigidbody2D>();
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
@@ -18,7 +22,21 @@ public class PlayerStatusEffectHandler : MonoBehaviour
         DisplaySFX();
     }
 
-
+    private void Update()
+    {
+        player.powersDisplay.text = "Knockback: " + isBeingKnockedBack + ",\n Force: " + knockbackForce;
+        if (!isBeingKnockedBack)
+        {
+            knockbackForce = Vector2.zero;
+        }
+    }
+    private void FixedUpdate()
+    {
+        if (isBeingKnockedBack)
+        {
+            m_rigidbody.MovePosition(transform.position + (Vector3)knockbackForce * Time.fixedDeltaTime);
+        }
+    }
     public void DisplaySFX()
     {
         UnityEditor.Handles.color = Color.green;
@@ -50,7 +68,10 @@ public class PlayerStatusEffectHandler : MonoBehaviour
                 player.ChangeHealth((int)effectValue);
                 break;
             case PowerupTypes.SpeedBoost:
-                player.baseSpeed += 1;
+                player.baseSpeed += effectValue;
+                break;
+            case PowerupTypes.DamageBoost:
+                player.meleeAttack.damage += (int)effectValue;
                 break;
         }
     }
@@ -109,17 +130,17 @@ public class PlayerStatusEffectHandler : MonoBehaviour
                     //Reenable the animator
                     //GetComponent<Animator>().enabled = true;
                     //Disable knockback effect
-                    player.isBeingKnockedBack = false;
+                    isBeingKnockedBack = false;
                 }
                 else
                 {
                     //Set the knockback force
-                    player.knockbackForce = effect.vectorValue;
+                    knockbackForce = effect.vectorValue;
                     //Set the sprite to be red
                     //Debug.Log("Set sprite to be red!");
                     spriteRenderer.color = Color.red;
                     //Set isBeingKnockedBack to true
-                    player.isBeingKnockedBack = true;
+                    isBeingKnockedBack = true;
                     //Remove the effect
                     StartCoroutine(RemoveStatusEffectAfterDelay(effect, effect.duration));
                 }

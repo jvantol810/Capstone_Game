@@ -21,6 +21,13 @@ public class ObjectPool : MonoBehaviour
             pooledObjects.Add(obj);
         }
     }
+    public void ClearPool()
+    {
+        foreach (GameObject obj in pooledObjects)
+        {
+            Destroy(obj);
+        }
+    }
 
     public GameObject GetPooledObject(Vector2 spawnPosition)
     {

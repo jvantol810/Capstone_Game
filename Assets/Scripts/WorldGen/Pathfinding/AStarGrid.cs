@@ -29,6 +29,9 @@ public class AStarGrid : MonoBehaviour
     
     public void InitGrid()
     {
+        walkableTiles.Clear();
+        enemiesOnGrid.Clear();
+
         //CreateWorldTiles();
         tileRow = new WorldTileRow[LevelSettings.MapData.width];
         //Go through tile array and create each column of height mapHeight
@@ -40,7 +43,23 @@ public class AStarGrid : MonoBehaviour
         //GameEvents.OnEnemyMove.AddListener(UpdateOccupiedTile);
         initialized = true;
     }
-
+    public Vector2 GetGridSize()
+    {
+        return new Vector2(tileRow.Length, tileRow[0].tileColumn.Length);
+    }
+    public void DeallocateGrid()
+    {
+        //Destroy every WorldTile in the grid
+        for (int i = 0; i < tileRow.Length; i++)
+        {
+            for (int j = 0; j < tileRow[i].tileColumn.Length; j++)
+            {
+                tileRow[i].tileColumn[j] = null;
+            }
+        }
+        enemiesOnGrid.Clear();
+        walkableTiles.Clear();
+    }
     public void FindEnemiesOnGrid()
     {
         GameObject[] enemyObjs = GameObject.FindGameObjectsWithTag("Enemy");

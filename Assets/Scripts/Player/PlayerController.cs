@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour
                 
                 //GameObject.FindGameObjectsWithTag("DashIcon").SetActive(true);
             }
-            //powersDisplay.text = powersText;
+         
         }
     }
 
@@ -114,6 +114,11 @@ public class PlayerController : MonoBehaviour
         return playerPowers.Contains(power);
     }
 
+    public void ClearObjectPools()
+    {
+        bombPool.ClearPool();
+        webPool.ClearPool();
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -154,7 +159,6 @@ public class PlayerController : MonoBehaviour
         //Update player time alive
         GameplaySession.playerAliveTime += Time.deltaTime;
         Debug.Log("Player time: " + GameplaySession.playerAliveTime);
-        
         //Update the aim
         //UpdateAim();
         //healthDisplay.text = "Health: " + currentHealth;
@@ -162,7 +166,7 @@ public class PlayerController : MonoBehaviour
         //get input from user
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
-
+        //rigidbody2d.angularVelocity = 0;
 
         //if (isBeingKnockedBack)
         //{
@@ -257,9 +261,6 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log("Throwing bomb");
             }
         }
-        powersDisplay.text = "Knockback: " + isBeingKnockedBack;
-        //powersDisplay.text = "Dash counter: " + dashCounter;
-        //Debug.Log("Dash counter: " + dashCounter);
 
     }
 

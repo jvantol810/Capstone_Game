@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bomb : MonoBehaviour
 {
     public float duration = 3f;
-    public float explosionDamage = 2f;
+    public int explosionDamage = 3;
     Rigidbody2D rigidbody2d;
     public float fieldOfImpact;
     public float explosionForce;
@@ -45,16 +45,17 @@ public class Bomb : MonoBehaviour
         {
             Vector2 direction = (obj.transform.position - transform.position).normalized;
             //Construct knockback status effect based on the explosionForce and direction
-            StatusEffect knockback = new StatusEffect(StatusEffectTypes.Knockback, gameObject, direction * (explosionForce / 100), false, 1f);
+            StatusEffect knockback = new StatusEffect(StatusEffectTypes.Knockback, gameObject, direction * explosionForce, false, 1f);
             if (obj.CompareTag("Player"))
             {
-                obj.GetComponent<PlayerStatusEffectHandler>().AddStatusEffect(knockback);
-                obj.GetComponent<PlayerController>().ChangeHealth((int)explosionDamage);
+                //obj.GetComponent<PlayerStatusEffectHandler>().AddStatusEffect(knockback);
+                //obj.GetComponent<PlayerController>().ChangeHealth((int)explosionDamage);
+                obj.GetComponent<PlayerController>().Hit(explosionDamage, knockback);
             }
             else if (obj.CompareTag("Enemy"))
             {
-                obj.GetComponent<CreatureStatusEffectHandler>().AddStatusEffect(knockback);
-                obj.GetComponent<CreatureStats>().ChangeHealth(-explosionDamage);
+                //obj.GetComponent<CreatureStatusEffectHandler>().Hit(knockback);
+                obj.GetComponent<CreatureStats>().Hit(explosionDamage, knockback);
             }
             else if (obj.CompareTag("Web"))
             {
@@ -76,7 +77,7 @@ public class Bomb : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, fieldOfImpact);

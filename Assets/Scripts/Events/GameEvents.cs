@@ -17,4 +17,5 @@ public static class GameEvents
     public static UnityEvent OnEnterTeleporter = new UnityEvent();
     public static UnityEvent OnPlayerDie = new UnityEvent();
     public static GameObjectEvent OnEnemyDie = new GameObjectEvent();
+
 }

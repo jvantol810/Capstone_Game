@@ -9,6 +9,9 @@ public class MinotaurController : MonoBehaviour
     private Rigidbody2D m_rigidbody;
     private Animator m_animator;
     private Transform player;
+    //[Header("Collider")]
+    //public GameObject m_colliderPrefab;
+    //private GameObject m_collider;
     //[Header("Attributes")]
     //public float health;
     //public float baseSpeed;
@@ -32,7 +35,7 @@ public class MinotaurController : MonoBehaviour
     public float dashCoolCounter;
     public bool isDashing;
     Vector2 dashDirection;
-
+    bool playerFound = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,7 +44,7 @@ public class MinotaurController : MonoBehaviour
 
         m_animator = GetComponent<Animator>();
 
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        //player = GameObject.FindGameObjectWithTag("Player").transform;
 
         //Set current speed to the base speed on start
         //currentSpeed = baseSpeed;
@@ -51,6 +54,11 @@ public class MinotaurController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(GameObject.FindGameObjectWithTag("Player") != null && !playerFound)
+        {
+            player = GameObject.FindGameObjectWithTag("Player").transform;
+            playerFound = true;
+        }
         //set look positions for animator
         Vector2 position = m_rigidbody.position;
 
@@ -60,7 +68,7 @@ public class MinotaurController : MonoBehaviour
         //Update the aim of the firepoint to target the player
         UpdateAim();
 
-        
+
     }
 
     private void OnDrawGizmos()
@@ -134,6 +142,15 @@ public class MinotaurController : MonoBehaviour
         return distance;
     }
 
+    //public void CreateCollider()
+    //{
+    //    m_collider = Instantiate(m_colliderPrefab);
+    //}
+
+    //public void UpdateColliderPosition()
+    //{
+    //    m_colliderPrefab.transform.position = transform.position;
+    //}
     public void Hit(int damage, StatusEffect knockback)
     {
         //Apply knockback in the direction of the hit
@@ -211,7 +228,10 @@ public class MinotaurController : MonoBehaviour
     Vector2 aimDirection;
     public void UpdateAim()
     {
-        aimDirection = (player.position - transform.position).normalized;
+        if(player != null)
+        {
+            aimDirection = (player.position - transform.position).normalized;
+        }
         aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
         firePoint.rotation = Quaternion.Euler(0, 0, aimAngle);
     }
@@ -229,6 +249,11 @@ public class MinotaurController : MonoBehaviour
         {
             m_animator.GetBehaviour<MinotaurChase>().StopDash();
         }
+        //if (collision.gameObject.CompareTag("Map"))
+        //{
+        //    Debug.Log("Touched the map!");
+        //    m_rigidbody.mass = 100000f;
+        //}
     }
 
     //private void OnCollisionExit2D(Collision2D collision)

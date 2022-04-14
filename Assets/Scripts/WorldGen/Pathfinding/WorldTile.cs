@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 [System.Serializable]
-public class WorldTile 
+public class WorldTile
 {
     public bool walkable;
     public bool occupied = false;

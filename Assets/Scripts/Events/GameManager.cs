@@ -24,9 +24,9 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         //if (_instance != null && _instance != this)
-          //  Destroy(this);
+        //  Destroy(this);
         //_instance = this;
-        //DontDestroyOnLoad(gameObject);
+        ////DontDestroyOnLoad(gameObject);
         GameEvents.OnEnterTeleporter.AddListener(ChangeLevel);
         GameEvents.OnPlayerDie.AddListener(ChangetoSubmit);
     }
@@ -35,7 +35,11 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(1);
     }
     
-    public void ChangeLevel() { 
+    public void ChangeLevel() {
+        //System.GC.Collect();
+        //SceneManager.UnloadSceneAsync(1);
+        //SceneManager.LoadSceneAsync(1);
+        //SceneManager.SetActiveScene(SceneManager.GetSceneAt(1));
         SceneManager.LoadScene(1);
     }
 

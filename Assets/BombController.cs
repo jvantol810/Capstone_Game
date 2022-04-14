@@ -22,9 +22,9 @@ public class BombController : MonoBehaviour
     public ObjectPool bombPool;
     public float bombShootSpeed;
     public float bombExplosionSize;
-    public float bombDamage;
+    public int bombDamage;
     public float bombDropCooldown;
-
+    public float bombKnocbkackForce;
     // Start is called before the first frame update
     void Start()
     {
@@ -123,6 +123,7 @@ public class BombController : MonoBehaviour
         //Set the bomb's settings based on BombController inspector values
         bomb.fieldOfImpact = bombExplosionSize;
         bomb.explosionDamage = bombDamage;
+        bomb.explosionForce = bombKnocbkackForce;
         bomb.Detonate();
         //bomb.Detonate();
     }

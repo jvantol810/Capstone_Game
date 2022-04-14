@@ -7,9 +7,10 @@ public class MeleeAttack : MonoBehaviour
     //Values for damage
     public int damage;
     public float attackCooldown;
+    public bool attacking = false;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
-    private float attackCooldownCounter;
+    public float attackCooldownCounter;
     public float knockbackForce;
     public float attackRadius;
     public Vector2 attackOffset;
@@ -38,7 +39,8 @@ public class MeleeAttack : MonoBehaviour
     {
         //If we are currently on cooldown, don't execute the attack
         if(attackCooldownCounter > 0) { return; }
-
+        if (attacking) { return; }
+        attacking = true;
         spriteRenderer.enabled = true;
         animator.enabled = true;
         animator.Play("melee_slash", 0, 0f);
@@ -77,6 +79,7 @@ public class MeleeAttack : MonoBehaviour
                 //obj.GetComponent<CreatureStatusEffectHandler>().AddStatusEffect(meleeKnockback);
             }
         }
+        //StopAttack();
     }
 
     public void StopAttack()
@@ -84,6 +87,7 @@ public class MeleeAttack : MonoBehaviour
         Debug.Log("Stop attack!");
         spriteRenderer.enabled = false;
         animator.enabled = false;
+        attacking = false;
         attackCooldownCounter = attackCooldown;
     }
 

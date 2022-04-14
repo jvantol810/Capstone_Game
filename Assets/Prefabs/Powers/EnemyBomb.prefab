@@ -4936,11 +4936,10 @@ GameObject:
   - component: {fileID: 7988198994546437133}
   - component: {fileID: 3610163716047424293}
   - component: {fileID: 336859080771659216}
-  - component: {fileID: 7323030862782072247}
   - component: {fileID: 2669260684196053991}
   m_Layer: 7
   m_Name: EnemyBomb
-  m_TagString: Untagged
+  m_TagString: Bomb
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5027,27 +5026,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!50 &7323030862782072247
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6457130007538514051}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!114 &2669260684196053991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5061,9 +5039,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 3
-  explosionDamage: 2
-  fieldOfImpact: 1.2
-  explosionForce: 12
+  explosionDamage: 3
+  fieldOfImpact: 1.1
+  explosionForce: 16
   layerToHit:
     serializedVersion: 2
     m_Bits: 256
