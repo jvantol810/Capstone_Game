@@ -486,7 +486,13 @@ public class RoomGen : MonoBehaviour
     private void MultiPrefabGeneration()
     {
         List<Vector2Int> prefabPlacePoints = new List<Vector2Int>();
+        if(allRooms.Count > 3)
+        {
+            Debug.Log("Detected Extra Rooms");
+            allRooms.RemoveRange(2, allRooms.Count - 3);
+        }
         
+        Debug.Log(allRooms.Count);
         foreach (var room in allRooms)
         {
             prefabPlacePoints = MultiFindPrefabSpace(room);
