@@ -41,7 +41,8 @@ public class CashEquipsData : MonoBehaviour
         }
         
     }
-    //BIG ISSUE: MUST ADD PURCHASED HATS
+
+
     public void SetHat(string hatID)
     {
         Debug.Log("Setting Hat to: " + hatID);
@@ -55,7 +56,7 @@ public class CashEquipsData : MonoBehaviour
                 }
                 
                 currentHat = Instantiate(ownedHats[i], Player.transform);
-                
+                GameplaySession.playerEquippedHat = hatID;
             }
         }
     }

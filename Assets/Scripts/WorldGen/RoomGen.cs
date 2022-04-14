@@ -24,6 +24,7 @@ public class RoomGen : MonoBehaviour
     public Tile[] tiles;
     public GameObject[] trees;
     public GameObject playerPrefab;
+    public HatDirectory ItemDirectory;
     //List for allRooms and list of their centers for connecting them to main map
     private List<RoomPrefab> allRooms = new List<RoomPrefab>();
     public List<Vector2Int> roomCenters = new List<Vector2Int>();
@@ -648,7 +649,12 @@ public class RoomGen : MonoBehaviour
             }
         }
         
-        Instantiate(playerPrefab, new Vector3(furthSpawn.x+.5f, furthSpawn.y+.5f, 0), Quaternion.identity);
+        GameObject player = Instantiate(playerPrefab, new Vector3(furthSpawn.x+.5f, furthSpawn.y+.5f, 0), Quaternion.identity);
+        GameObject spawnedHat = ItemDirectory.FindHatByID(GameplaySession.playerEquippedHat);
+        if(spawnedHat.name != "None.")
+        {
+            Instantiate(spawnedHat, player.transform);
+        }
     }
 
     private int RandomIndex(int maxIndex, int minIndex=0)

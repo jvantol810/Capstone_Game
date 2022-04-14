@@ -6,5 +6,7 @@ public static class GameplaySession
 {
     public static bool isPlaying = false;
     public static float playerAliveTime = 0;
+    public static int levelsCompleted = 0;
+    public static string playerEquippedHat = "";
     public static int seed;
 }
