@@ -26,6 +26,8 @@ public class PlayerController : MonoBehaviour
     float vertical;
 
     public Vector2 lookDirection = new Vector2(1, 0);
+    [Header("Audio")]
+    public AudioSource playerAudioSource;
     [Header("Possession")]
     public GameObject projectilePrefab;
     public float launchForce;
@@ -289,6 +291,7 @@ public class PlayerController : MonoBehaviour
     public void MeleeAttack()
     {
         //meleePrefab.SetActive(true);
+        
         meleeAttack.transform.rotation = Quaternion.Euler(0, 0, playerAim.aimAngle);
         meleeAttack.transform.position = transform.position + firePoint.right * meleeOffset;
         meleeAttack.Attack();
@@ -378,6 +381,7 @@ public class PlayerController : MonoBehaviour
                 Web web = webObj.GetComponent<Web>();
                 web.speed = webForce;
                 //shoot web in direction player is facing
+                GameEvents.OnShootWeb.Invoke(playerAudioSource);
                 web.Launch(playerAim.aimDirection);
                 break;
             case Powers.Explode:

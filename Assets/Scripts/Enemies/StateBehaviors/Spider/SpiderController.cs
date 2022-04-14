@@ -31,6 +31,7 @@ public class SpiderController : MonoBehaviour
     public float webSpeedReduction;
     public float webCooldown;
 
+    private AudioSource webAudioSource;
 
 
     // Start is called before the first frame update
@@ -42,6 +43,7 @@ public class SpiderController : MonoBehaviour
         m_animator = GetComponent<Animator>();
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        webAudioSource = GetComponent<AudioSource>();
 
         //Set current speed to the base speed on start
         //currentSpeed = baseSpeed;
@@ -126,6 +128,7 @@ public class SpiderController : MonoBehaviour
 
     public void WebAttack(Vector2 direction)
     {
+        
         //Create a web prefab at the firepoint position
         GameObject webObj = webPool.GetPooledObject(transform.position + firePoint.right);
         Web web = webObj.GetComponent<Web>();
@@ -136,11 +139,13 @@ public class SpiderController : MonoBehaviour
         web.speed = webShootSpeed;
 
         //Send a web outwards
+
         web.Launch(direction);
     }
 
     public void WebAttack()
     {
+        GameEvents.OnShootWeb.Invoke(webAudioSource);
         //Create a web prefab at the firepoint position
         GameObject webObj = webPool.GetPooledObject(transform.position + firePoint.right * 1.4f);
         Web web = webObj.GetComponent<Web>();

@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Web : MonoBehaviour
 {
+
+    public enum WebTypes
+    {
+        Player,
+        Enemy
+    }
+    [Header("Player or Enemy Web?")]
+    public WebTypes webType;
     [Header("Sprites")]
     public Sprite projectileWebSprite;
     public Sprite explodedWebSprite;
@@ -102,7 +110,7 @@ public class Web : MonoBehaviour
         foreach (Collider2D hit in hits)
         {
             GameObject obj = hit.gameObject;
-            if (obj.CompareTag("Player"))
+            if (obj.CompareTag("Player") && webType==WebTypes.Enemy)
             {
                 isTouchingPlayer = true;
                 //Debug.Log("Player touched the web!");
@@ -115,7 +123,7 @@ public class Web : MonoBehaviour
                 player.RemoveStatusEffect(slowEffect);
                 isTouchingPlayer = false;
             }
-            if (obj.CompareTag("Enemy"))
+            if (obj.CompareTag("Enemy") && webType == WebTypes.Player)
             {
                 Debug.Log("Enemy touched the web!");
                 CreatureStatusEffectHandler enemy = obj.GetComponent<CreatureStatusEffectHandler>();
@@ -148,14 +156,14 @@ public class Web : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && webType == WebTypes.Enemy)
         {
             isTouchingPlayer = true;
             //Debug.Log("Player touched the web!");
             player = collision.GetComponent<PlayerStatusEffectHandler>();
             player.AddStatusEffect(slowEffect);
         }
-        else if (collision.CompareTag("Enemy"))
+        else if (collision.CompareTag("Enemy") && webType == WebTypes.Player)
         {
             CreatureStatusEffectHandler enemy = collision.GetComponent<CreatureStatusEffectHandler>();
             enemy.AddStatusEffect(slowEffect);
@@ -165,14 +173,14 @@ public class Web : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
 
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && webType == WebTypes.Enemy)
         {
             isTouchingPlayer = true;
             //Debug.Log("Player touched the web!");
             player = collision.GetComponent<PlayerStatusEffectHandler>();
             player.RemoveStatusEffect(slowEffect);
         }
-        else if (collision.CompareTag("Enemy"))
+        else if (collision.CompareTag("Enemy") && webType == WebTypes.Player)
         {
             CreatureStatusEffectHandler enemy = collision.GetComponent<CreatureStatusEffectHandler>();
             enemy.RemoveStatusEffect(slowEffect);

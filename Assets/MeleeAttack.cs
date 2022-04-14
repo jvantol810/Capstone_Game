@@ -15,6 +15,8 @@ public class MeleeAttack : MonoBehaviour
     public float attackRadius;
     public Vector2 attackOffset;
     public LayerMask whatCanBeHit;
+    [Header("Audio")]
+    public AudioSource audioSource;
     void Start()
     {
         attackCooldownCounter = 0;
@@ -40,6 +42,7 @@ public class MeleeAttack : MonoBehaviour
         //If we are currently on cooldown, don't execute the attack
         if(attackCooldownCounter > 0) { return; }
         if (attacking) { return; }
+        GameEvents.OnMeleeAttack.Invoke(audioSource);
         attacking = true;
         spriteRenderer.enabled = true;
         animator.enabled = true;

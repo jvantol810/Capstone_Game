@@ -24,7 +24,7 @@ public class PlayerStatusEffectHandler : MonoBehaviour
 
     private void Update()
     {
-        player.powersDisplay.text = "Knockback: " + isBeingKnockedBack + ",\n Force: " + knockbackForce;
+        //player.powersDisplay.text = "Knockback: " + isBeingKnockedBack + ",\n Force: " + knockbackForce;
         if (!isBeingKnockedBack)
         {
             knockbackForce = Vector2.zero;

@@ -12,6 +12,8 @@ public class Bomb : MonoBehaviour
     public LayerMask layerToHit;
     public ParticleSystem bombParticleSystem;
     private SpriteRenderer m_renderer;
+    [Header("Audio")]
+    public AudioSource audioSource;
     void Awake()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -32,6 +34,7 @@ public class Bomb : MonoBehaviour
     IEnumerator Explode()
     {
         m_renderer.enabled = true;
+        
         //wait to continue with function
         yield return new WaitForSeconds(duration);
 
@@ -70,7 +73,7 @@ public class Bomb : MonoBehaviour
 
         //Enable the explosion
         bombParticleSystem.Play();
-
+        GameEvents.OnBombExplode.Invoke(audioSource);
         //Disable the bomb
         yield return new WaitForSeconds(bombParticleSystem.main.duration);
 
