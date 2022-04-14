@@ -192,7 +192,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8069015929196235293
 RectTransform:
   m_ObjectHideFlags: 0
@@ -424,10 +424,11 @@ MonoBehaviour:
   timeInvincible: 0.5
   isInvincible: 0
   lookDirection: {x: 1, y: 0}
+  playerAudioSource: {fileID: 614590713042590689}
   projectilePrefab: {fileID: 8930198046437737982, guid: c25fa86d41ebbf446b305deedc86fa26, type: 3}
   launchForce: 750
   webPool: {fileID: 8999122931901413522}
-  webForce: 5
+  webForce: 10
   bombPool: {fileID: 1347803477486358032}
   meleeAttack: {fileID: 5605824123106662667}
   meleeOffset: 0.35

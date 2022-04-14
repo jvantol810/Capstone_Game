@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9005828045066945511}
   - component: {fileID: 9005828045066945512}
   - component: {fileID: 7378410415542450878}
-  m_Layer: 12
+  m_Layer: 14
   m_Name: PlayerWeb
   m_TagString: Web
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &7378410415542450878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,6 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd73d6c5bbed3d4e8d6b2c1040bd6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  webType: 0
   projectileWebSprite: {fileID: 21300000, guid: 31cf52d56a3346540838cfb84852dc8d, type: 3}
   explodedWebSprite: {fileID: 21300000, guid: 15cad7705251ffa41ac6382ee370935f, type: 3}
   speed: 0

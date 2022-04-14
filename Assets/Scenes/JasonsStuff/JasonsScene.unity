@@ -979,6 +979,7 @@ MonoBehaviour:
   seed: 39802
   monsterPrefabs:
   - {fileID: 8821750546496874717, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
+  - {fileID: 8821750546496874717, guid: 13404caaa54e0934ab3e6360408d6819, type: 3}
   portalPrefab: {fileID: 6093248503178362355, guid: b2d8775d87c19714f84ae79a3d4ec17a, type: 3}
 --- !u!4 &974129684
 Transform:

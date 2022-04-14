@@ -15,6 +15,7 @@ TagManager:
   - BombIcon
   - Map
   - Tree
+  - Bomb
   layers:
   - Default
   - TransparentFX
@@ -30,7 +31,7 @@ TagManager:
   - Map
   - PlayerProjectile
   - Tree
-  - 
+  - PlayerWeb
   - 
   - 
   - 
