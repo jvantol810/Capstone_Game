@@ -93,6 +93,6 @@ public class RegisterManager : MonoBehaviour
 
     public void VerifyInputs()
     {
-        registerButton.interactable = (nameField.text.Length >= 8 && passwordField.text.Length >= 8);
+        registerButton.interactable = (nameField.text.Length >= 8 && passwordField.text.Length >= 8 && nameField.text.Length <= 20);
     }
 }

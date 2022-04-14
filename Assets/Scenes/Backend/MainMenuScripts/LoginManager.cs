@@ -84,7 +84,7 @@ public class LoginManager : MonoBehaviour
 
     public void VerifyInputs()
     {
-        submitButton.interactable = (nameField.text.Length >= 8 && passwordField.text.Length >= 8);
+        submitButton.interactable = (nameField.text.Length >= 8 && passwordField.text.Length >= 8 && nameField.text.Length <= 20);
     }
 
 
