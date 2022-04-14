@@ -158,9 +158,11 @@ public class Web : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Map"))
         {
+            Debug.Log("I collided with the map!");
             ExplodeWeb();
         }
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player")/* && webType == WebTypes.Enemy*/)

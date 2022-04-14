@@ -506,7 +506,7 @@ MonoBehaviour:
   webShootSpeed: 5
   webRadius: 0.5
   webSpeedReduction: 50
-  webCooldown: 1
+  webCooldown: 1.5
 --- !u!114 &6645070416482636097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -519,7 +519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 659e707767508b74783fe5dfdcd496a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 10
+  health: 5
   baseSpeed: 2
   currentSpeed: 0
   attackDamage: 1

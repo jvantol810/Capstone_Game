@@ -10,7 +10,7 @@ public static class LevelSettings
         public static int height = 50;
         public static int width = 50;
         public static AStarGrid activeAStarGrid;
-        public static int totalMons = 20;
+        public static int totalMons = 9;
         public static void SetSize(int height, int width)
         {
             MapData.height = height;

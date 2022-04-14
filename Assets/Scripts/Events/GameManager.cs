@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
         ////DontDestroyOnLoad(gameObject);
         GameEvents.OnEnterTeleporter.AddListener(ChangeLevel);
         GameEvents.OnPlayerDie.AddListener(ChangetoSubmit);
+        LevelSettings.MapData.totalMons += 2;
+        Debug.Log("Total mons to spawn: " + LevelSettings.MapData.totalMons);
     }
     public void NewGame()
     {
