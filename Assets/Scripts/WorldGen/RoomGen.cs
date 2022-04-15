@@ -44,7 +44,8 @@ public class RoomGen : MonoBehaviour
     public int floorMax;
     public bool seeded = false;
     public int seed;
-    public GameObject[] monsterPrefabs; // Move to another file along with SpawnEntity function
+    public GameObject[] monsterPrefabs;
+    public GameObject[] potionPrefabs;
     public GameObject portalPrefab; 
     private int walkX;
     private int walkY;
@@ -208,6 +209,7 @@ public class RoomGen : MonoBehaviour
         MultiPrefabGeneration();
         PlantTrees();
         SpawnMonsters();
+        SpawnPotions();
         SpawnPlayer();
         SpawnPortal();
     }
@@ -319,6 +321,7 @@ public class RoomGen : MonoBehaviour
     //Converts String array into a Tilemap prefab
     private void ConvertToPrefab()//Works for multi
     {
+        Debug.Log("Called");
         var stringArrays = FileParse.allTextPrefabs;
 
         for(int k = 0; k < stringArrays.Count; k++)
@@ -487,11 +490,11 @@ public class RoomGen : MonoBehaviour
     private void MultiPrefabGeneration()
     {
         List<Vector2Int> prefabPlacePoints = new List<Vector2Int>();
-        if(allRooms.Count > 3)
+        /*if(allRooms.Count > 3)
         {
             Debug.Log("Detected Extra Rooms");
             allRooms.RemoveRange(2, allRooms.Count - 3);
-        }
+        }*/
         
         Debug.Log(allRooms.Count);
         foreach (var room in allRooms)
@@ -636,6 +639,7 @@ public class RoomGen : MonoBehaviour
         var walkTiles = aStarGrid.GetWalkableTileLocations();
         float max = 0;
         Vector2Int furthSpawn = Vector2Int.zero;
+        //Pretty sure this doesn't really work heh
         foreach (var tile in walkTiles)
         {
             foreach (var mon in globalMonList)
@@ -654,6 +658,18 @@ public class RoomGen : MonoBehaviour
         if(spawnedHat.name != "None.")
         {
             Instantiate(spawnedHat, player.transform);
+        }
+    }
+
+    private void SpawnPotions()
+    {
+        var walkTiles = aStarGrid.GetWalkableTileLocations();
+
+        for (int i = 0; i < LevelSettings.MapData.totalPots; i++)
+        {
+            var spawn = walkTiles[RandomIndex(walkTiles.Count)];
+            var tilespawn = aStarGrid.GetTileAt(spawn);
+            Instantiate(potionPrefabs[RandomIndex(potionPrefabs.Length)], new Vector3(tilespawn.centerWorldPosition.x, tilespawn.centerWorldPosition.y, 0), Quaternion.identity);
         }
     }
 
