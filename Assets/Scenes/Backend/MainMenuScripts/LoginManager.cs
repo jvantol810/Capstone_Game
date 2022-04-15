@@ -15,7 +15,7 @@ public class LoginManager : MonoBehaviour
     public Button submitButton;
 
     public TitleScreenManager titleScreenManager;
-
+    public GameObject SubmitScreen;
 
     public void CallLogin()
     {
@@ -72,7 +72,15 @@ public class LoginManager : MonoBehaviour
                     Debug.Log(DatabaseManager.currency);
 
                     titleScreenManager.SignedIn();
-                    titleScreenManager.SwitchScreen(titleScreenManager.gameObject);
+                    if(titleScreenManager.FromSubmitScreen)
+                    {
+                        titleScreenManager.SwitchScreen(SubmitScreen);
+                    }
+                    else
+                    {
+                        titleScreenManager.SwitchScreen(titleScreenManager.gameObject);
+                    }
+                    
                     //loginMenuText.text = ("Previous High Score: " + message);
                     //TitleScreenManager.SetUserInfo(nameField.text);
                     //UnityEngine.SceneManagement.SceneManager.LoadScene(0);

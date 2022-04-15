@@ -9,4 +9,10 @@ public static class GameplaySession
     public static int levelsCompleted = 0;
     public static string playerEquippedHat = "";
     public static int seed;
+
+    public static void ClearGameSession()
+    {
+        playerAliveTime = 0;
+        levelsCompleted = 0;
+    }
 }

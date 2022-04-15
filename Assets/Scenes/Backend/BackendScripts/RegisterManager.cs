@@ -15,6 +15,7 @@ public class RegisterManager : MonoBehaviour
     public Button registerButton;
 
     public TitleScreenManager titleScreenManager;
+    public GameObject SubmitScreen;
 
     public void CallRegister()
     {
@@ -82,7 +83,14 @@ public class RegisterManager : MonoBehaviour
                     Debug.Log(DatabaseManager.currency);
 
                     titleScreenManager.SignedIn();
-                    titleScreenManager.SwitchScreen(titleScreenManager.gameObject);
+                    if (titleScreenManager.FromSubmitScreen)
+                    {
+                        titleScreenManager.SwitchScreen(SubmitScreen);
+                    }
+                    else
+                    {
+                        titleScreenManager.SwitchScreen(titleScreenManager.gameObject);
+                    }
                     //UnityEngine.SceneManagement.SceneManager.LoadScene(0);
                     //DBManager.time = int.Parse(loginPOST.downloadHandler.text.Split('\t')[0]);
                 }

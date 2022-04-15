@@ -123,12 +123,15 @@ public class LeaderboardManager : MonoBehaviour
         else
         {
             int addedEntries = 0;
-            for(int i = 2; i < sortedEntries.Length; i += 2)
+            for (int i = 3; i < sortedEntries.Length; i += 3)
             {
+                Debug.Log(sortedEntries[i - 2] + " " + sortedEntries[i - 1] + " " + sortedEntries[i]);
                 GameObject newEntry = Instantiate(scoreEntryPrefab, viewportContent.transform);
                 Text[] newEntryTexts = newEntry.GetComponentsInChildren<Text>();
-                newEntryTexts[0].text = sortedEntries[i - 1];
-                newEntryTexts[1].text = sortedEntries[i];
+                newEntryTexts[0].text = sortedEntries[i - 2];
+                var convertedTime = System.TimeSpan.FromSeconds(double.Parse(sortedEntries[i - 1]));
+                newEntryTexts[1].text = string.Format("{0:00}:{1:00}:{2:00}", convertedTime.Hours, convertedTime.Minutes, convertedTime.Seconds);
+                newEntryTexts[2].text = sortedEntries[i];
                 addedEntries++;
             }
             if (addedEntries < displayCount)
@@ -160,12 +163,15 @@ public class LeaderboardManager : MonoBehaviour
         else
         {
             int addedEntries = 0;
-            for (int i = 2; i < sortedEntries.Length; i += 2)
+            for (int i = 3; i < sortedEntries.Length; i += 3)
             {
+                Debug.Log(sortedEntries[i - 2] + " " + sortedEntries[i - 1] + " " + sortedEntries[i]);
                 GameObject newEntry = Instantiate(scoreEntryPrefab, viewportContent.transform);
                 Text[] newEntryTexts = newEntry.GetComponentsInChildren<Text>();
-                newEntryTexts[0].text = sortedEntries[i - 1];
-                newEntryTexts[1].text = sortedEntries[i];
+                newEntryTexts[0].text = sortedEntries[i - 2];
+                var convertedTime = System.TimeSpan.FromSeconds(double.Parse(sortedEntries[i - 1]));
+                newEntryTexts[1].text = string.Format("{0:00}:{1:00}:{2:00}", convertedTime.Hours, convertedTime.Minutes, convertedTime.Seconds);
+                newEntryTexts[2].text = sortedEntries[i];
                 addedEntries++;
             }
             if (addedEntries < displayCount)

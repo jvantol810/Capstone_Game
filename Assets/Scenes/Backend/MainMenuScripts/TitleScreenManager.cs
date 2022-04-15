@@ -15,6 +15,7 @@ public class TitleScreenManager : MonoBehaviour
     public Button GBPurchaseButton;
     public Button CashShopButton;
     public GameObject submitScoresScreen;
+    public bool FromSubmitScreen;
 
     //public CashEquipsData CEData;
 
@@ -85,6 +86,11 @@ public class TitleScreenManager : MonoBehaviour
     public void UpdateGhostBucksDisplay(int amt)
     {
         GBDisplayText.text = amt.ToString("n0") + " GB";
+    }
+
+    public void SetFromSubmitScreen(bool value)
+    {
+        FromSubmitScreen = value;
     }
 
 }

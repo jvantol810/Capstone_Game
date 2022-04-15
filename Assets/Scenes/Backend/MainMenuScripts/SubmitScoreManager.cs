@@ -6,13 +6,16 @@ using UnityEngine.UI;
 
 public class SubmitScoreManager : MonoBehaviour
 {
-    public string score = "10";
     public Text ScoreText;
     public Text UsernameText;
-    public string username;
+    public Text TimeText;
+    //public string username;
     public string message;
     public Button YesButton;
     public Text submitMenuText;
+    [Header("Public External Objects")]
+    public TitleScreenManager titleScreenManager;
+    public GameObject LeaderboardScreen;
 
     //public TitleScreenManager titleScreenManager;
 
@@ -26,7 +29,9 @@ public class SubmitScoreManager : MonoBehaviour
     void Update()
     {
         UsernameText.text = DatabaseManager.username;
-        ScoreText.text = score;
+        ScoreText.text = GameplaySession.levelsCompleted.ToString();
+        var convertedTime = System.TimeSpan.FromSeconds(GameplaySession.playerAliveTime);
+        TimeText.text = string.Format("{0:00}:{1:00}:{2:00}", convertedTime.Hours, convertedTime.Minutes, convertedTime.Seconds);
 
         if (DatabaseManager.username == null)
         {
@@ -47,10 +52,11 @@ public class SubmitScoreManager : MonoBehaviour
 
     IEnumerator SubmitClass()
     {
-        username = DatabaseManager.username;
+        //username = DatabaseManager.username;
         WWWForm formdata = new WWWForm();
-        formdata.AddField("USERNAME", username);
-        formdata.AddField("SCORE", score);
+        formdata.AddField("USERNAME", DatabaseManager.username);
+        formdata.AddField("SCORE", GameplaySession.levelsCompleted);
+        formdata.AddField("TIME", Mathf.RoundToInt(GameplaySession.playerAliveTime));
         formdata.AddField("PLAYERID", DatabaseManager.userid);
 
         using (UnityWebRequest submitPOST = UnityWebRequest.Post("http://localhost/capstone/submit.php", formdata))
@@ -66,6 +72,8 @@ public class SubmitScoreManager : MonoBehaviour
             else
             {
                 message = submitPOST.downloadHandler.text;
+                titleScreenManager.FromSubmitScreen = false;
+                titleScreenManager.SwitchScreen(LeaderboardScreen);
                 Debug.Log(message);
             }
         }

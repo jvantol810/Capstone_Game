@@ -34,14 +34,12 @@ public class GameManager : MonoBehaviour
     }
     public void NewGame()
     {
+        GameplaySession.ClearGameSession();
         SceneManager.LoadScene(1);
     }
     
     public void ChangeLevel() {
-        //System.GC.Collect();
-        //SceneManager.UnloadSceneAsync(1);
-        //SceneManager.LoadSceneAsync(1);
-        //SceneManager.SetActiveScene(SceneManager.GetSceneAt(1));
+        GameplaySession.levelsCompleted += 1;
         SceneManager.LoadScene(1);
     }
 
@@ -59,6 +57,9 @@ public class GameManager : MonoBehaviour
 
         TitleScreenManager title = FindObjectOfType<TitleScreenManager>();
         //Debug.Log(title);
+        title.FromSubmitScreen = true;
+        Debug.Log("This is heading from submit screen? " + title.FromSubmitScreen);
         title.SwitchScreen(title.submitScoresScreen);
+        
     }
 }
