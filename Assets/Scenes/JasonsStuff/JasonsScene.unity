@@ -1050,8 +1050,9 @@ MonoBehaviour:
   - {fileID: 3350636786608551685, guid: 297622065862cf14d92ba3ef460fddd6, type: 3}
   - {fileID: 1921959048153719105, guid: 3609ec2c417327541b8221f1c89ec382, type: 3}
   potionPrefabs:
-  - {fileID: 984906929}
-  - {fileID: 984906929}
+  - {fileID: 4805246451038181042, guid: e0e6d5bfe8269bb4ea241915d972c251, type: 3}
+  - {fileID: 7298644749569265096, guid: 25c91c56f7a23d94f8c66ed3f6611720, type: 3}
+  - {fileID: 5634541784262679434, guid: 839982464082cf5428a30d98fc61ad71, type: 3}
   portalPrefab: {fileID: 6093248503178362355, guid: b2d8775d87c19714f84ae79a3d4ec17a, type: 3}
 --- !u!4 &974129684
 Transform:

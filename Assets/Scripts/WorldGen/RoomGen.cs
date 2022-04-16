@@ -76,7 +76,6 @@ public class RoomGen : MonoBehaviour
         LevelSettings.MapData.SetAStarGrid(aStarGrid);
         
         FileParse.ParseWholeFolder();
-        
         //Converts prefab arrays into lists
         ConvertToPrefab();
         
@@ -321,7 +320,7 @@ public class RoomGen : MonoBehaviour
     //Converts String array into a Tilemap prefab
     private void ConvertToPrefab()//Works for multi
     {
-        Debug.Log("Called");
+        allRooms.Clear();
         var stringArrays = FileParse.allTextPrefabs;
 
         for(int k = 0; k < stringArrays.Count; k++)
@@ -334,7 +333,7 @@ public class RoomGen : MonoBehaviour
                 for (int j = 0; j < stringArrays[k].GetLength(1); j++)
                 {
                     //Debug.Log(roomTiles.prefabTiles.Count);
-                    //Debug.Log(stringArray[j, i] +"J:" + j + "I:" + i);
+                    //Debug.Log("J:" + j + "I:" + i);
                     //This trims the 2d array down to just the parts that represent tiles
                     if (stringArrays[k][j, i] != null)
                     {
@@ -442,45 +441,12 @@ public class RoomGen : MonoBehaviour
         {
             WorldTile closestTile = aStarGrid.GetNearestWalkableTile(center, prefabPlacePoints);
             //Debug.Log(closestTile.gridPosition);
-            WorldTile[] closestPath = aStarGrid.FindPath(closestTile.gridPosition, center, false);
+            WorldTile[] closestPath = aStarGrid.FindOrthogonalPath(closestTile.gridPosition, center, false);
             //Debug.Log(closestPath.Length);
-            for(int i = 0; i < closestPath.Length; i++)
+            foreach (var tile in closestPath)
             {
-                //This fixes any disconnect with a diagonal at the beginning of a path
-                if (i == 0)
-                {
-                    if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[0]).walkable || !aStarGrid.GetTileAt(closestPath[i].neighborLocations[4]).walkable)
-                    {
-                        AddTileToMap(true, closestPath[i].neighborLocations[0], tiles[RandomIndex(tiles.Length,1)]);
-                        AddTileToMap(true, closestPath[i].neighborLocations[1], tiles[RandomIndex(tiles.Length,1)]);  
-                        AddTileToMap(true, closestPath[i].neighborLocations[2], tiles[RandomIndex(tiles.Length,1)]);
-                        AddTileToMap(true, closestPath[i].neighborLocations[3], tiles[RandomIndex(tiles.Length,1)]); 
-                        AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]);
-                        AddTileToMap(true, closestPath[i].neighborLocations[5], tiles[RandomIndex(tiles.Length,1)]); 
-                        AddTileToMap(true, closestPath[i].neighborLocations[6], tiles[RandomIndex(tiles.Length,1)]);
-                        AddTileToMap(true, closestPath[i].neighborLocations[7], tiles[RandomIndex(tiles.Length,1)]); 
-                    }
-                    else
-                    {
-                        AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]);
-                    }
-                }
-                
-                //This changes the diamond path to a star step
-                if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[0]).walkable  || !aStarGrid.GetTileAt(closestPath[i].neighborLocations[4]).walkable)
-                {
-                    if (!aStarGrid.GetTileAt(closestPath[i].neighborLocations[2]).walkable || !aStarGrid.GetTileAt(closestPath[i].neighborLocations[6]).walkable)
-                    {
-                        if (aStarGrid.GetTileAt(closestPath[i].neighborLocations[2]) != closestPath[i+1] && aStarGrid.GetTileAt(closestPath[i].neighborLocations[6]) != closestPath[i+1])
-                        {
-                            AddTileToMap(true, closestPath[i].neighborLocations[4], tiles[RandomIndex(tiles.Length,1)]); 
-                        }
-                    }
-                    
-                }
                 //Adds tile from path
-                AddTileToMap(true, closestPath[i].gridPosition, tiles[2]);
-               
+                AddTileToMap(true, tile.gridPosition, tiles[2]);
             }  
         }
         
@@ -490,14 +456,34 @@ public class RoomGen : MonoBehaviour
     private void MultiPrefabGeneration()
     {
         List<Vector2Int> prefabPlacePoints = new List<Vector2Int>();
-        if(allRooms.Count > 3)
+        List<RoomPrefab> chosenPrefabs = new List<RoomPrefab>();
+        //Prefabs to use for the run from allRooms list
+        for (int i = 0; i < LevelSettings.MapData.prefabsPerFloor; i++)
         {
-            Debug.Log("Detected Extra Rooms");
-            allRooms.RemoveRange(2, allRooms.Count - 3);
+            int rand = RandomIndex(allRooms.Count);
+            if(chosenPrefabs.Contains(allRooms[rand]))
+            {
+                while (chosenPrefabs.Contains(allRooms[rand]))
+                {
+                    rand = RandomIndex(allRooms.Count);
+                }
+                
+                chosenPrefabs.Add(allRooms[rand]);
+            }
+            else
+            {
+                chosenPrefabs.Add(allRooms[rand]);
+            }
         }
+        //Debug.Log("chosen count:" +chosenPrefabs.Count);
         
-        Debug.Log(allRooms.Count);
-        foreach (var room in allRooms)
+        if(allRooms.Count > 5)
+        {
+            //Debug.Log("Detected Extra Rooms");
+            allRooms.RemoveRange(4, allRooms.Count - 5);
+        }
+        //Debug.Log(allRooms.Count);
+        foreach (var room in chosenPrefabs)
         {
             prefabPlacePoints = MultiFindPrefabSpace(room);
             MultiPlacePrefab(room, prefabPlacePoints);
@@ -598,12 +584,13 @@ public class RoomGen : MonoBehaviour
         {
             for (int j = 0; j < room.prefabTiles[i].Count; j++)
             {
+                //Debug.Log("J:" + j + "i" + i);
+
                 room.prefabTiles[j][i].gridX = prefabPlacePoints[totalTiles].x;
                 room.prefabTiles[j][i].gridY = prefabPlacePoints[totalTiles].y;
                 //Debug.Log(prefabPlacePoints[totalTiles]);
                 totalTiles++;
-                
-                
+
                 //If walkable set the map to floor if not walls and add to map and astar grid
                 if (room.prefabTiles[j][i].walkable)
                 {
@@ -613,10 +600,11 @@ public class RoomGen : MonoBehaviour
                 {
                     AddTileToMap(false, room.prefabTiles[j][i].gridPosition, tiles[0]);
                 }
+                
+
             }
         }
         
-        //roomCenters.Add(new Vector2Int());
     }
 
     private void SpawnMonsters()

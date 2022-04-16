@@ -19,7 +19,8 @@ public static class FileParse
     private static String[,] ParseTextFile(String file)
     {
         //IMPORTANT
-        //The formatting of a room prefab has to be in a square shape see TestPrefab.txt for reference
+        //The formatting of a room prefab has to be in a *square* shape see SmolSquare.txt for reference
+        //It also imports upside down so design accordingly see HeartInverse.txt for reference
 
         
         //Reads each prefab file
@@ -55,6 +56,7 @@ public static class FileParse
         foreach (var file in Directory.GetFiles(textPath,"*.txt"))
         {
             allTextPrefabs.Add(ParseTextFile(file));
+            //Debug.Log("parse"+allTextPrefabs.Count);
         }
     }
 

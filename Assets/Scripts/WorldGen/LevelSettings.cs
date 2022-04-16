@@ -7,11 +7,12 @@ public static class LevelSettings
     [System.Serializable]
     public static class MapData
     {
-        public static int height = 50;
-        public static int width = 50;
+        public static int height = 60;
+        public static int width = 60;
         public static AStarGrid activeAStarGrid;
         public static int totalMons = 9;
         public static int totalPots = 4;
+        public static int prefabsPerFloor = 3;
         public static void SetSize(int height, int width)
         {
             MapData.height = height;
