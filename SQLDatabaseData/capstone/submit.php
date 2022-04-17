@@ -14,9 +14,11 @@
 	
 	$username = $_POST['USERNAME'];
 	$score = $_POST['SCORE'];
+	$time = $_POST['TIME'];
+	$playerid = $_POST['PLAYERID'];
 	
 	//Establish Count
-    $countcheckquery = "SELECT count(username) as 'count' from leaderboard WHERE username='" . $username . "';";
+    $countcheckquery = "SELECT count(username) as 'count', time from leaderboard WHERE username='" . $username . "' AND time=" . $score . ";";
     $countcheck = mysqli_query($con,$countcheckquery) or die("2: Countcheck Query Failed");
 	if (mysqli_num_rows($countcheck) > 0)
 	{
@@ -37,8 +39,9 @@
 	else
 	{
 		//add score to table
-		$insertuserquery = "INSERT INTO leaderboard (username, time, count) VALUES('" . $username . "', '" . $score . "', '" . $count . "');";
+		$insertuserquery = "INSERT INTO leaderboard (playerid, username, time, levelscompleted, count) VALUES('" . $playerid . "', '" . $username . "', '" . $time . "', '" . $score . "', '" . $count . "');";
 		mysqli_query($con, $insertuserquery) or die("4: Insert Player Query");
+		echo "Inserted score.";
 	}
 	   
 ?>

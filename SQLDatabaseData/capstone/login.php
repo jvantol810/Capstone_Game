@@ -23,22 +23,34 @@
 	else
 	{	
 		//Check if name exists
-    $namecheckquery = "SELECT username, salt, hash, time from leaderboard WHERE username='" . $username . "';";
+    $namecheckquery = "SELECT playerid, username, salt, hash, totalruns, currenttime, currency from accounts WHERE username='" . $username . "';";
 
-    $namecheck = mysqli_query($con,$namecheckquery) or die("2: Namecheck Query Failed");
+    $namecheck = mysqli_query($con,$namecheckquery) or die("2: Namecheck Query Failed" . mysqli_error($con));
 	
 
-	if (mysqli_num_rows($namecheck) < 1)
+	if (mysqli_num_rows($namecheck) != 1)
 	{
 		echo "3: Username not found"; //error #3
 		exit();
 	}
 
+
+	$namecheckvalues = "";
+	$salt = "";
+	$hash = "";
+        //get login info from query
+    while($row = mysqli_fetch_array($namecheck))
+    {
+        //$output = $output . "/t" . $row['username'] . "/t" . $row['time'];
+        $namecheckvalues = $row['playerid'] . "\t" . $row['username'] . "\t" . $row['totalruns'] . "\t" . $row['currenttime'] . "\t" . $row['currency'];
+		$salt = $row["salt"];
+		$hash = $row["hash"];
+    }
+
 	
 	//get login info from query
-	$tableinfo = mysqli_fetch_assoc($namecheck);
-	$salt = $tableinfo["salt"];
-	$hash = $tableinfo["hash"];
+	//$tableinfo = mysqli_fetch_assoc($namecheck);
+	
 	
 	$loginhash = crypt($password, $salt);
 	if ($hash != $loginhash)
@@ -48,8 +60,10 @@
 	}
 	else
 	{
-		echo $tableinfo["time"];
+		echo $namecheckvalues;
 	}
+
+	$output = $tableinfo['playerid'];
 	
 	
     //add user to table
