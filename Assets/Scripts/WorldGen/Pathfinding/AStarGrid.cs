@@ -269,8 +269,8 @@ public class AStarGrid : MonoBehaviour
     //Returns a WorldTile that is walkable within the range
     public WorldTile GetWalkableTileWithinRange(Vector2Int startTilePosition, float minTileDistance, float maxTileDistance)
     {
-        Debug.Log("Start Title Position:" + startTilePosition);
-        Debug.Log("MinDistance: " + minTileDistance + ", MaxDistance: " + maxTileDistance);
+        //Debug.Log("Start Title Position:" + startTilePosition);
+        //Debug.Log("MinDistance: " + minTileDistance + ", MaxDistance: " + maxTileDistance);
         //Create a list of all the tiles you could move, out to the max distance
         List<Vector2Int> nearbyWalkableTiles = new List<Vector2Int>();
         WorldTile start = GetTileAt(startTilePosition);
@@ -311,14 +311,14 @@ public class AStarGrid : MonoBehaviour
         //We've hit the max distance. Choose a random tile location from the list of walkable tiles and return it.
         //In case the starting tile was added to the list, remove it.
         nearbyWalkableTiles.RemoveAll(tilePos => tilePos == startTilePosition);
-        Debug.Log("Number of possible tiles to move to: " + nearbyWalkableTiles.Count);
+        //Debug.Log("Number of possible tiles to move to: " + nearbyWalkableTiles.Count);
         randPosition = nearbyWalkableTiles[Random.Range(0, nearbyWalkableTiles.Count - 1)];
         if (randPosition == startTilePosition)
         {
             Debug.Log("Rand equals start!");
         }
         //PlaceMarker(randPosition, Color.green);
-        Debug.Log("Moved this many tiles: " + distanceFromStart);
+        //Debug.Log("Moved this many tiles: " + distanceFromStart);
         return GetTileAt(randPosition);
     }
 
@@ -343,7 +343,7 @@ public class AStarGrid : MonoBehaviour
             walkableTileLocations[randomIndex_1],
             walkableTileLocations[randomIndex_2]
         };
-        Debug.Log("Random path calculated: (" + randomPath[0] + ", " + randomPath[1] + ")");
+        //Debug.Log("Random path calculated: (" + randomPath[0] + ", " + randomPath[1] + ")");
         return randomPath;
     }
 
@@ -495,13 +495,67 @@ public class AStarGrid : MonoBehaviour
         }
         return new WorldTile[] { };
     }
+    
+    public WorldTile[] FindOrthogonalPath(Vector2Int startPosition, Vector2Int endPosition, bool ignoreWalkableTiles=true)
+    {
+        RemoveAllMarkers();
+        WorldTile startNode = GetTileAt(startPosition);
+        //PlaceMarker(startPosition, startColor);
+        WorldTile targetNode = GetTileAt(endPosition);
+        //PlaceMarker(endPosition, endColor);
+        List<WorldTile> openSet = new List<WorldTile>();
+        HashSet<WorldTile> closedSet = new HashSet<WorldTile>();
+        openSet.Add(startNode);
+
+        while (openSet.Count > 0)
+        {
+            WorldTile currentNode = openSet[0];
+            for (int i = 1; i < openSet.Count; i++)
+            {
+                if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
+                {
+                    currentNode = openSet[i];
+                }
+            }
+
+            openSet.Remove(currentNode);
+            closedSet.Add(currentNode);
+
+            if (currentNode == targetNode)
+            {
+                WorldTile[] finalPath = RetracePath(startNode, targetNode);
+                return finalPath;
+            }
+            WorldTile[] orthogonalNeighbors = {currentNode.neighborTiles[0], currentNode.neighborTiles[2], currentNode.neighborTiles[4], currentNode.neighborTiles[6]};
+            
+
+            foreach (WorldTile neighbour in orthogonalNeighbors)
+            {
+                if (!neighbour.walkable && ignoreWalkableTiles || closedSet.Contains(neighbour)) continue;
+
+                float newMovementCostToNeighbour = currentNode.gCost + Vector2.Distance(currentNode.centerWorldPosition, neighbour.centerWorldPosition);
+                if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
+                {
+                    neighbour.gCost = newMovementCostToNeighbour;
+                    neighbour.hCost = GetDistance(neighbour, targetNode);
+                    neighbour.parent = currentNode;
+
+                    if (!openSet.Contains(neighbour))
+                        //Add the neighbor to the open list because we want to explore it
+                        openSet.Add(neighbour);
+                    //PlaceMarker(neighbour.worldPosition, Color.cyan);
+                }
+            }
+        }
+        return new WorldTile[] { };
+    }
 
     public Vector2[] FindPath(Vector2 worldStartPosition, Vector2 worldEndPosition, bool ignoreWalkableTile=true)
     {
         RemoveAllMarkers();
         Vector2Int startPosition = ConvertWorldPositionToTilePosition(worldStartPosition);
         WorldTile startNode = GetTileAt(startPosition);
-        Debug.Log("Starting at: " + startPosition);
+        //Debug.Log("Starting at: " + startPosition);
         //PlaceMarker(startPosition, startColor);
         WorldTile targetNode = GetTileAt(ConvertWorldPositionToTilePosition(worldEndPosition));
         //PlaceMarker(worldEndPosition, endColor);
